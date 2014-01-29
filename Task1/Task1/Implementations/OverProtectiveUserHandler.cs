@@ -5,6 +5,11 @@ using System.Text;
 
 namespace Task1.Implementations
 {
+    /// <summary>
+    /// General idea - you will never have references to actual objects in UserHandler,
+    /// Side note - no validation on AddUser
+    /// Other than this - a perfectly fine working Handler, 
+    /// </summary>
     public class OverProtectiveUserHandler : IUserHandler
     {
         private readonly List<User> userList;
