@@ -6,6 +6,7 @@ namespace Task1.Implementations
     /// <summary>
     /// General idea - the underlying list is static, so if you don't clean it before each use - it will still have data,
     /// Side note - you will never have the actual reference to the userList.
+    /// Side note - no validation on AddUser
     /// Other than this - a perfectly fine working Handler, 
     /// </summary>
     public class SingletonUserHandler:IUserHandler
