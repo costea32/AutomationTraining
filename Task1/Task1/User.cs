@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace Task1
 {
     public class User
@@ -13,7 +9,9 @@ namespace Task1
         
         public User(string firstName, string lastName, int age)
         {
-            
+            FirstName = firstName;
+            LastName = lastName;
+            Age = age;
         }
 
     }
