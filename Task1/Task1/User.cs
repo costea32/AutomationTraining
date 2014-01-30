@@ -1,5 +1,4 @@
-﻿
-namespace Task1
+﻿namespace Task1
 {
     public class User
     {

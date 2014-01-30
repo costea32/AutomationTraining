@@ -23,6 +23,8 @@ namespace Task1.Implementations
 
         public void AddUser(User user)
         {
+            if (user == null)
+                throw new ArgumentNullException("user","You can not add a null user to the user list");
             if (string.IsNullOrEmpty(user.FirstName))
                 throw new Exception("First name is a mandatory field");
             if (string.IsNullOrEmpty(user.LastName))
