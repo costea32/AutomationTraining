@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Task1.Implementations;
 
 namespace Task1
 {
@@ -9,7 +6,10 @@ namespace Task1
     {
         public IUserHandler GetHandler()
         {
-            throw new NotImplementedException("this method will be implemented later");
+            return new PerfectUserHandler();
+            //return new BuggedHandler();
+            //return new OverProtectiveUserHandler();
+            //return new SingletonUserHandler();
         }
     }
 }
