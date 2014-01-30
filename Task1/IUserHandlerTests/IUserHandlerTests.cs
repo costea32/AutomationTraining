@@ -59,12 +59,51 @@ namespace IUserHandlerTests
 
 
         [TestMethod()]
-        public void InProgress()
+        public void PositiveClearDataTest()
         {
-            // In Progress
+            UserHandlerProvider handlerProvider = new UserHandlerProvider();
+            IUserHandler handler = handlerProvider.GetHandler();
+
+            User user1 = new User("firstName1", "lastName1", 31);
+            User user2 = new User("firstName2", "lastName2", 32);
+
+            handler.Users.Add(user1);
+            handler.Users.Add(user2);
+
+            handler.ClearData();
+
+            Assert.AreEqual(handler.Users, null);
         }
 
+        [TestMethod()]
+        public void PositiveGetUserByNameTest()
+        {
+            UserHandlerProvider handlerProvider = new UserHandlerProvider();
+            IUserHandler handler = handlerProvider.GetHandler();
 
+            User user1 = new User("firstName1", "lastName1", 31);
+
+            handler.Users.Add(user1);
+
+            User user2 = handler.GetUserByName("firstName1", "lastName1");
+
+            Assert.AreEqual(user1, user2);
+        }
+
+        [TestMethod()]
+        public void PositiveGetUserByNameTest()
+        {
+            UserHandlerProvider handlerProvider = new UserHandlerProvider();
+            IUserHandler handler = handlerProvider.GetHandler();
+
+            User user1 = new User("firstName1", "lastName1", 31);
+
+            handler.Users.Add(user1);
+
+            User user2 = handler.GetUserByName("firstName1", "lastName1");
+
+            Assert.AreEqual(user1, user2);
+        }
 
 
 
