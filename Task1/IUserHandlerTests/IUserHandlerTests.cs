@@ -13,6 +13,17 @@ namespace IUserHandlerTests
         //
         // Positive tests
         //
+        [TestInitialize]
+        public void TestInit()
+        {
+            //happens before each test
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            //happens after each test
+        }
 
         [TestMethod()]
         public void PositiveUserCountTest()
@@ -25,7 +36,7 @@ namespace IUserHandlerTests
             for (int i = 0; i <= 10; i++)
             {
                 User user = new User("firstName" + i.ToString(), "lastName" + i.ToString(), i);
-                handler.Users.Add(user);
+                handler.AddUser(user);
                 Assert.AreEqual(i + 1, handler.UserCount);
             }
         }
@@ -54,7 +65,7 @@ namespace IUserHandlerTests
             handler.AddUser(user1);
 
             Assert.AreEqual<string>("firstName", handler.Users[0].FirstName);
-            Assert.AreEqual<string>("lasttName", handler.Users[0].LastName);
+            Assert.AreEqual<string>("lastName", handler.Users[0].LastName);
             Assert.AreEqual(31, handler.Users[0].Age);
         }
 
@@ -67,9 +78,9 @@ namespace IUserHandlerTests
             User user1 = new User("firstName1", "lastName1", 31);
             User user2 = new User("firstName2", "lastName2", 32);
 
-            handler.Users.Add(user1);
-            handler.Users.Add(user2);
-            ;
+            handler.AddUser(user1);
+            handler.AddUser(user2);
+            
             List<User> expectedList = new List<User>();
             expectedList.Add(user1);
             expectedList.Add(user2);
@@ -87,8 +98,8 @@ namespace IUserHandlerTests
             User user1 = new User("firstName1", "lastName1", 31);
             User user2 = new User("firstName2", "lastName2", 32);
 
-            handler.Users.Add(user1);
-            handler.Users.Add(user2);
+            handler.AddUser(user1);
+            handler.AddUser(user2);
 
             Assert.AreEqual(handler.Users.Count, 2);
 
@@ -96,8 +107,8 @@ namespace IUserHandlerTests
 
             Assert.AreEqual(handler.Users.Count, 0);
 
-            handler.Users.Add(user1);
-            handler.Users.Add(user2);
+            handler.AddUser(user1);
+            handler.AddUser(user2);
 
             Assert.AreEqual(handler.Users.Count, 2);
         }
@@ -110,7 +121,7 @@ namespace IUserHandlerTests
 
             User user1 = new User("firstName1", "lastName1", 31);
 
-            handler.Users.Add(user1);
+            handler.AddUser(user1);
 
             User user2 = handler.GetUserByName("firstName1", "lastName1");
 
@@ -125,7 +136,7 @@ namespace IUserHandlerTests
 
             User user1 = new User("firstName1", "lastName1", 31);
 
-            handler.Users.Add(user1);
+            handler.AddUser(user1);
 
             User user2 = handler.GetUserByName("firstName1", "lastName1");
 
@@ -144,9 +155,9 @@ namespace IUserHandlerTests
             User user2 = new User("firstName11", "lastName11", 31);
             User user3 = new User("firstName2", "lastName2", 32);
 
-            handler.Users.Add(user1);
-            handler.Users.Add(user2);
-            handler.Users.Add(user3);
+            handler.AddUser(user1);
+            handler.AddUser(user2);
+            handler.AddUser(user3);
 
             List<User> expectedList = new List<User>();
             expectedList.Add(user1);
@@ -273,8 +284,8 @@ namespace IUserHandlerTests
             User user1 = new User("firstName", "lastName1", 31);
             User user2 = new User("firstName", "lastName2", 32);
 
-            handler.Users.Add(user1);
-            handler.Users.Add(user2);
+            handler.AddUser(user1);
+            handler.AddUser(user2);
 
             User user3 = handler.GetUserByName("firstName", "lastName2");
 
@@ -290,8 +301,8 @@ namespace IUserHandlerTests
             User user1 = new User("firstName1", "lastName", 31);
             User user2 = new User("firstName2", "lastName", 32);
 
-            handler.Users.Add(user1);
-            handler.Users.Add(user2);
+            handler.AddUser(user1);
+            handler.AddUser(user2);
 
             User user3 = handler.GetUserByName("firstName2", "lastName");
 
@@ -310,15 +321,15 @@ namespace IUserHandlerTests
 
             handler.Users.Add(user1);
             List<User> testList = handler.GetUsersByAge(-10);
-            Assert.AreEqual(0, testList);
+            Assert.AreEqual(0, testList.Count);
 
             handler.Users.Add(user2);
             testList = handler.GetUsersByAge(0);
-            Assert.AreEqual(0, testList);
+            Assert.AreEqual(0, testList.Count);
 
             handler.Users.Add(user3);
             testList = handler.GetUsersByAge(151);
-            Assert.AreEqual(0, testList);
+            Assert.AreEqual(0, testList.Count);
         }
 
     }
