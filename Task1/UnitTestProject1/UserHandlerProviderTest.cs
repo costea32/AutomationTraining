@@ -8,6 +8,18 @@ namespace UnitTestProject1
     [TestClass()]
     public class UserHandlerProviderTest
     {
+        [TestInitialize]
+        public void TestInit()
+        {
+            //happens before each test
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            //happens after each test
+        }
+
         [TestMethod()]
         public void AddUserTest()
         {
@@ -124,7 +136,7 @@ namespace UnitTestProject1
             // ex.1
             var countBefore = handler.Users.Count;
             handler.ClearData();
-            if (countBefore != 0)
+           if (countBefore != 0) 
                 Assert.IsFalse((countBefore == handler.Users.Count), "I assume it's wrong.");
 
             //ex.2
@@ -138,14 +150,12 @@ namespace UnitTestProject1
 
         private string NameBuilder(int l/*, bool symbols = false, bool digits = false, bool hyphen = false*/)
         {
-            string result;
             var sBuilder = new StringBuilder();
             var rand = new Random(DateTime.Now.Millisecond);
             for (int i = 0; i < l; i++)
                 sBuilder.Append(Convert.ToChar(rand.Next(65, 90)));
 
-            result = sBuilder.ToString();
-            return result;
+            return sBuilder.ToString();
         }
 
         #endregion
