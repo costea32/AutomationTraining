@@ -10,6 +10,19 @@ namespace TestProject1
     [TestClass]
     public class UnitTest1
     {
+
+        [TestInitialize]
+        public void TestInit()
+        {
+            //happens before each test
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            //happens after each test
+        }
+
         [TestMethod]
         public void UserCountTest1()
         {
@@ -174,6 +187,8 @@ namespace TestProject1
 
             User u1 = new User("Test", "User", 10);
 
+            handler.AddUser(u1);
+
             List<User> TestList = new List<User>();
             TestList = handler.GetUsersByAge(10);
 
@@ -263,7 +278,7 @@ namespace TestProject1
             List<User> TestList = new List<User>();
             TestList = handler.GetUsersByAge(55);
 
-            int expected = 10;
+            int expected = 0;
             int actual = TestList.Count;
 
             Assert.AreEqual(expected, actual, "\nGetUsersByAgeTest6 failed! \nGetUsersByAge fails when all records in the list satisfy search criteria");
