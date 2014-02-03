@@ -46,6 +46,7 @@ namespace TestProject1
             try
             {
                 User u1 = new User("", "LastName", 10);
+                this.handler.AddUser(u1);
             }
             catch (Exception e)
             {
@@ -63,6 +64,7 @@ namespace TestProject1
             try
             {
                 User u1 = new User(null, "LastName", 10);
+                this.handler.AddUser(u1);
             }
             catch (Exception e)
             {
@@ -79,6 +81,7 @@ namespace TestProject1
             try
             {
                 User u1 = new User("FirstName", "", 10);
+                this.handler.AddUser(u1);
             }
             catch (Exception e)
             {
@@ -96,6 +99,7 @@ namespace TestProject1
             try
             {
                 User u1 = new User("FirstName", null, 10);
+                this.handler.AddUser(u1);
             }
             catch (Exception e)
             {
@@ -113,6 +117,7 @@ namespace TestProject1
             try
             {
                 User u1 = new User("FirstName", "LastName", -1);
+                this.handler.AddUser(u1);
             }
             catch (Exception e)
             {
@@ -130,6 +135,7 @@ namespace TestProject1
             try
             {
                 User u1 = new User("FirstName", "LastName", 0);
+                this.handler.AddUser(u1);
             }
             catch (Exception e)
             {
@@ -138,6 +144,15 @@ namespace TestProject1
             }
             Assert.IsTrue(thrown, "No exception is thrown when user with 0 age is created.");
 
+        }
+
+        [TestMethod]
+        public void AddUser_Basic()
+        {
+            User u1 = new User("FirstName", "LastName", 18);
+            this.handler.AddUser(u1);
+
+            Assert.IsTrue(this.handler.Users.Contains(u1), "Users.Contains(u1) does not found newly added user");
         }
         
         [TestMethod]
