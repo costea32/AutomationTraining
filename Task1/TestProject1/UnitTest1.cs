@@ -10,168 +10,239 @@ namespace TestProject1
     [TestClass]
     public class UnitTest1
     {
-
+        private UserHandlerProvider uh;
+        private IUserHandler handler;
+        
         [TestInitialize]
         public void TestInit()
         {
-            //happens before each test
+            this.uh = new UserHandlerProvider();
+            this.handler = uh.GetHandler();
         }
 
         [TestCleanup]
         public void TestCleanup()
         {
-            //happens after each test
+            this.handler.ClearData();
         }
 
         [TestMethod]
-        public void UserCountTest1()
+        public void AddUser_EmptyName()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
+            try
+            {
+                User u1 = new User("", "LastName", 10);
+                Assert.Fail("No exception is thrown when user with empty name is created.");
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.Message.Contains("empty"),"Error message is not explicit");
+            }
 
+        }
+
+        [TestMethod]
+        public void AddUser_NullName()
+        {
+            try
+            {
+                User u1 = new User(null, "LastName", 10);
+                Assert.Fail("No exception is thrown when user with NULL name is created.");
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.Message.Contains("null"), "Error message is not explicit");
+            }
+
+        }
+
+        [TestMethod]
+        public void AddUser_EmptySurname()
+        {
+            try
+            {
+                User u1 = new User("FirstName", "", 10);
+                Assert.Fail("No exception is thrown when user with empty surname is created.");
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.Message.Contains("empty"), "Error message is not explicit");
+            }
+
+        }
+
+        [TestMethod]
+        public void AddUser_NullName()
+        {
+            try
+            {
+                User u1 = new User("FirstName", null, 10);
+                Assert.Fail("No exception is thrown when user with NULL surname is created.");
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.Message.Contains("null"), "Error message is not explicit");
+            }
+
+        }
+
+        [TestMethod]
+        public void AddUser_NegativeAge()
+        {
+            try
+            {
+                User u1 = new User("FirstName", "LastName", -1);
+                Assert.Fail("No exception is thrown when user with negative age is created.");
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.Message.Contains("age"), "Error message is not explicit");
+            }
+
+        }
+
+        [TestMethod]
+        public void AddUser_ZeroAge()
+        {
+            try
+            {
+                User u1 = new User("FirstName", "LastName", 0);
+                Assert.Fail("No exception is thrown when user with 0 age is created.");
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.Message.Contains("age"), "Error message is not explicit");
+            }
+
+        }
+        
+        [TestMethod]
+        public void UserCount_EmptyList()
+        {
             int expected = 0;
-            int actual = handler.UserCount;
+            int actual = this.handler.UserCount;
 
             Assert.AreEqual(expected, actual, "\nUseCountTest1 failed! \nUserCount default value is incorrect.");
         }
 
         [TestMethod]
-        public void UserCountTest2()
+        public void UserCount_ListOfOneObject()
         {
             User u1 = new User("Test", "User1", 10);
 
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
-
-            handler.AddUser(u1);
+            this.handler.AddUser(u1);
             int expected = 1;
-            int actual = handler.UserCount;
+            int actual = this.handler.UserCount;
 
             Assert.AreEqual(expected, actual, "\nUseCountTest2 failed! \nUserCount for one user is incorrect.");
         }
 
         [TestMethod]
-        public void UserCountTest3()
+        public void UserCount_ListWithTenSimilarUsers()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
             
             for (int i = 0; i < 10; i++)
             {
                 User u1 = new User("Test", "User", i+10);
-                handler.AddUser(u1);
+                this.handler.AddUser(u1);
             }
                    
             int expected = 10; //in case the method allows to have users with the same name and surname
-            int actual = handler.UserCount;
+            int actual = this.handler.UserCount;
 
             Assert.AreEqual(expected, actual, "\nUseCountTest3 failed! \nUserCount for 10 users is incorrect.");
         }
 
         [TestMethod]
-        public void UserCountTest4()
+        public void UserCount_ListWithOneUser()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
 
             for (int i = 0; i < 10; i++)
             {
                 User u1 = new User("Test", "User", i + 10);
-                handler.AddUser(u1);
+                this.handler.AddUser(u1);
             }
 
             int expected = 1; //in case the system does not allow to have users with the same name and surname
-            int actual = handler.UserCount;
+            int actual = this.handler.UserCount;
 
             Assert.AreEqual(expected, actual, "\nUseCountTest4 failed! \nUserCount for 10 users is incorrect.");
         }
 
         [TestMethod]
-        public void UserCountTest5()
+        public void UserCount_ListWithTenDifferentUsers()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
 
             for (int i = 0; i < 10; i++)
             {
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
+                this.handler.AddUser(u1);
             }
 
             int expected = 10;
-            int actual = handler.UserCount;
+            int actual = this.handler.UserCount;
 
             Assert.AreEqual(expected, actual, "\nUseCountTest5 failed! \nUserCount is incorrect after ClearData().");
         }
 
         [TestMethod]
-        public void UserCountTest6()
+        public void UserCount_AfterClearData()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
 
             for (int i = 0; i < 10; i++)
             {
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
+                this.handler.AddUser(u1);
             }
 
-            handler.ClearData(); //i guess this method should clear the list and UserCount should return 0;
+            this.handler.ClearData(); //i guess this method should clear the list and UserCount should return 0;
 
             int expected = 0;
-            int actual = handler.UserCount;
+            int actual = this.handler.UserCount;
 
             Assert.AreEqual(expected, actual, "\nUseCountTest6 failed! \nUserCount is incorrect after ClearData().");
         }
 
         [TestMethod]
-        public void ClearDataTest1()
+        public void ClearData_Basic()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
 
             for (int i = 0; i < 10; i++)
             {
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
+                this.handler.AddUser(u1);
             }
 
-            handler.ClearData(); //i guess this method should clear the list and UserCount should return 0;
+            this.handler.ClearData(); //i guess this method should clear the list and UserCount should return 0;
 
             int expected = 0;
-            int actual = handler.UserCount;
+            int actual = this.handler.UserCount;
 
             Assert.AreEqual(expected, actual, "\nClearDataTest1 failed! \nClearData() method does not clear the list.");
         }
 
         [TestMethod]
-        public void ClearDataTest2()
+        public void ClearData_ClearEmptyList()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
-
-            handler.ClearData();
+            this.handler.ClearData();
 
             int expected = 0;
-            int actual = handler.UserCount;
+            int actual = this.handler.UserCount;
 
             Assert.AreEqual(expected, actual, "\nClearDataTest2 failed! \nClearData() method fails when list is empty.");
         }
 
         [TestMethod]
-        public void GetUsersByAgeTest1()
+        public void GetUsersByAge_EmptyList()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
-
             List<User> TestList = new List<User>();
-            TestList = handler.GetUsersByAge(10);
+            TestList = this.handler.GetUsersByAge(10);
 
             int expected = 0;
             int actual = TestList.Count;
@@ -180,14 +251,12 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public void GetUsersByAgeTest2()
+        public void GetUsersByAge_ListWithOneUser()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
 
             User u1 = new User("Test", "User", 10);
 
-            handler.AddUser(u1);
+            this.handler.AddUser(u1);
 
             List<User> TestList = new List<User>();
             TestList = handler.GetUsersByAge(10);
@@ -199,15 +268,13 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public void GetUsersByAgeTest3()
+        public void GetUsersByAge_ListWithOneUser_Negative()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
 
             User u1 = new User("Test", "User", 10);
 
             List<User> TestList = new List<User>();
-            TestList = handler.GetUsersByAge(20);
+            TestList = this.handler.GetUsersByAge(20);
 
             int expected = 0;
             int actual = TestList.Count;
@@ -216,21 +283,19 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public void GetUsersByAgeTest4()
+        public void GetUsersByAge_OneUserFound()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
 
             for (int i = 0; i < 10; i++)
             {
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
+                this.handler.AddUser(u1);
             }
 
             List<User> TestList = new List<User>();
-            TestList = handler.GetUsersByAge(15);
+            TestList = this.handler.GetUsersByAge(15);
 
             int expected = 1;
             int actual = TestList.Count;
@@ -239,21 +304,18 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public void GetUsersByAgeTest5()
+        public void GetUsersByAge_NoUsersFound()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
-
             for (int i = 0; i < 10; i++)
             {
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
+                this.handler.AddUser(u1);
             }
 
             List<User> TestList = new List<User>();
-            TestList = handler.GetUsersByAge(55);
+            TestList = this.handler.GetUsersByAge(55);
 
             int expected = 0;
             int actual = TestList.Count;
@@ -262,44 +324,40 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public void GetUsersByAgeTest6()
+        public void GetUsersByAge_ManyUsersFound()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
 
             for (int i = 0; i < 10; i++)
             {
                 string name = "Test" + i;
                 string surname = "User" + i;
-                User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
+                User u1 = new User(name, surname, 10);
+                this.handler.AddUser(u1);
             }
 
             List<User> TestList = new List<User>();
-            TestList = handler.GetUsersByAge(55);
+            TestList = this.handler.GetUsersByAge(10);
 
-            int expected = 0;
+            int expected = 10;
             int actual = TestList.Count;
 
             Assert.AreEqual(expected, actual, "\nGetUsersByAgeTest6 failed! \nGetUsersByAge fails when all records in the list satisfy search criteria");
         }
 
         [TestMethod]
-        public void GetUsersByAgeTest7()
+        public void GetUsersByAge_SearchNegativeAge()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
 
             for (int i = 0; i < 10; i++)
             {
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
+                this.handler.AddUser(u1);
             }
 
             List<User> TestList = new List<User>();
-            TestList = handler.GetUsersByAge(-1);
+            TestList = this.handler.GetUsersByAge(-1);
 
             int expected = 0;
             int actual = TestList.Count;
@@ -308,61 +366,55 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public void GetUserByNameTest1()
+        public void GetUserByName_Basic()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
 
             for (int i = 0; i < 10; i++)
             {
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
+                this.handler.AddUser(u1);
             }
 
             User expected = new User("Test1","User1",11);
-            User actual = handler.GetUserByName("Test1","User1");
+            User actual = this.handler.GetUserByName("Test1", "User1");
 
             Assert.AreEqual(expected, actual, "\nGetUserByNameTest1 failed! \nGetUserByName cannot find required user");
         }
 
         [TestMethod]
-        public void GetUserByNameTest2()
+        public void GetUserByName_FirstUserInTheList()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
 
             for (int i = 0; i < 10; i++)
             {
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
+                this.handler.AddUser(u1);
             }
 
             User expected = new User("Test0", "User0", 10);
-            User actual = handler.GetUserByName("Test0", "User0");
+            User actual = this.handler.GetUserByName("Test0", "User0");
 
             Assert.AreEqual(expected, actual, "\nGetUserByNameTest2 failed! \nGetUserByName cannot find required user if it is the first one in the list");
         }
 
         [TestMethod]
-        public void GetUserByNameTest3()
+        public void GetUserByName_LastUserInTheList()
         {
-            UserHandlerProvider uh = new UserHandlerProvider();
-            IUserHandler handler = uh.GetHandler();
 
             for (int i = 0; i < 10; i++)
             {
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
+                this.handler.AddUser(u1);
             }
 
             User expected = new User("Test9", "User9", 19);
-            User actual = handler.GetUserByName("Test9", "User9");
+            User actual = this.handler.GetUserByName("Test9", "User9");
 
             Assert.AreEqual(expected, actual, "\nGetUserByNameTest3 failed! \nGetUserByName cannot find required user if it is the last one in the list");
         }
