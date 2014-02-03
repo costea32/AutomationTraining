@@ -13,30 +13,23 @@ namespace TestProject1
         private UserHandlerProvider uh;
         private IUserHandler handler;
         
-        private bool NameCompare(User u1, User u2)
+        private bool NameCompare(User u1)
         {
-            if (u1.FirstName == u2.FirstName)
-            {
-                if (u1.LastName == u2.LastName)
-                    return true;
-                else
-                    return false;
-            }
-            else 
-                return false;
+            bool result = handler.Users.Any(x => (x.FirstName == u1.FirstName) && (x.LastName == u1.LastName));
+            return result; 
         }
 
         [TestInitialize]
         public void TestInit()
         {
-            this.uh = new UserHandlerProvider();
-            this.handler = uh.GetHandler();
+            uh = new UserHandlerProvider();
+            handler = uh.GetHandler();
         }
 
         [TestCleanup]
         public void TestCleanup()
         {
-            this.handler.Users.Clear();
+            handler.ClearData();
         }
 
         [TestMethod]
@@ -46,11 +39,11 @@ namespace TestProject1
             try
             {
                 User u1 = new User("", "LastName", 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
             catch (Exception e)
             {
-                Assert.IsTrue(e.Message.Contains("empty"),"Error message is not explicit");
+                Assert.IsTrue(e.Message.Contains("name"),"Error message is not explicit");
                 thrown = true;
             }
             Assert.IsTrue(thrown, "No exception is thrown when user with empty name is created.");
@@ -64,11 +57,11 @@ namespace TestProject1
             try
             {
                 User u1 = new User(null, "LastName", 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
             catch (Exception e)
             {
-                Assert.IsTrue(e.Message.Contains("null"), "Error message is not explicit");
+                Assert.IsTrue(e.Message.Contains("name"), "Error message is not explicit");
                 thrown = true;
             }
             Assert.IsTrue(thrown, "No exception is thrown when user with NULL name is created.");
@@ -81,11 +74,11 @@ namespace TestProject1
             try
             {
                 User u1 = new User("FirstName", "", 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
             catch (Exception e)
             {
-                Assert.IsTrue(e.Message.Contains("empty"), "Error message is not explicit");
+                Assert.IsTrue(e.Message.Contains("name"), "Error message is not explicit");
                 thrown = true;
             }
             Assert.IsTrue(thrown, "No exception is thrown when user with empty surname is created.");
@@ -93,17 +86,17 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public void AddUser_NullName()
+        public void AddUser_NullSurname()
         {
             bool thrown = false;
             try
             {
                 User u1 = new User("FirstName", null, 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
             catch (Exception e)
             {
-                Assert.IsTrue(e.Message.Contains("null"), "Error message is not explicit");
+                Assert.IsTrue(e.Message.Contains("name"), "Error message is not explicit");
                 thrown = true;
             }
             Assert.IsTrue(thrown, "No exception is thrown when user with NULL surname is created.");
@@ -117,11 +110,11 @@ namespace TestProject1
             try
             {
                 User u1 = new User("FirstName", "LastName", -1);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
             catch (Exception e)
             {
-                Assert.IsTrue(e.Message.Contains("age"), "Error message is not explicit");
+                Assert.IsTrue(e.Message.Contains("zero"), "Error message is not explicit");
                 thrown = true;
             }
             Assert.IsTrue(thrown,"No exception is thrown when user with negative age is created.");
@@ -135,11 +128,11 @@ namespace TestProject1
             try
             {
                 User u1 = new User("FirstName", "LastName", 0);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
             catch (Exception e)
             {
-                Assert.IsTrue(e.Message.Contains("age"), "Error message is not explicit");
+                Assert.IsTrue(e.Message.Contains("zero"), "Error message is not explicit");
                 thrown = true;
             }
             Assert.IsTrue(thrown, "No exception is thrown when user with 0 age is created.");
@@ -150,16 +143,17 @@ namespace TestProject1
         public void AddUser_Basic()
         {
             User u1 = new User("FirstName", "LastName", 18);
-            this.handler.AddUser(u1);
+            handler.AddUser(u1);
 
-            Assert.IsTrue(this.handler.Users.Contains(u1), "Users.Contains(u1) does not found newly added user");
+            Assert.IsTrue(handler.Users.Any(x => (x.FirstName == "FirstName") && (x.LastName == "LastName") && (x.Age == 18)),"User has not been added to the list");
+          //  Assert.IsTrue(handler.Users.Contains(u1), "Users.Contains(u1) does not found newly added user");
         }
         
         [TestMethod]
         public void UserCount_EmptyList()
         {
             int expected = 0;
-            int actual = this.handler.UserCount;
+            int actual = handler.UserCount;
 
             Assert.AreEqual(expected, actual, "UserCounts do not match");
         }
@@ -168,10 +162,10 @@ namespace TestProject1
         public void UserCount_ListOfOneObject()
         {
             User u1 = new User("Test", "User1", 10);
-            this.handler.AddUser(u1);
+            handler.AddUser(u1);
 
             int expected = 1;
-            int actual = this.handler.UserCount;
+            int actual = handler.UserCount;
 
             Assert.AreEqual(expected, actual, "UserCounts do not match");
         }
@@ -183,11 +177,11 @@ namespace TestProject1
             for (int i = 0; i < 10; i++)
             {
                 User u1 = new User("Test", "User", i+10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
                    
             int expected = 10; //in case the method allows to have users with the same name and surname
-            int actual = this.handler.UserCount;
+            int actual = handler.UserCount;
 
             Assert.AreEqual(expected, actual, "UserCounts do not match (if users with the same name/surname are allowed)");
         }
@@ -199,11 +193,11 @@ namespace TestProject1
             for (int i = 0; i < 10; i++)
             {
                 User u1 = new User("Test", "User", i + 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
 
             int expected = 1; //in case the system does not allow to have users with the same name and surname
-            int actual = this.handler.UserCount;
+            int actual = handler.UserCount;
 
             Assert.AreEqual(expected, actual, "UserCounts do not match (if users with the same name/surname are not allowed)");
         }
@@ -217,11 +211,11 @@ namespace TestProject1
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
 
             int expected = 10;
-            int actual = this.handler.UserCount;
+            int actual = handler.UserCount;
 
             Assert.AreEqual(expected, actual, "UserCounts do not match");
         }
@@ -235,13 +229,13 @@ namespace TestProject1
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
 
-            this.handler.ClearData(); //i guess this method should clear the list and UserCount should return 0;
+            handler.ClearData(); //i guess this method should clear the list and UserCount should return 0;
 
             int expected = 0;
-            int actual = this.handler.UserCount;
+            int actual = handler.UserCount;
 
             Assert.AreEqual(expected, actual, "UserCounts do not match");
         }
@@ -255,13 +249,13 @@ namespace TestProject1
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
 
-            this.handler.ClearData(); //i guess this method should clear the list and UserCount should return 0;
+            handler.ClearData(); //i guess this method should clear the list and UserCount should return 0;
             
             int expected = 0;
-            int actual = this.handler.Users.Count;
+            int actual = handler.Users.Count;
 
             Assert.AreEqual(expected, actual, "ClearData does not remove users from the list");
         }
@@ -269,10 +263,10 @@ namespace TestProject1
         [TestMethod]
         public void ClearData_ClearEmptyList()
         {
-            this.handler.ClearData();
+            handler.ClearData();
 
             int expected = 0;
-            int actual = this.handler.Users.Count;
+            int actual = handler.Users.Count;
 
             Assert.AreEqual(expected, actual, "ClearData breaks empty list");
         }
@@ -281,7 +275,7 @@ namespace TestProject1
         public void GetUsersByAge_EmptyList()
         {
             List<User> TestList = new List<User>();
-            TestList = this.handler.GetUsersByAge(10);
+            TestList = handler.GetUsersByAge(10);
 
             int expected = 0;
             int actual = TestList.Count;
@@ -295,7 +289,7 @@ namespace TestProject1
 
             User u1 = new User("Test", "User", 10);
 
-            this.handler.AddUser(u1);
+            handler.AddUser(u1);
 
             List<User> TestList = new List<User>();
             TestList = handler.GetUsersByAge(10);
@@ -313,7 +307,7 @@ namespace TestProject1
             User u1 = new User("Test", "User", 10);
 
             List<User> TestList = new List<User>();
-            TestList = this.handler.GetUsersByAge(20);
+            TestList = handler.GetUsersByAge(20);
 
             int expected = 0;
             int actual = TestList.Count;
@@ -330,11 +324,11 @@ namespace TestProject1
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
 
             List<User> TestList = new List<User>();
-            TestList = this.handler.GetUsersByAge(15);
+            TestList = handler.GetUsersByAge(15);
 
             int expected = 1;
             int actual = TestList.Count;
@@ -350,11 +344,11 @@ namespace TestProject1
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
 
             List<User> TestList = new List<User>();
-            TestList = this.handler.GetUsersByAge(55);
+            TestList = handler.GetUsersByAge(55);
 
             int expected = 0;
             int actual = TestList.Count;
@@ -371,11 +365,11 @@ namespace TestProject1
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
 
             List<User> TestList = new List<User>();
-            TestList = this.handler.GetUsersByAge(10);
+            TestList = handler.GetUsersByAge(10);
 
             int expected = 10;
             int actual = TestList.Count;
@@ -392,14 +386,14 @@ namespace TestProject1
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
 
             List<User> TestList = new List<User>();
             bool thrown = false;
             try
             {
-                TestList = this.handler.GetUsersByAge(-1);
+                TestList = handler.GetUsersByAge(-1);
             }
             catch (Exception e)
             {
@@ -418,13 +412,12 @@ namespace TestProject1
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
 
             User expected = new User("Test1","User1",11);
-            User actual = this.handler.GetUserByName("Test1", "User1");
 
-            Assert.IsTrue(NameCompare(expected, actual), "Compared two users.");
+            Assert.IsTrue(NameCompare(expected), "Compared two users.");
         }
 
         [TestMethod]
@@ -436,13 +429,12 @@ namespace TestProject1
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
 
             User expected = new User("Test0", "User0", 10);
-            User actual = this.handler.GetUserByName("Test0", "User0");
 
-            Assert.IsTrue(NameCompare(expected, actual), "Compared two users.");
+            Assert.IsTrue(NameCompare(expected), "Compared two users.");
         }
 
         [TestMethod]
@@ -454,13 +446,25 @@ namespace TestProject1
                 string name = "Test" + i;
                 string surname = "User" + i;
                 User u1 = new User(name, surname, i + 10);
-                this.handler.AddUser(u1);
+                handler.AddUser(u1);
             }
 
             User expected = new User("Test9", "User9", 19);
-            User actual = this.handler.GetUserByName("Test9", "User9");
 
-            Assert.IsTrue(NameCompare(expected, actual), "Compared two users.");
+            Assert.IsTrue(NameCompare(expected), "Compared two users.");
         }
+
+        [TestMethod]
+        public void UserList_Basic()
+        {
+            handler.AddUser(new User("FirstName1", "LastName1", 18));
+            handler.AddUser(new User("FirstName2", "LastName2", 19));
+
+            bool a = handler.Users.Any(x => (x.FirstName == "FirstName1") && (x.LastName == "LastName1") && (x.Age == 18));
+            bool b = handler.Users.Any(x => (x.FirstName == "FirstName2") && (x.LastName == "LastName2") && (x.Age == 19));
+
+            Assert.IsTrue(a && b,"User list returned incorrectly");            
+        }
+
     }
 }
