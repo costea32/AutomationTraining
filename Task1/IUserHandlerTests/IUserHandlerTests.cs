@@ -13,9 +13,14 @@ namespace IUserHandlerTests
 
         IUserHandler handler;
 
-        public Boolean IsTheUserInTheList(string firstname, string lastname, int age)
+        public Boolean IsTheUserInTheList(User user)
         {
-            return handler.Users.Any(x => (x.FirstName == firstname) && (x.LastName == lastname) && (x.Age == age));
+            return handler.Users.Any(x => (x.FirstName == user.FirstName) && (x.LastName == user.LastName) && (x.Age == user.Age));
+        }
+
+        public Boolean IsSameUser(User user1, User user2)
+        {
+            return ((user1.FirstName == user2.FirstName) && (user1.LastName == user2.LastName) && (user1.Age == user2.Age));
         }
 
         [TestInitialize]
@@ -51,7 +56,7 @@ namespace IUserHandlerTests
 
             handler.AddUser(user1);
 
-            Assert.IsTrue(IsTheUserInTheList("firstName","lastName", 31));
+            Assert.IsTrue(IsTheUserInTheList(user1));
         }
 
         [TestMethod()]
@@ -66,8 +71,8 @@ namespace IUserHandlerTests
             List<User> newUserList = handler.Users;
             
             Boolean a,b = true;
-            a = IsTheUserInTheList("firstName1","lastName1", 31);
-            b = IsTheUserInTheList("firstName2","lastName2", 32);
+            a = IsTheUserInTheList(user1);
+            b = IsTheUserInTheList(user2);
 
             Assert.IsTrue(a&&b,"Users list returned incorrectly");
         }
@@ -103,7 +108,7 @@ namespace IUserHandlerTests
 
             User user2 = handler.GetUserByName("firstName1", "lastName1");
 
-            Assert.IsTrue((user2.FirstName == "firstName1") && (user2.LastName == "lastName1") && (user2.Age == 31),"Wrong user returned");
+            Assert.IsTrue(IsSameUser(user1,user2), "Wrong user returned");
         }
 
         [TestMethod()]
@@ -119,7 +124,7 @@ namespace IUserHandlerTests
 
             List<User> expectedList = handler.GetUsersByAge(31);
 
-            Assert.IsTrue(expectedList.All(x => x.Age == 31));
+            Assert.IsTrue(expectedList.All(x => x.Age == 31),"Not all returned users have the expected age");
         }
 
         //
@@ -242,7 +247,7 @@ namespace IUserHandlerTests
 
             User user3 = handler.GetUserByName("firstName", "lastName2");
 
-            Assert.IsTrue(user3.FirstName == "firstName" && user3.LastName == "lastName2" && user3.Age == 32,"Wrong user returned");
+            Assert.IsTrue(IsSameUser(user2,user3),"Wrong user returned");
         }
 
         [TestMethod()]
@@ -256,7 +261,7 @@ namespace IUserHandlerTests
 
             User user3 = handler.GetUserByName("firstName2", "lastName");
 
-            Assert.IsTrue(user3.FirstName == "firstName2" && user3.LastName == "lastName" && user3.Age == 32, "Wrong user returned");
+            Assert.IsTrue(IsSameUser(user2,user3), "Wrong user returned");
         }
     }
 }
