@@ -40,6 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementations\BuggedUserHandler.cs" />
+    <Compile Include="Implementations\PerfectUserHandler.cs" />
+    <Compile Include="Implementations\OverProtectiveUserHandler.cs" />
+    <Compile Include="Implementations\SingletonUserHandler.cs" />
     <Compile Include="IUserHandler.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
