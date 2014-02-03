@@ -13,6 +13,11 @@ namespace IUserHandlerTests
 
         IUserHandler handler;
 
+        public Boolean IsTheUserInTheList(string firstname, string lastname, int age)
+        {
+            return handler.Users.Any(x => (x.FirstName == firstname) && (x.LastName == lastname) && (x.Age == age));
+        }
+
         [TestInitialize]
         public void TestInit()
         {
@@ -27,7 +32,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void PositiveUserCountTest()
+        public void UserCount()
         {
             Assert.AreEqual(0, handler.UserCount);
 
@@ -40,27 +45,17 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void PositiveAddUserTest()
-        {
-            User user1 = new User("firstName1", "lastName1", 31);
-
-            handler.AddUser(user1);
-
-            Assert.AreEqual(1, handler.UserCount,"User has not been added");
-        }
-
-        [TestMethod()]
-        public void PositiveTestThatUserIsAddedCorrectly()
+        public void AddUser()
         {
             User user1 = new User("firstName", "lastName", 31);
 
             handler.AddUser(user1);
 
-            Assert.IsTrue(handler.Users.Any(x => x.FirstName == "firstName" && x.LastName == "lastName" && x.Age == 31));
+            Assert.IsTrue(IsTheUserInTheList("firstName","lastName", 31));
         }
 
         [TestMethod()]
-        public void PositiveGetListOfUsersTest()
+        public void GetUsers()
         {
             User user1 = new User("firstName1", "lastName1", 31);
             User user2 = new User("firstName2", "lastName2", 32);
@@ -71,15 +66,15 @@ namespace IUserHandlerTests
             List<User> newUserList = handler.Users;
             
             Boolean a,b = true;
-            a = newUserList.Any(x => (x.FirstName == "firstName1") && (x.LastName == "lastName1") && (x.Age == 31));
-            b = newUserList.Any(x => (x.FirstName == "firstName2") && (x.LastName == "lastName2") && (x.Age == 32));
+            a = IsTheUserInTheList("firstName1","lastName1", 31);
+            b = IsTheUserInTheList("firstName2","lastName2", 32);
 
             Assert.IsTrue(a&&b,"Users list returned incorrectly");
         }
 
 
         [TestMethod()]
-        public void PositiveClearDataTest()
+        public void ClearData()
         {
             User user1 = new User("firstName1", "lastName1", 31);
             User user2 = new User("firstName2", "lastName2", 32);
@@ -100,7 +95,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void PositiveGetUserByNameTest()
+        public void GetByName()
         {
             User user1 = new User("firstName1", "lastName1", 31);
 
@@ -112,7 +107,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void PositiveGetUsersByAgeTest()
+        public void GetByAge()
         {
             User user1 = new User("firstName1", "lastName1", 31);
             User user2 = new User("firstName11", "lastName11", 31);
@@ -124,12 +119,7 @@ namespace IUserHandlerTests
 
             List<User> expectedList = handler.GetUsersByAge(31);
 
-            Boolean a, b;
-
-            a = expectedList.Any(x => x.Age == 31);
-            b = !expectedList.Any(x => x.Age == 32);
-
-            Assert.IsTrue(a && b,"GetUsersByAge returns incorrect list of users");
+            Assert.IsTrue(expectedList.All(x => x.Age == 31));
         }
 
         //
@@ -137,68 +127,91 @@ namespace IUserHandlerTests
         //
 
         [TestMethod()]
-        public void NegativeAddNullUser()
+        public void AddNullUser()
         {
+            Boolean exceptionThrown = true;
             try
             {
                 handler.AddUser(null);
+                exceptionThrown = false;
             }
             catch (ArgumentNullException e)
             {
-                Assert.AreEqual(0, handler.UserCount);
+                Assert.IsTrue(e.Message.Contains("null user"));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Assert.Fail("Cannot add null users");
+                Assert.Fail("No validation for null users");
             }
+
+            Assert.IsTrue(exceptionThrown,"Exception not thrown");
         }
 
 
         [TestMethod()]
-        public void NegativeAddUserWithNoFirstNameTest()
+        public void AddUser_NoFirstName()
         {
+            Boolean exceptionThrown = true;
             try
             {
                 User user1 = new User(null, "lastName", 31);
 
                 handler.AddUser(user1);
+                exceptionThrown = false;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.Message.Contains("mandatory"));
+            }
 
             Assert.AreEqual(0, handler.UserCount,"User added with no firstname");
+            Assert.IsTrue(exceptionThrown, "Exception not thrown");
         }
 
         [TestMethod()]
-        public void NegativeAddUserWithNoLastNameTest()
+        public void AddUser_NoLastName()
         {
+            Boolean exceptionThrown = true;
             try
             {
                 User user1 = new User("firstName", null, 31);
 
                 handler.AddUser(user1);
+                exceptionThrown = false;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.Message.Contains("mandatory"));
+            }
 
             Assert.AreEqual(0, handler.UserCount,"User added with no lastname");
+            Assert.IsTrue(exceptionThrown);
         }
 
         [TestMethod()]
-        public void NegativeAddUserWithInvalidAgeTest()
+        public void AddUser_InvalidAge()
         {
+            Boolean exceptionThrown = true;
             try
             {
                 User user2 = new User("firstName2", "lastName2", -10);
 
                 handler.AddUser(user2);
+                exceptionThrown = false;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.Message.Contains("zero"));
+            }
 
             Assert.AreEqual(0, handler.UserCount,"User added with age less than zero");
+            Assert.IsTrue(exceptionThrown, "Exception not thrown");
         }
 
         [TestMethod()]
-        public void NegativeAddUsersWithSameFirstAndLastNameTest()
+        public void AddUser_ExistingFirstLastName()
         {
+            Boolean exceptionThrown = true;
             try
             {
                 User user1 = new User("firstName", "lastName", 31);
@@ -206,47 +219,20 @@ namespace IUserHandlerTests
 
                 handler.AddUser(user1);
                 handler.AddUser(user2);
+                exceptionThrown = false;
             }
 
-            catch { }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.Message.Contains("already registered"));
+            }
 
             Assert.AreEqual(1, handler.UserCount,"User added with same first and last name");
+            Assert.IsTrue(exceptionThrown, "Exception not thrown");
         }
 
         [TestMethod()]
-        public void NegativeGetUserByNameWithNoFirstNameTest()
-        {
-            try
-            {
-                User user1 = new User("firstName", "lastName", 31);
-                
-                handler.Users.Add(user1);
-
-                User user2 = handler.GetUserByName(null, "lastName");
-
-                Assert.IsFalse(user2.FirstName == "firstName" && user2.LastName == "lastName" && user2.Age == 31, "User added with no firstname");
-            }
-            catch { }
-        }
-
-        [TestMethod()]
-        public void NegativeGetUserByNameWithNoLastNameTest()
-        {
-            try
-            {
-                User user1 = new User("firstName", "lastName", 31);
-
-                handler.Users.Add(user1);
-
-                User user2 = handler.GetUserByName("firstName", null);
-
-                Assert.IsFalse(user2.FirstName == "firstName" && user2.LastName == "lastName" && user2.Age == 31, "User added with no lastname");
-            }
-            catch { }
-        }
-
-        [TestMethod()]
-        public void TestThatGetUserByNameDoesNotSearchByFirstNameOnly()
+        public void GetByName_MultipleFirstName()
         {
             User user1 = new User("firstName", "lastName1", 31);
             User user2 = new User("firstName", "lastName2", 32);
@@ -260,7 +246,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void TestThatGetUserByNameDoesNotSearchByLastNameOnly()
+        public void GetByName_MultipleLastName()
         {
             User user1 = new User("firstName1", "lastName", 31);
             User user2 = new User("firstName2", "lastName", 32);
@@ -272,16 +258,5 @@ namespace IUserHandlerTests
 
             Assert.IsTrue(user3.FirstName == "firstName2" && user3.LastName == "lastName" && user3.Age == 32, "Wrong user returned");
         }
-
-        [TestMethod()]
-        public void TestThatGetUsersByAgeReturnsNothingWhenSearchingByInvalidAge()
-        {
-            User user1 = new User("firstName1", "lastName1", -10);
-
-            handler.Users.Add(user1);
-            List<User> testList = handler.GetUsersByAge(-10);
-            Assert.IsTrue(!testList.Any(x => x.Age == -10),"Wrong list of users returned");
-        }
-
     }
 }
