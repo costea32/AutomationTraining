@@ -13,6 +13,19 @@ namespace TestProject1
         private UserHandlerProvider uh;
         private IUserHandler handler;
         
+        private bool NameCompare(User u1, User u2)
+        {
+            if (u1.FirstName == u2.FirstName)
+            {
+                if (u1.LastName == u2.LastName)
+                    return true;
+                else
+                    return false;
+            }
+            else 
+                return false;
+        }
+
         [TestInitialize]
         public void TestInit()
         {
@@ -23,96 +36,107 @@ namespace TestProject1
         [TestCleanup]
         public void TestCleanup()
         {
-            this.handler.ClearData();
+            this.handler.Users.Clear();
         }
 
         [TestMethod]
         public void AddUser_EmptyName()
         {
+            bool thrown = false;
             try
             {
                 User u1 = new User("", "LastName", 10);
-                Assert.Fail("No exception is thrown when user with empty name is created.");
             }
             catch (Exception e)
             {
                 Assert.IsTrue(e.Message.Contains("empty"),"Error message is not explicit");
+                thrown = true;
             }
+            Assert.IsTrue(thrown, "No exception is thrown when user with empty name is created.");
 
         }
 
         [TestMethod]
         public void AddUser_NullName()
         {
+            bool thrown = false;
             try
             {
                 User u1 = new User(null, "LastName", 10);
-                Assert.Fail("No exception is thrown when user with NULL name is created.");
             }
             catch (Exception e)
             {
                 Assert.IsTrue(e.Message.Contains("null"), "Error message is not explicit");
+                thrown = true;
             }
-
+            Assert.IsTrue(thrown, "No exception is thrown when user with NULL name is created.");
         }
 
         [TestMethod]
         public void AddUser_EmptySurname()
         {
+            bool thrown = false;
             try
             {
                 User u1 = new User("FirstName", "", 10);
-                Assert.Fail("No exception is thrown when user with empty surname is created.");
             }
             catch (Exception e)
             {
                 Assert.IsTrue(e.Message.Contains("empty"), "Error message is not explicit");
+                thrown = true;
             }
+            Assert.IsTrue(thrown, "No exception is thrown when user with empty surname is created.");
 
         }
 
         [TestMethod]
         public void AddUser_NullName()
         {
+            bool thrown = false;
             try
             {
                 User u1 = new User("FirstName", null, 10);
-                Assert.Fail("No exception is thrown when user with NULL surname is created.");
             }
             catch (Exception e)
             {
                 Assert.IsTrue(e.Message.Contains("null"), "Error message is not explicit");
+                thrown = true;
             }
+            Assert.IsTrue(thrown, "No exception is thrown when user with NULL surname is created.");
 
         }
 
         [TestMethod]
         public void AddUser_NegativeAge()
         {
+            bool thrown = false;
             try
             {
                 User u1 = new User("FirstName", "LastName", -1);
-                Assert.Fail("No exception is thrown when user with negative age is created.");
             }
             catch (Exception e)
             {
                 Assert.IsTrue(e.Message.Contains("age"), "Error message is not explicit");
+                thrown = true;
             }
+            Assert.IsTrue(thrown,"No exception is thrown when user with negative age is created.");
 
         }
 
         [TestMethod]
         public void AddUser_ZeroAge()
         {
+            bool thrown = false;
             try
             {
                 User u1 = new User("FirstName", "LastName", 0);
-                Assert.Fail("No exception is thrown when user with 0 age is created.");
             }
             catch (Exception e)
             {
                 Assert.IsTrue(e.Message.Contains("age"), "Error message is not explicit");
+                thrown = true;
             }
+            Assert.IsTrue(thrown, "No exception is thrown when user with 0 age is created.");
 
         }
         
@@ -122,19 +146,19 @@ namespace TestProject1
             int expected = 0;
             int actual = this.handler.UserCount;
 
-            Assert.AreEqual(expected, actual, "\nUseCountTest1 failed! \nUserCount default value is incorrect.");
+            Assert.AreEqual(expected, actual, "UserCounts do not match");
         }
 
         [TestMethod]
         public void UserCount_ListOfOneObject()
         {
             User u1 = new User("Test", "User1", 10);
-
             this.handler.AddUser(u1);
+
             int expected = 1;
             int actual = this.handler.UserCount;
 
-            Assert.AreEqual(expected, actual, "\nUseCountTest2 failed! \nUserCount for one user is incorrect.");
+            Assert.AreEqual(expected, actual, "UserCounts do not match");
         }
 
         [TestMethod]
@@ -150,7 +174,7 @@ namespace TestProject1
             int expected = 10; //in case the method allows to have users with the same name and surname
             int actual = this.handler.UserCount;
 
-            Assert.AreEqual(expected, actual, "\nUseCountTest3 failed! \nUserCount for 10 users is incorrect.");
+            Assert.AreEqual(expected, actual, "UserCounts do not match (if users with the same name/surname are allowed)");
         }
 
         [TestMethod]
@@ -166,7 +190,7 @@ namespace TestProject1
             int expected = 1; //in case the system does not allow to have users with the same name and surname
             int actual = this.handler.UserCount;
 
-            Assert.AreEqual(expected, actual, "\nUseCountTest4 failed! \nUserCount for 10 users is incorrect.");
+            Assert.AreEqual(expected, actual, "UserCounts do not match (if users with the same name/surname are not allowed)");
         }
 
         [TestMethod]
@@ -184,7 +208,7 @@ namespace TestProject1
             int expected = 10;
             int actual = this.handler.UserCount;
 
-            Assert.AreEqual(expected, actual, "\nUseCountTest5 failed! \nUserCount is incorrect after ClearData().");
+            Assert.AreEqual(expected, actual, "UserCounts do not match");
         }
 
         [TestMethod]
@@ -204,7 +228,7 @@ namespace TestProject1
             int expected = 0;
             int actual = this.handler.UserCount;
 
-            Assert.AreEqual(expected, actual, "\nUseCountTest6 failed! \nUserCount is incorrect after ClearData().");
+            Assert.AreEqual(expected, actual, "UserCounts do not match");
         }
 
         [TestMethod]
@@ -220,11 +244,11 @@ namespace TestProject1
             }
 
             this.handler.ClearData(); //i guess this method should clear the list and UserCount should return 0;
-
+            
             int expected = 0;
-            int actual = this.handler.UserCount;
+            int actual = this.handler.Users.Count;
 
-            Assert.AreEqual(expected, actual, "\nClearDataTest1 failed! \nClearData() method does not clear the list.");
+            Assert.AreEqual(expected, actual, "ClearData does not remove users from the list");
         }
 
         [TestMethod]
@@ -233,9 +257,9 @@ namespace TestProject1
             this.handler.ClearData();
 
             int expected = 0;
-            int actual = this.handler.UserCount;
+            int actual = this.handler.Users.Count;
 
-            Assert.AreEqual(expected, actual, "\nClearDataTest2 failed! \nClearData() method fails when list is empty.");
+            Assert.AreEqual(expected, actual, "ClearData breaks empty list");
         }
 
         [TestMethod]
@@ -247,7 +271,7 @@ namespace TestProject1
             int expected = 0;
             int actual = TestList.Count;
 
-            Assert.AreEqual(expected, actual, "\nGetUsersByAgeTest1 failed! \nIt is expected that GetUsersByAge(int n) has to return 0 when UserList is empty.");
+            Assert.AreEqual(expected, actual, "GetUsersByAge fails with empty list");
         }
 
         [TestMethod]
@@ -264,7 +288,7 @@ namespace TestProject1
             int expected = 1;
             int actual = TestList.Count;
 
-            Assert.AreEqual(expected, actual, "\nGetUsersByAgeTest2 failed! \nGetUsersByAge fails when there is just one user in the list");
+            Assert.AreEqual(expected, actual, "GetUsersByAge fails with the list of one element");
         }
 
         [TestMethod]
@@ -279,7 +303,7 @@ namespace TestProject1
             int expected = 0;
             int actual = TestList.Count;
 
-            Assert.AreEqual(expected, actual, "\nGetUsersByAgeTest3 failed! \nGetUsersByAge fails when there is just one user in the list");
+            Assert.AreEqual(expected, actual, "GetUsersByAge fails with the list of one element");
         }
 
         [TestMethod]
@@ -300,7 +324,7 @@ namespace TestProject1
             int expected = 1;
             int actual = TestList.Count;
 
-            Assert.AreEqual(expected, actual, "\nGetUsersByAgeTest4 failed! \nGetUsersByAge fails when there are more than just one user in the list");
+            Assert.AreEqual(expected, actual, "GetUsersByAge does not work properly");
         }
 
         [TestMethod]
@@ -320,7 +344,7 @@ namespace TestProject1
             int expected = 0;
             int actual = TestList.Count;
 
-            Assert.AreEqual(expected, actual, "\nGetUsersByAgeTest5 failed! \nGetUsersByAge fails when there are no records that satisfy search criteria");
+            Assert.AreEqual(expected, actual, "GetUsersByAge does not work properly");
         }
 
         [TestMethod]
@@ -341,7 +365,7 @@ namespace TestProject1
             int expected = 10;
             int actual = TestList.Count;
 
-            Assert.AreEqual(expected, actual, "\nGetUsersByAgeTest6 failed! \nGetUsersByAge fails when all records in the list satisfy search criteria");
+            Assert.AreEqual(expected, actual, "GetUsersByAge does not work properly");
         }
 
         [TestMethod]
@@ -357,12 +381,17 @@ namespace TestProject1
             }
 
             List<User> TestList = new List<User>();
-            TestList = this.handler.GetUsersByAge(-1);
-
-            int expected = 0;
-            int actual = TestList.Count;
-
-            Assert.AreEqual(expected, actual, "\nGetUsersByAgeTest7 failed! \nGetUsersByAge fails when search age is negative");
+            bool thrown = false;
+            try
+            {
+                TestList = this.handler.GetUsersByAge(-1);
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.Message.Contains("age"), "Error message is not explicit");
+                thrown = true;
+            }
+            Assert.IsTrue(thrown, "No exception is thrown when search by negative age is requested.");
         }
 
         [TestMethod]
@@ -380,7 +409,7 @@ namespace TestProject1
             User expected = new User("Test1","User1",11);
             User actual = this.handler.GetUserByName("Test1", "User1");
 
-            Assert.AreEqual(expected, actual, "\nGetUserByNameTest1 failed! \nGetUserByName cannot find required user");
+            Assert.IsTrue(NameCompare(expected, actual), "Compared two users.");
         }
 
         [TestMethod]
@@ -398,7 +427,7 @@ namespace TestProject1
             User expected = new User("Test0", "User0", 10);
             User actual = this.handler.GetUserByName("Test0", "User0");
 
-            Assert.AreEqual(expected, actual, "\nGetUserByNameTest2 failed! \nGetUserByName cannot find required user if it is the first one in the list");
+            Assert.IsTrue(NameCompare(expected, actual), "Compared two users.");
         }
 
         [TestMethod]
@@ -416,7 +445,7 @@ namespace TestProject1
             User expected = new User("Test9", "User9", 19);
             User actual = this.handler.GetUserByName("Test9", "User9");
 
-            Assert.AreEqual(expected, actual, "\nGetUserByNameTest3 failed! \nGetUserByName cannot find required user if it is the last one in the list");
+            Assert.IsTrue(NameCompare(expected, actual), "Compared two users.");
         }
     }
 }
