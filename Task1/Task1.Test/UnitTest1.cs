@@ -10,6 +10,20 @@ namespace Task1.Test
     public class UnitTest1
     {
         //publict void FunctionToTest_DataPut_ExpectedResult
+        private IUserHandler userHandler;
+
+        [TestInitialize]
+        public void TestInit()
+        {
+            UserHandlerProvider provider = new UserHandlerProvider();
+            userHandler =provider.GetHandler();
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            userHandler.ClearData();
+        }
 
         [TestMethod]
         public void Users_3Users_NotNull()
@@ -22,10 +36,10 @@ namespace Task1.Test
             List<User> actual = new List<User>();
 
             //action
-            user.GetHandler().AddUser(johny);
-            user.GetHandler().AddUser(mary);
-            user.GetHandler().AddUser(bob);
-            actual = user.GetHandler().Users;
+            userHandler.AddUser(johny);
+            userHandler.AddUser(mary);
+            userHandler.AddUser(bob);
+            actual = userHandler.Users;
 
             //assert
             CollectionAssert.AllItemsAreNotNull(actual);
@@ -39,9 +53,9 @@ namespace Task1.Test
             User johny = new User("John", "Smith", 16);
 
             //action
-            user.GetHandler().AddUser(johny);
-            int i = user.GetHandler().Users.Count - 1;
-            User actual = user.GetHandler().Users[i]; //get last added User
+            userHandler.AddUser(johny);
+            int i = userHandler.Users.Count - 1;
+            User actual = userHandler.Users[i]; //get last added User
 
             //assert
             Assert.AreEqual<User>(johny,actual);
@@ -58,10 +72,10 @@ namespace Task1.Test
             int expected = 3;
 
             //action
-            user.GetHandler().AddUser(johny);
-            user.GetHandler().AddUser(mary);
-            user.GetHandler().AddUser(bob);
-            int actual = user.GetHandler().UserCount;
+            userHandler.AddUser(johny);
+            userHandler.AddUser(mary);
+            userHandler.AddUser(bob);
+            int actual = userHandler.UserCount;
 
             //assert
             Assert.AreEqual(expected,actual);
@@ -77,11 +91,11 @@ namespace Task1.Test
             User bob = new User("Bobby", "Singer", 45);
 
             //action
-            user.GetHandler().AddUser(johny);
-            user.GetHandler().AddUser(mary);
-            user.GetHandler().AddUser(bob);
+            userHandler.AddUser(johny);
+            userHandler.AddUser(mary);
+            userHandler.AddUser(bob);
 
-            User actual = user.GetHandler().GetUserByName("John","Smith");
+            User actual = userHandler.GetUserByName("John","Smith");
 
             //assert
             Assert.AreEqual<User>(johny,actual);
@@ -101,11 +115,11 @@ namespace Task1.Test
             //action
             expected.Add(johny);
             expected.Add(mary);
-            user.GetHandler().AddUser(johny);
-            user.GetHandler().AddUser(mary);
-            user.GetHandler().AddUser(bob);
+            userHandler.AddUser(johny);
+            userHandler.AddUser(mary);
+            userHandler.AddUser(bob);
 
-            actual = user.GetHandler().GetUsersByAge(16);
+            actual = userHandler.GetUsersByAge(16);
 
             //assert
             CollectionAssert.AreEqual(expected,actual);
