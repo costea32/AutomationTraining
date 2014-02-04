@@ -31,6 +31,9 @@ namespace Task2
 
             driver.Navigate().GoToUrl("https://github.com/costea32/AutomationTraining/branches");
 
+            ICollection<IWebElement> table = driver.FindElements(By.XPath("/html/body/div/div[3]/div[2]/div/div[2]/table[2]")); //XPath("/html/body/div/div[3]/div[2]/div/div[2]/table[2]")
+            List<IWebElement> elements = table.ToList();
+
             driver.Close();
 
             Console.WriteLine("\nTest finished!");

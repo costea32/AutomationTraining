@@ -10,6 +10,14 @@ namespace Task2
         public string branchName;
         public int behind;
         public int ahead;
-        // to add one more member
+        List<Record> records;
+
+        Branch(string bn, int b, int a)
+        {
+            branchName = bn;
+            behind = b;
+            ahead = a;
+            records = new List<Record>();
+        }
     }
 }
