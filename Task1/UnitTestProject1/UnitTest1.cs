@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
 
 using Task1;
 
@@ -10,22 +12,6 @@ namespace UnitTestProject1
     [TestClass]
     public class UnitTest1
     {
-        [TestInitialize]
-        public void TestInit()
-        {
-            //initalise nre Handler Provider before new test
-            handler = new UserHandlerProvider().GetHandler();
-
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            //clean all test data after test run
-            handler.ClearData();
-        }
-
-
         //Defining handler
         IUserHandler handler;
         
@@ -40,6 +26,59 @@ namespace UnitTestProject1
         User resultUser;
         List<User> resultList;
 
+        /// <summary>
+        /// Generic Method to compare 2 objects
+        /// Takes 2 objects and compares field by field
+        /// as result trows assert exception
+        /// </summary>
+        /// <typeparam name="T">Generic Type of sent object</typeparam>
+        /// <param name="expectedObject">The Object with expected attributes</param>
+        /// <param name="actualObject">Current Object returned by test</param>
+        protected void CompareTwoObjectsHandler<T>(T expectedObject, T actualObject)
+        {
+            StringBuilder errorString = new StringBuilder();
+            PropertyInfo[] expectedProperties = expectedObject.GetType().GetProperties();
+            PropertyInfo[] actualProperties = actualObject.GetType().GetProperties();
+            string propertyName;
+            object expectedValue;
+            object actualValue;
+
+            foreach (PropertyInfo property in expectedProperties)
+	        {
+                propertyName = property.Name;
+                expectedValue = expectedObject.GetType().GetProperty(propertyName).GetValue(expectedObject);
+                actualValue = actualObject.GetType().GetProperty(propertyName).GetValue(actualObject);
+
+                if (expectedValue.ToString() != actualValue.ToString())
+                {
+                    errorString.AppendFormat("Wrong Attribute: [{0}]. Expected Value = <{1}>, Actual value = <{2}>; ", propertyName, expectedValue, actualValue);
+                }
+	        }
+            
+            //TODO Fix problem with INT comparison
+            if (errorString.ToString() != "")
+            {
+                throw new AssertFailedException(errorString.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Initialise new Handler before each test
+        /// </summary>
+        [TestInitialize]
+        public void TestInit()
+        {
+            handler = new UserHandlerProvider().GetHandler();
+        }
+
+        /// <summary>
+        /// Clean user list after every test is ran
+        /// </summary>
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            handler.ClearData();
+        }
 
         /// <summary>
         /// Initial data test
@@ -61,11 +100,9 @@ namespace UnitTestProject1
         {
             handler.AddUser(testUser1);
 
-            //TODO Assert user
-
             Assert.AreEqual(1, handler.UserCount, "Wrong UserCount");
             Assert.AreEqual(1, handler.Users.Count, "Wrong List Count");
-            Assert.AreEqual(testUser1, handler.Users[0], "Wrong user added");
+            CompareTwoObjectsHandler(testUser1, handler.Users[0]);
         }
 
         /// <summary>
@@ -77,19 +114,20 @@ namespace UnitTestProject1
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
-            //TODO Assert User
             //TODO Search user in List
 
             Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
             Assert.AreEqual(2, handler.Users.Count, "Wrong List Count upon");
-            Assert.AreEqual(testUser1, handler.Users[0], "Wrong first user added");
-            Assert.AreEqual(testUser2, handler.Users[1], "Wrong second user added");
+            CompareTwoObjectsHandler(testUser1, handler.Users[0]);
+            CompareTwoObjectsHandler(testUser2, handler.Users[1]);
         }
 
         /// <summary>
-        /// Add a User Twice. Expected behaviour - List of 2 users
+        /// Add a User Twice
+        /// Expected behavior - Exception
         /// </summary>
         [TestMethod]
+        [ExpectedException(typeof(Exception), "")] //TODO check exception text
         public void AddAUserTwice()
         {
 
@@ -97,12 +135,12 @@ namespace UnitTestProject1
             handler.AddUser(testUser1);
 
             //TODO Assert Exeption
-            //TODO Assert User
-
-            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
-            Assert.AreEqual(2, handler.Users.Count, "Wrong List Count");
-            Assert.AreEqual(testUser1, handler.Users[0], "Wrong User added first Time");
-            Assert.AreEqual(testUser1, handler.Users[1], "Wrong User added second Time");
+            //TODO catch exception
+                
+            
+            Assert.AreEqual(1, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(1, handler.Users.Count, "Wrong List Count");
+            CompareTwoObjectsHandler(testUser1, handler.Users[0]);
         }
 
         /// <summary>
@@ -175,11 +213,9 @@ namespace UnitTestProject1
             handler.ClearData();
             handler.AddUser(testUser2);
 
-            //TODO Assert User
-
             Assert.AreEqual(1, handler.UserCount, "Wrong UserCount");
             Assert.AreEqual(1, handler.Users.Count, "Wrong List Count");
-            Assert.AreEqual(testUser2, handler.Users[0], "Wrong user added to list");
+            CompareTwoObjectsHandler(testUser2, handler.Users[0]);
         }
 
         /// <summary>
@@ -188,7 +224,6 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetByNameEmptyList()
         {
-
             resultUser =  handler.GetUserByName(testUser1.FirstName, testUser1.LastName);
 
             Assert.IsNull(resultUser, "A user was returned");
@@ -202,19 +237,16 @@ namespace UnitTestProject1
         [TestMethod]
         public void NoUserFoundByName()
         {
-            //testAction = "requsting user by wrong name";
-            //resetHandler
-
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
-            handler.AddUser(testUser3);
+            //handler.AddUser(testUser3);
             handler.AddUser(testUser4);
 
             resultUser = handler.GetUserByName(wrongUser.FirstName, wrongUser.LastName);
 
             Assert.IsNull(resultUser, "A user was returned");
-            Assert.AreEqual(4, handler.UserCount, "Wrong UserCount");
-            Assert.AreEqual(4, handler.Users.Count, "Wrong List Count");
+            Assert.AreEqual(3, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(3, handler.Users.Count, "Wrong List Count");
         }
 
 
@@ -224,9 +256,6 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetUserbyFNOnly()
         {
-            //testAction = "requesting user by Correct First Name Only";
-            //resetHandler
-
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
@@ -244,9 +273,6 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetUserbyLNOnly()
         {
-            //testAction = "request User by Correct Last name Only";
-            //resetHandler
-
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
@@ -265,20 +291,15 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetOneUserByName()
         {
-            //testAction = "request a user by correct name";
-            //resetHandler
-
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
             resultUser = handler.GetUserByName(testUser2.FirstName, testUser2.LastName);
 
-            //TODO Assert User
-
             Assert.IsNotNull(resultUser, "No Users were returned");
-            Assert.AreEqual(testUser2, resultUser, "Wrong User was returned");
             Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
             Assert.AreEqual(2, handler.Users.Count, "Wrong list Count");
+            CompareTwoObjectsHandler(testUser2, resultUser);
         }
 
         /// <summary>
@@ -287,9 +308,6 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetByInvertedName()
         {
-            //testAction = "requesting user by inverted name (LN,FN)";
-            //resetHandler
-
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
@@ -329,21 +347,16 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetByName2ndTime()
         {
-            //testAction = "second request of same user";
-            //resetHandler
-
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
             resultUser = handler.GetUserByName(testUser1.FirstName, testUser1.LastName);
             resultUser = handler.GetUserByName(testUser1.FirstName, testUser1.LastName);
 
-            //TODO Assert User
-
             Assert.IsNotNull(resultUser, "No Users were returned");
-            Assert.AreEqual(testUser1, resultUser, "Wrong User was returned");
             Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
             Assert.AreEqual(2, handler.Users.Count, "Wrong list Count");
+            CompareTwoObjectsHandler(testUser1, resultUser);
         }
 
         /// <summary>
@@ -352,9 +365,6 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetByNameAnotherUser()
         {
-            //testAction = "second request of other user";
-            //resetHandler
-
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
@@ -373,9 +383,6 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetByAgeEmptyList()
         {
-            //testAction = "getting by age from empty list";
-            //resetHandler
-
             resultList = handler.GetUsersByAge(wrongUser.Age);
 
             Assert.AreEqual(0, resultList.Count, "Result list is returned");
@@ -389,21 +396,17 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetOneUserByAge()
         {
-            //testAction = "requesting one user by corect age";
-            //resetHandler
-
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
             resultList = handler.GetUsersByAge(testUser2.Age);
 
-            //TODO Assert User
             //TODO Search in list
 
             Assert.AreEqual(1, resultList.Count, "Wrong resultList count");
-            Assert.AreEqual(testUser2, resultList[0], "Wrong User returned");
             Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
             Assert.AreEqual(2, handler.Users.Count, "Wrong list Count");
+            CompareTwoObjectsHandler(testUser2, resultList[0]);
         }
 
         /// <summary>
@@ -412,9 +415,6 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetNoUserByAge()
         {
-            //testAction = "requesting users by wrong age";
-            //resetHandler
-
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
@@ -431,43 +431,33 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetMultipleUsersByAge()
         {
-            //testAction = "request multiple users by age";
-            //resetHandler
-
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
             handler.AddUser(testUser4);
 
             resultList = handler.GetUsersByAge(testUser4.Age);
 
-            //TODO Assert User
             //TODO search in list
             Assert.AreEqual(2, resultList.Count, "List of users retured");
             Assert.AreEqual(3, handler.UserCount, "Wrong UserCount");
             Assert.AreEqual(3, handler.Users.Count, "Wrong list Count");
-            Assert.AreEqual(testUser1, resultList[0], "Wrong first user in list");
-            Assert.AreEqual(testUser4, resultList[1], "Wrong second user returned in list");
+            CompareTwoObjectsHandler(testUser1, resultList[0]);
+            CompareTwoObjectsHandler(testUser4, resultList[1]);
         }
 
         [TestMethod]
         public void GetUsersByAgeRepeat()
         {
-            //testAction = "reapeat request after first";
-            //resetHandler
-
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
             resultList = handler.GetUsersByAge(testUser1.Age);
             resultList = handler.GetUsersByAge(testUser2.Age);
 
-            //TODO Assert User
-
             Assert.AreEqual(1, resultList.Count, "List of users retured");
             Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
             Assert.AreEqual(2, handler.Users.Count, "Wrong list Count");
-            Assert.AreEqual(testUser2, resultList[0], "Wrong user returned in list");
-
+            CompareTwoObjectsHandler(testUser2, resultList[0]);
         }
 
         
