@@ -8,147 +8,209 @@ namespace UnitTestProject1
     [TestClass()]
     public class UserHandlerProviderTest
     {
+        private IUserHandler handler;
+
         [TestInitialize]
         public void TestInit()
         {
-            //happens before each test
+            UserHandlerProvider target = new UserHandlerProvider();
+            handler = target.GetHandler();
         }
 
         [TestCleanup]
         public void TestCleanup()
         {
-            //happens after each test
+            handler.ClearData();
         }
 
+
         [TestMethod()]
-        public void AddUserTest()
+        public void HandlerNotNullCheck()
         {
-            string val1;
-            string val2;
-            int val3;
-            User newGuy;
-
-            UserHandlerProvider target = new UserHandlerProvider();
-            var handler = target.GetHandler();
             Assert.IsNotNull(handler);
-
-            // Enter correct first name & correct last name & correct age.
-            val1 = NameBuilder(6);
-            val2 = NameBuilder(6);
-            val3 = new Random(DateTime.Now.Millisecond).Next(16, 80);
-            newGuy = new User(val1, val2, val3);
-            handler.AddUser(newGuy);
-            Assert.IsTrue(handler.Users.Contains(newGuy), "No new guy here!");
-
-            // Enter correct first name & correct last name & incorrect age.
-            val1 = NameBuilder(6);
-            val2 = NameBuilder(6);
-            val3 = new Random(DateTime.Now.Millisecond).Next(-100, -1);
-            newGuy = new User(val1, val2, val3);
-            handler.AddUser(newGuy);
-            Assert.IsFalse(handler.Users.Contains(newGuy), "WTF is he doin' here!?");
-
-            // Enter incorrect first name & correct last name & correct age. (digits)
-            val1 = NameBuilder(6) + "123";
-            val2 = NameBuilder(6);
-            val3 = new Random(DateTime.Now.Millisecond).Next(16, 80);
-            newGuy = new User(val1, val2, val3);
-            handler.AddUser(newGuy);
-            Assert.IsFalse(handler.Users.Contains(newGuy), "WTF is he doin' here!?");
-
-            // Enter incorrect first name & correct last name & correct age. (symbols)
-            val1 = NameBuilder(6) + "!@#";
-            val2 = NameBuilder(6);
-            val3 = new Random(DateTime.Now.Millisecond).Next(16, 80);
-            newGuy = new User(val1, val2, val3);
-            handler.AddUser(newGuy);
-            Assert.IsFalse(handler.Users.Contains(newGuy), "WTF is he doin' here!?");
-
-            // Enter correct first name & incorrect last name & correct age. (digits)
-            val1 = NameBuilder(6);
-            val2 = NameBuilder(6) + "123";
-            val3 = new Random(DateTime.Now.Millisecond).Next(16, 80);
-            newGuy = new User(val1, val2, val3);
-            handler.AddUser(newGuy);
-            Assert.IsFalse(handler.Users.Contains(newGuy), "WTF is he doin' here!?");
-
-            // Enter correct first name & incorrect last name & correct age. (symbols)
-            val1 = NameBuilder(6);
-            val2 = NameBuilder(6) + "!@#";
-            val3 = new Random(DateTime.Now.Millisecond).Next(16, 80);
-            newGuy = new User(val1, val2, val3);
-            handler.AddUser(newGuy);
-            Assert.IsFalse(handler.Users.Contains(newGuy), "WTF is he doin' here!?");
         }
 
+        #region AddUser
         [TestMethod()]
-        public void UserCountTest()
+        public void AddUser_Correct()
         {
-            UserHandlerProvider target = new UserHandlerProvider();
-            var handler = target.GetHandler();
-            Assert.IsNotNull(handler);
-
-            Assert.IsTrue((handler.Users.Count == handler.UserCount), "That's just wrong.");
+            var val1 = NameBuilder(6);
+            var val2 = NameBuilder(6);
+            var val3 = new Random(DateTime.Now.Millisecond).Next(16, 80);
+            var newGuy = new User(val1, val2, val3);
+            handler.AddUser(newGuy);
+            Assert.IsTrue(handler.Users.Exists(x => x.FirstName.Equals(val1) && x.LastName.Equals(val2) && x.Age.Equals(val3)), "New user not in the list");
         }
-
+        [ExpectedException(typeof(Exception))]
         [TestMethod()]
-        public void GetUserByNameTest()
+        public void AddUser_EmptyFirstName()
         {
-            UserHandlerProvider target = new UserHandlerProvider();
-            var handler = target.GetHandler();
-            Assert.IsNotNull(handler);
+            var val1 = "";
+            var val2 = NameBuilder(6);
+            var val3 = new Random(DateTime.Now.Millisecond).Next(16, 80);
+            var newGuy = new User(val1, val2, val3);
+            handler.AddUser(newGuy);
+            Assert.IsFalse(handler.Users.Exists(x => x.FirstName.Equals(val1) && x.LastName.Equals(val2) && x.Age.Equals(val3)), "User created without first name");
+        }
+        [ExpectedException(typeof(Exception))]
+        [TestMethod()]
+        public void AddUser_EmptyLastName()
+        {
+            var val1 = NameBuilder(6);
+            var val2 = "";
+            var val3 = new Random(DateTime.Now.Millisecond).Next(16, 80);
+            var newGuy = new User(val1, val2, val3);
+            handler.AddUser(newGuy);
+            Assert.IsFalse(handler.Users.Exists(x => x.FirstName.Equals(val1) && x.LastName.Equals(val2) && x.Age.Equals(val3)), "User created without last name");
+        }
+        [ExpectedException(typeof(Exception))]
+        [TestMethod()]
+        public void AddUser_NegativeAge()
+        {
+            var val1 = NameBuilder(6);
+            var val2 = NameBuilder(6);
+            var val3 = new Random(DateTime.Now.Millisecond).Next(-100, -1);
+            var newGuy = new User(val1, val2, val3);
+            handler.AddUser(newGuy);
+            Assert.IsFalse(handler.Users.Exists(x => x.FirstName.Equals(val1) && x.LastName.Equals(val2) && x.Age.Equals(val3)), "User created with negative age value");
+        }
+        /*
+        [TestMethod()]
+        public void AddUser_NumsFirstName()
+        {
+            var val1 = NameBuilder(6) + "123";
+            var val2 = NameBuilder(6);
+            var val3 = new Random(DateTime.Now.Millisecond).Next(16, 80);
+            var newGuy = new User(val1, val2, val3);
+            handler.AddUser(newGuy);
+            Assert.IsFalse(handler.Users.Exists(x => x.FirstName.Equals(val1) && x.LastName.Equals(val2) && x.Age.Equals(val3)), "User created with numbers in first name");
+        }
+        [TestMethod()]
+        public void AddUser_DigitsFirstName()
+        {
+            var val1 = NameBuilder(6) + "!@#";
+            var val2 = NameBuilder(6);
+            var val3 = new Random(DateTime.Now.Millisecond).Next(16, 80);
+            var newGuy = new User(val1, val2, val3);
+            handler.AddUser(newGuy);
+            Assert.IsFalse(handler.Users.Exists(x => x.FirstName.Equals(val1) && x.LastName.Equals(val2) && x.Age.Equals(val3)), "User created with digits in first name");
+        }
+        [TestMethod()]
+        public void AddUser_NumsLastName()
+        {
+            var val1 = NameBuilder(6);
+            var val2 = NameBuilder(6) + "123";
+            var val3 = new Random(DateTime.Now.Millisecond).Next(16, 80);
+            var newGuy = new User(val1, val2, val3);
+            handler.AddUser(newGuy);
+            Assert.IsFalse(handler.Users.Exists(x => x.FirstName.Equals(val1) && x.LastName.Equals(val2) && x.Age.Equals(val3)), "User created with numbers in last name");
+        }
+        [TestMethod()]
+        public void AddUser_DigitsLastName()
+        {
+            var val1 = NameBuilder(6);
+            var val2 = NameBuilder(6) + "!@#";
+            var val3 = new Random(DateTime.Now.Millisecond).Next(16, 80);
+            var newGuy = new User(val1, val2, val3);
+            handler.AddUser(newGuy);
+            Assert.IsFalse(handler.Users.Exists(x => x.FirstName.Equals(val1) && x.LastName.Equals(val2) && x.Age.Equals(val3)), "User created with digits in last name");
+        }*/
+        #endregion
 
+        #region UserCount
+        [TestMethod()]
+        public void UserCount_Equality()
+        {
+            Assert.IsTrue((handler.Users.Count == handler.UserCount), "UserCount is not equal to actual Count of Users");
+        }
+        [TestMethod()]
+        public void UserCount_ChangeOnAddUser()
+        {
+            var countBefore = handler.UserCount;
+            handler.AddUser(new User(NameBuilder(6), NameBuilder(6), 24));
+            var countAfter = handler.UserCount;
+            Assert.IsTrue(countBefore < countAfter, "UserCount didn't change");
+        }
+        [TestMethod()]
+        public void UserCount_ChangeOnClearData()
+        {
+            handler.AddUser(new User(NameBuilder(6), NameBuilder(6), 24));
+            var countBefore = handler.UserCount;
+            handler.ClearData();
+            var countAfter = handler.UserCount;
+            Assert.IsTrue(countBefore > countAfter, "UserCount didn't change");
+        }
+        #endregion
+
+        #region GetUserByName
+        [TestMethod()]
+        public void GetUserByName_Existing()
+        {
             string firstname = NameBuilder(6);
             string lastname = NameBuilder(6);
             var newGuy = new User(firstname, lastname, 25);
             handler.AddUser(newGuy);
-
-            Assert.IsNotNull(handler.GetUserByName(firstname, lastname));
-            var ourGuy = handler.GetUserByName(firstname, lastname);
-            Assert.IsTrue(ourGuy.FirstName.Equals(firstname) && ourGuy.LastName.Equals(lastname), "There's no such fella.");
+            Assert.IsNotNull(handler.GetUserByName(firstname, lastname), "Can't find newly added user by name");
         }
-
         [TestMethod()]
-        public void GetUserByAgeTest()
+        public void GetUserByName_NonExisting()
         {
-            UserHandlerProvider target = new UserHandlerProvider();
-            var handler = target.GetHandler();
-            Assert.IsNotNull(handler);
-
             string firstname = NameBuilder(6);
             string lastname = NameBuilder(6);
-            var age = new Random(DateTime.Now.Millisecond).Next(16, 80);
+            Assert.IsNull(handler.GetUserByName(firstname, lastname), "Returns a non-existing user");
+        }
+        [TestMethod()]
+        public void GetUserByName_CorrectReturn()
+        {
+            string firstname = NameBuilder(6);
+            string lastname = NameBuilder(6);
+            int age = new Random().Next(18, 80);
             var newGuy = new User(firstname, lastname, age);
             handler.AddUser(newGuy);
-
-            Assert.IsNotNull(handler.GetUsersByAge(age));
-            var ourGuys = handler.GetUsersByAge(age);
-            Assert.IsTrue(ourGuys.Contains(newGuy), "There's no such fella.");
+            var ourGuy = handler.GetUserByName(firstname, lastname);
+            Assert.IsTrue(ourGuy.FirstName.Equals(firstname) && ourGuy.LastName.Equals(lastname) && ourGuy.Age.Equals(age), "Can't find newly added user by name");
         }
+        #endregion
 
+        #region GetUserByAge
         [TestMethod()]
-        public void ClearDataTest()
+        public void GetUserByAge_Existing()
         {
-            UserHandlerProvider target = new UserHandlerProvider();
-            var handler = target.GetHandler();
-            Assert.IsNotNull(handler);
+            string firstname = NameBuilder(6);
+            string lastname = NameBuilder(6);
+            var age = new Random().Next(16, 80);
 
-            // ex.1
+            handler.AddUser(new User(firstname, lastname, age));
+            var ourGuys = handler.GetUsersByAge(age);
+            Assert.IsTrue(ourGuys.Exists(x => x.FirstName.Equals(firstname) && x.LastName.Equals(lastname) && x.Age.Equals(age)), "Can't find existing user");
+        }
+        [TestMethod()]
+        public void GetUserByAge_NonExisting()
+        {
+            string firstname = NameBuilder(6);
+            string lastname = NameBuilder(6);
+            var age = new Random().Next(16, 80);
+            handler.ClearData();
+            var ourGuys = handler.GetUsersByAge(age);
+            Assert.IsFalse(ourGuys.Exists(x => x.FirstName.Equals(firstname) && x.LastName.Equals(lastname) && x.Age.Equals(age)), "Finds a non-existing user");
+        }
+        #endregion
+
+        #region ClearData
+        [TestMethod()]
+        public void ClearData_AffectsUsers()
+        {
+            handler.AddUser(new User(NameBuilder(6), NameBuilder(6), 24));
             var countBefore = handler.Users.Count;
             handler.ClearData();
-           if (countBefore != 0) 
-                Assert.IsFalse((countBefore == handler.Users.Count), "I assume it's wrong.");
-
-            //ex.2
-            var newGuy = new User("sam", "nelson", 25);
-            handler.AddUser(newGuy);
-            handler.ClearData();
-            Assert.IsTrue(handler.GetUserByName("sam", "nelson") == null, "I assume it's wrong.");
+            var countAfter = handler.Users.Count;
+            Assert.IsTrue(countBefore > countAfter, "Users list didn't change");
         }
+        #endregion
 
         #region helpers
 
-        private string NameBuilder(int l/*, bool symbols = false, bool digits = false, bool hyphen = false*/)
+        private string NameBuilder(int l)
         {
             var sBuilder = new StringBuilder();
             var rand = new Random(DateTime.Now.Millisecond);

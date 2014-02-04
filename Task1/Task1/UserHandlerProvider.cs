@@ -8,10 +8,10 @@ namespace Task1
     {
         public IUserHandler GetHandler()
         {
-           //return new PerfectUserHandler();
-            //return new BuggedHandler();
+            //return new PerfectUserHandler();
+            return new BuggedHandler();
             //return new OverProtectiveUserHandler();
-            return new SingletonUserHandler();
+            //return new SingletonUserHandler();
         }
     }
 }
