@@ -10,19 +10,20 @@ namespace UnitTestProject1
     [TestClass]
     public class UnitTest1
     {
-        //[TestInitialize]
-        //public void TestInit()
-        //{
-        //    //happens before each test
-        //    resetHandler();
-        //}
+        [TestInitialize]
+        public void TestInit()
+        {
+            //initalise nre Handler Provider before new test
+            handler = new UserHandlerProvider().GetHandler();
 
-        //[TestCleanup]
-        //public void TestCleanup()
-        //{
-        //    //Happens after each test
-        //    handler.ClearData();
-        //}
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            //clean all test data after test run
+            handler.ClearData();
+        }
 
 
         //Defining handler
@@ -33,21 +34,12 @@ namespace UnitTestProject1
         User testUser2 = new User("FN2", "LN2", 22);
         User testUser3 = new User("FN1", "LN1", 23); //this user requred to test a dublicate FN<>LN pair
         User testUser4 = new User("FN4", "LN4", 21); //this user requred to test a dublicate age
+        User wrongUser = new User("WrongFN", "WrongLN", 1); //this user is created to identify not existing values
 
         //Defining Test Result Vars
         User resultUser;
         List<User> resultList;
 
-        //Define Action for easier Assessmet
-        string testAction;
-
-        /// <summary>
-        /// Method to create now handler Object. Added to be reused in TestMethods
-        /// </summary>
-        protected void resetHandler()
-        {
-            handler = new UserHandlerProvider().GetHandler();
-        }
 
         /// <summary>
         /// Initial data test
@@ -55,27 +47,25 @@ namespace UnitTestProject1
         [TestMethod]
         public void InitialStateTest()
         {
-            testAction = "handler Initialisation";
-            resetHandler();
+
             //check Users list and User Count
-            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(0, handler.Users.Count, "Wrong List Count upon " + testAction);
+            Assert.AreEqual(0, handler.UserCount, "Assert UserCount is not 0");
+            Assert.AreEqual(0, handler.Users.Count, "UserList count is not 0");
         }
 
         /// <summary>
         /// Verify that one user can be added
         /// </summary>
         [TestMethod]
-        public void AddAUserTest()
+        public void AddAUser()
         {
-            testAction = "Adding one user";
-            resetHandler();
-
             handler.AddUser(testUser1);
 
-            Assert.AreEqual(1, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(1, handler.Users.Count, "Wrong List Count upon " + testAction);
-            Assert.AreEqual(testUser1, handler.Users[0], "Wrong user added upon " + testAction);
+            //TODO Assert user
+
+            Assert.AreEqual(1, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(1, handler.Users.Count, "Wrong List Count");
+            Assert.AreEqual(testUser1, handler.Users[0], "Wrong user added");
         }
 
         /// <summary>
@@ -84,14 +74,14 @@ namespace UnitTestProject1
         [TestMethod]
         public void Add2Users()
         {
-            testAction = "Adding 2 users";
-            resetHandler();
-
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
-            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(2, handler.Users.Count, "Wrong List Count upon " + testAction);
+            //TODO Assert User
+            //TODO Search user in List
+
+            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(2, handler.Users.Count, "Wrong List Count upon");
             Assert.AreEqual(testUser1, handler.Users[0], "Wrong first user added");
             Assert.AreEqual(testUser2, handler.Users[1], "Wrong second user added");
         }
@@ -102,14 +92,15 @@ namespace UnitTestProject1
         [TestMethod]
         public void AddAUserTwice()
         {
-            testAction = "Adding one user 2 times";
-            resetHandler();
 
             handler.AddUser(testUser1);
             handler.AddUser(testUser1);
 
-            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(2, handler.Users.Count, "Wrong List Count upon " + testAction);
+            //TODO Assert Exeption
+            //TODO Assert User
+
+            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(2, handler.Users.Count, "Wrong List Count");
             Assert.AreEqual(testUser1, handler.Users[0], "Wrong User added first Time");
             Assert.AreEqual(testUser1, handler.Users[1], "Wrong User added second Time");
         }
@@ -120,13 +111,11 @@ namespace UnitTestProject1
         [TestMethod]
         public void EmptyClear()
         {
-            testAction = "Clearing an empty List";
-            resetHandler();
 
             handler.ClearData();
 
-            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(0, handler.Users.Count, "Wrong List Count upon " + testAction);
+            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(0, handler.Users.Count, "Wrong List Count");
         }
 
         /// <summary>
@@ -135,15 +124,13 @@ namespace UnitTestProject1
         [TestMethod]
         public void ClearOneUser()
         {
-            testAction = "Clearing a list with 1 user";
-            resetHandler();
 
             handler.AddUser(testUser1);
 
             handler.ClearData();
 
-            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(0, handler.Users.Count, "Wrong List Count upon " + testAction);
+            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(0, handler.Users.Count, "Wrong List Count");
         }
 
         /// <summary>
@@ -152,15 +139,13 @@ namespace UnitTestProject1
         [TestMethod]
         public void ReapeatedClear()
         {
-            testAction = "Performing a clear 2nd time";
-            resetHandler();
 
             handler.AddUser(testUser1);
             handler.ClearData();
             handler.ClearData();
 
-            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(0, handler.Users.Count, "Wrong List Count upon " + testAction);
+            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(0, handler.Users.Count, "Wrong List Count");
 
         }
 
@@ -170,15 +155,13 @@ namespace UnitTestProject1
         [TestMethod]
         public void Clean2Users()
         {
-            testAction = "Clearing a list with 2 users";
-            resetHandler();
 
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
             handler.ClearData();
 
-            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(0, handler.Users.Count, "Wrong List Count upon " + testAction);
+            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(0, handler.Users.Count, "Wrong List Count");
         }
 
         /// <summary>
@@ -187,15 +170,15 @@ namespace UnitTestProject1
         [TestMethod]
         public void AddUserAfterClear()
         {
-            testAction = "attempt to add user after clear";
-            resetHandler();
 
             handler.AddUser(testUser1);
             handler.ClearData();
             handler.AddUser(testUser2);
 
-            Assert.AreEqual(1, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(1, handler.Users.Count, "Wrong List Count upon " + testAction);
+            //TODO Assert User
+
+            Assert.AreEqual(1, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(1, handler.Users.Count, "Wrong List Count");
             Assert.AreEqual(testUser2, handler.Users[0], "Wrong user added to list");
         }
 
@@ -205,14 +188,12 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetByNameEmptyList()
         {
-            testAction = "ger by name from ampty list";
-            resetHandler();
 
-            resultUser =  handler.GetUserByName("FN1", "FN2");
+            resultUser =  handler.GetUserByName(testUser1.FirstName, testUser1.LastName);
 
-            Assert.IsNull(resultUser, "A user was returned upon " + testAction);
-            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(0, handler.Users.Count, "Wrong List Count upon " + testAction);
+            Assert.IsNull(resultUser, "A user was returned");
+            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(0, handler.Users.Count, "Wrong List Count");
         }
 
         /// <summary>
@@ -221,19 +202,19 @@ namespace UnitTestProject1
         [TestMethod]
         public void NoUserFoundByName()
         {
-            testAction = "requsting user by wrong name";
-            resetHandler();
+            //testAction = "requsting user by wrong name";
+            //resetHandler
 
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
             handler.AddUser(testUser3);
             handler.AddUser(testUser4);
 
-            resultUser = handler.GetUserByName("WrongFN", "WrongLN");
+            resultUser = handler.GetUserByName(wrongUser.FirstName, wrongUser.LastName);
 
-            Assert.IsNull(resultUser, "A user was returned upon " + testAction);
-            Assert.AreEqual(4, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(4, handler.Users.Count, "Wrong List Count upon " + testAction);
+            Assert.IsNull(resultUser, "A user was returned");
+            Assert.AreEqual(4, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(4, handler.Users.Count, "Wrong List Count");
         }
 
 
@@ -243,17 +224,17 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetUserbyFNOnly()
         {
-            testAction = "requesting user by Correct First Name Only";
-            resetHandler();
+            //testAction = "requesting user by Correct First Name Only";
+            //resetHandler
 
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
-            resultUser = handler.GetUserByName("FN1", "WrongLN");
+            resultUser = handler.GetUserByName(testUser1.FirstName, wrongUser.LastName);
 
-            Assert.IsNull(resultUser, "A user was returned upon " + testAction);
-            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(2, handler.Users.Count, "Wrong List Count upon " + testAction);
+            Assert.IsNull(resultUser, "A user was returned");
+            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(2, handler.Users.Count, "Wrong List Count");
 
         }
 
@@ -263,19 +244,20 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetUserbyLNOnly()
         {
-            testAction = "request User by Correct Last name Only";
-            resetHandler();
+            //testAction = "request User by Correct Last name Only";
+            //resetHandler
 
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
-            resultUser = handler.GetUserByName("WrongFN", "LN1");
+            resultUser = handler.GetUserByName(wrongUser.FirstName, testUser1.LastName);
 
-            Assert.IsNull(resultUser, "A user was returned upon " + testAction);
-            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count upon " + testAction);
+            Assert.IsNull(resultUser, "A user was returned");
+            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count");
 
         }
+
 
         /// <summary>
         /// Getting One user by correct First Name and Last Name
@@ -283,18 +265,20 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetOneUserByName()
         {
-            testAction = "request a user by correct name";
-            resetHandler();
+            //testAction = "request a user by correct name";
+            //resetHandler
 
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
-            resultUser = handler.GetUserByName("FN2", "LN2");
+            resultUser = handler.GetUserByName(testUser2.FirstName, testUser2.LastName);
 
-            Assert.IsNotNull(resultUser, "No Users were returned upon "+ testAction);
-            Assert.AreEqual(testUser2, resultUser, "Wrong User was returned upon " + testAction);
-            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count upon " + testAction);
+            //TODO Assert User
+
+            Assert.IsNotNull(resultUser, "No Users were returned");
+            Assert.AreEqual(testUser2, resultUser, "Wrong User was returned");
+            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count");
         }
 
         /// <summary>
@@ -303,40 +287,41 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetByInvertedName()
         {
-            testAction = "requesting user by inverted name (LN,FN)";
-            resetHandler();
+            //testAction = "requesting user by inverted name (LN,FN)";
+            //resetHandler
 
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
-            resultUser = handler.GetUserByName("LN1", "FN1");
+            resultUser = handler.GetUserByName(testUser1.LastName, testUser1.FirstName);
 
-            Assert.IsNull(resultUser, "A user was returned upon " + testAction);
-            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count upon " + testAction);
+            Assert.IsNull(resultUser, "A user was returned");
+            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count");
         }
 
         /// <summary>
-        /// Request by a correct Name where multiple users exist in list
+        ///This test is not valid due to data validtion implemented
         /// </summary>
-        [TestMethod]
-        public void GetByNameMultipleuser()
-        {
-            testAction = "request multiple users by FN and LN";
-            resetHandler();
 
-            handler.AddUser(testUser1);
-            handler.AddUser(testUser2);
-            handler.AddUser(testUser3);
+        //[TestMethod]
+        //public void GetByNameMultipleuser()
+        //{
+        //    //testAction = "request multiple users by FN and LN";
+        //    //resetHandler
 
-            resultUser = handler.GetUserByName("FN1", "LN1");
+        //    handler.AddUser(testUser1);
+        //    handler.AddUser(testUser2);
+        //    handler.AddUser(testUser3);
 
-            //Here I use an assuption that Method will return 1st user (the most obvious and logiacal solution)
-            Assert.IsNotNull(resultUser, "No Users were returned upon " + testAction);
-            Assert.AreEqual(testUser1, resultUser, "Wrong User was returned upon " + testAction);
-            Assert.AreEqual(3, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(3, handler.Users.Count, "Wrong list Count upon " + testAction);
-        }
+        //    resultUser = handler.GetUserByName("FN1", "LN1");
+
+        //    //Here I use an assuption that Method will return 1st user (the most obvious and logiacal solution)
+        //    Assert.IsNotNull(resultUser, "No Users were returned");
+        //    Assert.AreEqual(testUser1, resultUser, "Wrong User was returned");
+        //    Assert.AreEqual(3, handler.UserCount, "Wrong UserCount");
+        //    Assert.AreEqual(3, handler.Users.Count, "Wrong list Count");
+        //}
 
         /// <summary>
         /// Multiple requests of same user
@@ -344,19 +329,21 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetByName2ndTime()
         {
-            testAction = "second request of same user";
-            resetHandler();
+            //testAction = "second request of same user";
+            //resetHandler
 
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
-            resultUser = handler.GetUserByName("FN1", "LN1");
-            resultUser = handler.GetUserByName("FN1", "LN1");
+            resultUser = handler.GetUserByName(testUser1.FirstName, testUser1.LastName);
+            resultUser = handler.GetUserByName(testUser1.FirstName, testUser1.LastName);
 
-            Assert.IsNotNull(resultUser, "No Users were returned upon " + testAction);
-            Assert.AreEqual(testUser1, resultUser, "Wrong User was returned upon " + testAction);
-            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count upon " + testAction);
+            //TODO Assert User
+
+            Assert.IsNotNull(resultUser, "No Users were returned");
+            Assert.AreEqual(testUser1, resultUser, "Wrong User was returned");
+            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count");
         }
 
         /// <summary>
@@ -365,19 +352,19 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetByNameAnotherUser()
         {
-            testAction = "second request of other user";
-            resetHandler();
+            //testAction = "second request of other user";
+            //resetHandler
 
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
-            resultUser = handler.GetUserByName("FN1", "LN1");
-            resultUser = handler.GetUserByName("FN2", "LN2");
+            resultUser = handler.GetUserByName(testUser1.FirstName, testUser1.LastName);
+            resultUser = handler.GetUserByName(testUser2.FirstName, testUser2.LastName);
 
-            Assert.IsNotNull(resultUser, "No Users were returned upon " + testAction);
-            Assert.AreEqual(testUser2, resultUser, "Wrong User was returned upon " + testAction);
-            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count upon " + testAction);
+            Assert.IsNotNull(resultUser, "No Users were returned");
+            Assert.AreEqual(testUser2, resultUser, "Wrong User was returned");
+            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count");
         }
 
         /// <summary>
@@ -386,14 +373,14 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetByAgeEmptyList()
         {
-            testAction = "getting by age from empty list";
-            resetHandler();
+            //testAction = "getting by age from empty list";
+            //resetHandler
 
-            resultList = handler.GetUsersByAge(1);
+            resultList = handler.GetUsersByAge(wrongUser.Age);
 
-            Assert.AreEqual(0, resultList.Count, "List of users retured upon " +testAction);
-            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(0, handler.Users.Count, "Wrong list Count upon " + testAction);
+            Assert.AreEqual(0, resultList.Count, "Result list is returned");
+            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(0, handler.Users.Count, "Wrong list Count");
         }
 
         /// <summary>
@@ -402,18 +389,21 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetOneUserByAge()
         {
-            testAction = "requesting one user by corect age";
-            resetHandler();
+            //testAction = "requesting one user by corect age";
+            //resetHandler
 
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
-            resultList = handler.GetUsersByAge(22);
+            resultList = handler.GetUsersByAge(testUser2.Age);
 
-            Assert.AreEqual(1, resultList.Count, "Wrong list returned upon" + testAction);
-            Assert.AreEqual(testUser2, resultList[0], "Wrong User returned upon " + testAction);
-            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count upon " + testAction);
+            //TODO Assert User
+            //TODO Search in list
+
+            Assert.AreEqual(1, resultList.Count, "Wrong resultList count");
+            Assert.AreEqual(testUser2, resultList[0], "Wrong User returned");
+            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count");
         }
 
         /// <summary>
@@ -422,17 +412,17 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetNoUserByAge()
         {
-            testAction = "requesting users by wrong age";
-            resetHandler();
+            //testAction = "requesting users by wrong age";
+            //resetHandler
 
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
 
-            resultList = handler.GetUsersByAge(231);
+            resultList = handler.GetUsersByAge(wrongUser.Age);
 
-            Assert.AreEqual(0, resultList.Count, "List of users retured upon " + testAction);
-            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count upon " + testAction);
+            Assert.AreEqual(0, resultList.Count, "List of users retured");
+            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count");
         }
 
         /// <summary>
@@ -441,42 +431,44 @@ namespace UnitTestProject1
         [TestMethod]
         public void GetMultipleUsersByAge()
         {
-            testAction = "request multiple users by age";
-            resetHandler();
+            //testAction = "request multiple users by age";
+            //resetHandler
 
             handler.AddUser(testUser1);
             handler.AddUser(testUser2);
             handler.AddUser(testUser4);
 
-            resultList = handler.GetUsersByAge(21);
+            resultList = handler.GetUsersByAge(testUser4.Age);
 
-
-            //Here i use an assuption that users will be returned in same order as they where added
-            Assert.AreEqual(2, resultList.Count, "List of users retured upon " + testAction);
-            Assert.AreEqual(3, handler.UserCount, "Wrong UserCount upon " + testAction);
-            Assert.AreEqual(3, handler.Users.Count, "Wrong list Count upon " + testAction);
-            Assert.AreEqual(testUser1, resultList[0], "Wrong first user in list upon " + testAction);
-            Assert.AreEqual(testUser4, resultList[1], "Wrong second user returned in list upon " + testAction);
+            //TODO Assert User
+            //TODO search in list
+            Assert.AreEqual(2, resultList.Count, "List of users retured");
+            Assert.AreEqual(3, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(3, handler.Users.Count, "Wrong list Count");
+            Assert.AreEqual(testUser1, resultList[0], "Wrong first user in list");
+            Assert.AreEqual(testUser4, resultList[1], "Wrong second user returned in list");
         }
 
-        //[TestMethod]
-        //public void GetUsersByAgeRepeat()
-        //{
-        //    testAction = "reapeat request after first";
-        //    resetHandler();
+        [TestMethod]
+        public void GetUsersByAgeRepeat()
+        {
+            //testAction = "reapeat request after first";
+            //resetHandler
 
-        //    handler.AddUser(testUser1);
-        //    handler.AddUser(testUser2);
+            handler.AddUser(testUser1);
+            handler.AddUser(testUser2);
 
-        //    resultList = handler.GetUsersByAge(21);
-        //    resultList = handler.GetUsersByAge(22);
+            resultList = handler.GetUsersByAge(testUser1.Age);
+            resultList = handler.GetUsersByAge(testUser2.Age);
 
-        //    Assert.AreEqual(2, resultList.Count, "List of users retured upon " + testAction);
-        //    Assert.AreEqual(3, handler.UserCount, "Wrong UserCount upon " + testAction);
-        //    Assert.AreEqual(3, handler.Users.Count, "Wrong list Count upon " + testAction);
-        //    Assert.AreEqual(testUser2, resultList[0], "Wrong user returned in list upon " + testAction);
+            //TODO Assert User
 
-        //}
+            Assert.AreEqual(1, resultList.Count, "List of users retured");
+            Assert.AreEqual(2, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(2, handler.Users.Count, "Wrong list Count");
+            Assert.AreEqual(testUser2, resultList[0], "Wrong user returned in list");
+
+        }
 
         
 
