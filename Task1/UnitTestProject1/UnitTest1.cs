@@ -127,17 +127,21 @@ namespace UnitTestProject1
         /// Expected behavior - Exception
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(Exception), "")] //TODO check exception text
+        //[ExpectedException(typeof(Exception), "WRONG TEXT")] //TODO Understand why this did not work
         public void AddAUserTwice()
         {
+            try
+            {
+                handler.AddUser(testUser1);
+                handler.AddUser(testUser1);
+            }
+            catch (Exception trownException)
+            {
+                Assert.AreEqual(trownException.Message, "Such a user was already registered", "Wrong Exception");
+            }
 
-            handler.AddUser(testUser1);
-            handler.AddUser(testUser1);
 
-            //TODO Assert Exeption
-            //TODO catch exception
-                
-            
+
             Assert.AreEqual(1, handler.UserCount, "Wrong UserCount");
             Assert.AreEqual(1, handler.Users.Count, "Wrong List Count");
             CompareTwoObjectsHandler(testUser1, handler.Users[0]);
