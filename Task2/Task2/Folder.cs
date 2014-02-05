@@ -5,18 +5,21 @@ using System.Text;
 
 namespace Task2
 {
-    public abstract class Record
+    class Folder: Record
     {
-        public string Name;
-        public string Type;
-        public string Comment;
+        List<Record> tree;
 
-/*        Record(string n, string t, string c)
+        Folder(string n, string t, string c)
         {
             Name = n;
             Type = t;
             Comment = c;
+            AddTree();
         }
-*/ 
+
+        public void AddTree()
+        {
+
+        }
     }
 }

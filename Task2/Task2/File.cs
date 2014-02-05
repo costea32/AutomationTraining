@@ -5,18 +5,13 @@ using System.Text;
 
 namespace Task2
 {
-    public abstract class Record
+    class File: Record
     {
-        public string Name;
-        public string Type;
-        public string Comment;
-
-/*        Record(string n, string t, string c)
+        File(string n, string t, string c)
         {
             Name = n;
             Type = t;
             Comment = c;
         }
-*/ 
     }
 }
