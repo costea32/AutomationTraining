@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task1", "Task1\Task1.csproj", "{50F7D8D2-B377-47B6-8FE3-425123E29DB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject1\TestProject1.csproj", "{979B10AA-98BB-4990-BD1E-98E4D8D576E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task1_UnitTests", "TestProject1\Task1_UnitTests.csproj", "{979B10AA-98BB-4990-BD1E-98E4D8D576E1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6C029279-ED8F-4CD9-87AA-6958D51D3254}"
 EndProject

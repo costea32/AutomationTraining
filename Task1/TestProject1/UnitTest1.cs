@@ -5,24 +5,57 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Task1;
 
-namespace TestProject1
+namespace Task1_UnitTests
 {
     [TestClass]
-    public class UnitTest1
+    public class IUserHandlerTest
     {
-        private UserHandlerProvider uh;
         private IUserHandler handler;
         
-        private bool NameCompare(User u1)
+        private bool NameCompare(User u1, User u2)
         {
-            bool result = handler.Users.Any(x => (x.FirstName == u1.FirstName) && (x.LastName == u1.LastName));
-            return result; 
+//            bool result = handler.Users.Any(x => (x.FirstName == u1.FirstName) && (x.LastName == u1.LastName));
+
+            if ((u1.FirstName == u2.FirstName) && (u1.LastName == u2.LastName) && (u1.Age == u2.Age))
+                return true;
+            else 
+                return false; 
+        }
+
+        private void CreateUsers()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                string name = "Test" + i;
+                string surname = "User" + i;
+                User u1 = new User(name, surname, i + 10);
+                handler.AddUser(u1);
+            }
+        }
+
+        private void CreateUsersSameAge()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                string name = "Test" + i;
+                string surname = "User" + i;
+                User u1 = new User(name, surname, 10);
+                handler.AddUser(u1);
+            }
+        }
+
+        private bool AgeTen(User u)
+        {
+            if (u.Age == 10) 
+                return true;
+            else
+                return false;
         }
 
         [TestInitialize]
         public void TestInit()
         {
-            uh = new UserHandlerProvider();
+            UserHandlerProvider uh = new UserHandlerProvider();
             handler = uh.GetHandler();
         }
 
@@ -171,48 +204,9 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public void UserCount_ListWithTenSimilarUsers()
+        public void UserCount_ListWithTenUsers()
         {
-            
-            for (int i = 0; i < 10; i++)
-            {
-                User u1 = new User("Test", "User", i+10);
-                handler.AddUser(u1);
-            }
-                   
-            int expected = 10; //in case the method allows to have users with the same name and surname
-            int actual = handler.UserCount;
-
-            Assert.AreEqual(expected, actual, "UserCounts do not match (if users with the same name/surname are allowed)");
-        }
-
-        [TestMethod]
-        public void UserCount_ListWithOneUser()
-        {
-
-            for (int i = 0; i < 10; i++)
-            {
-                User u1 = new User("Test", "User", i + 10);
-                handler.AddUser(u1);
-            }
-
-            int expected = 1; //in case the system does not allow to have users with the same name and surname
-            int actual = handler.UserCount;
-
-            Assert.AreEqual(expected, actual, "UserCounts do not match (if users with the same name/surname are not allowed)");
-        }
-
-        [TestMethod]
-        public void UserCount_ListWithTenDifferentUsers()
-        {
-
-            for (int i = 0; i < 10; i++)
-            {
-                string name = "Test" + i;
-                string surname = "User" + i;
-                User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
-            }
+            CreateUsers();
 
             int expected = 10;
             int actual = handler.UserCount;
@@ -223,16 +217,9 @@ namespace TestProject1
         [TestMethod]
         public void UserCount_AfterClearData()
         {
+            CreateUsers();
 
-            for (int i = 0; i < 10; i++)
-            {
-                string name = "Test" + i;
-                string surname = "User" + i;
-                User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
-            }
-
-            handler.ClearData(); //i guess this method should clear the list and UserCount should return 0;
+            handler.ClearData();
 
             int expected = 0;
             int actual = handler.UserCount;
@@ -243,16 +230,9 @@ namespace TestProject1
         [TestMethod]
         public void ClearData_Basic()
         {
+            CreateUsers();
 
-            for (int i = 0; i < 10; i++)
-            {
-                string name = "Test" + i;
-                string surname = "User" + i;
-                User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
-            }
-
-            handler.ClearData(); //i guess this method should clear the list and UserCount should return 0;
+            handler.ClearData();
             
             int expected = 0;
             int actual = handler.Users.Count;
@@ -288,7 +268,6 @@ namespace TestProject1
         {
 
             User u1 = new User("Test", "User", 10);
-
             handler.AddUser(u1);
 
             List<User> TestList = new List<User>();
@@ -318,34 +297,21 @@ namespace TestProject1
         [TestMethod]
         public void GetUsersByAge_OneUserFound()
         {
-
-            for (int i = 0; i < 10; i++)
-            {
-                string name = "Test" + i;
-                string surname = "User" + i;
-                User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
-            }
+            CreateUsers();
 
             List<User> TestList = new List<User>();
             TestList = handler.GetUsersByAge(15);
 
-            int expected = 1;
-            int actual = TestList.Count;
+            User expected = new User("Test5","User5",15);
+            User actual = TestList.First();
 
-            Assert.AreEqual(expected, actual, "GetUsersByAge does not work properly");
+            Assert.IsTrue(NameCompare(expected, actual), "GetUsersByAge does not work properly");
         }
 
         [TestMethod]
         public void GetUsersByAge_NoUsersFound()
         {
-            for (int i = 0; i < 10; i++)
-            {
-                string name = "Test" + i;
-                string surname = "User" + i;
-                User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
-            }
+            CreateUsers();
 
             List<User> TestList = new List<User>();
             TestList = handler.GetUsersByAge(55);
@@ -359,14 +325,7 @@ namespace TestProject1
         [TestMethod]
         public void GetUsersByAge_ManyUsersFound()
         {
-
-            for (int i = 0; i < 10; i++)
-            {
-                string name = "Test" + i;
-                string surname = "User" + i;
-                User u1 = new User(name, surname, 10);
-                handler.AddUser(u1);
-            }
+            CreateUsersSameAge();
 
             List<User> TestList = new List<User>();
             TestList = handler.GetUsersByAge(10);
@@ -378,16 +337,20 @@ namespace TestProject1
         }
 
         [TestMethod]
+        public void GetUsersByAge_CheckAgeOfReturnedUsers()
+        {
+            CreateUsersSameAge();
+
+            List<User> TestList = new List<User>();
+            TestList = handler.GetUsersByAge(10);
+
+            Assert.IsTrue(TestList.TrueForAll(AgeTen), "GetUsersByAge corrupts users age");
+        }
+
+        [TestMethod]
         public void GetUsersByAge_SearchNegativeAge()
         {
-
-            for (int i = 0; i < 10; i++)
-            {
-                string name = "Test" + i;
-                string surname = "User" + i;
-                User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
-            }
+            CreateUsers();
 
             List<User> TestList = new List<User>();
             bool thrown = false;
@@ -404,54 +367,72 @@ namespace TestProject1
         }
 
         [TestMethod]
+        public void GetUsersByAge_AfterClearData()
+        {
+            CreateUsers();
+            handler.ClearData();
+
+            List<User> TestList = new List<User>();
+            TestList = handler.GetUsersByAge(15);
+
+            int expected = 0;
+            int actual = TestList.Count;
+
+            Assert.AreEqual(expected, actual, "GetUsersByAge returns data after ClearData");
+        }
+
+        [TestMethod]
         public void GetUserByName_Basic()
         {
-
-            for (int i = 0; i < 10; i++)
-            {
-                string name = "Test" + i;
-                string surname = "User" + i;
-                User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
-            }
+            CreateUsers();
 
             User expected = new User("Test1","User1",11);
+            User actual = handler.GetUserByName("Test1","User1");
 
-            Assert.IsTrue(NameCompare(expected), "Compared two users.");
+            Assert.IsTrue(NameCompare(expected, actual), "Compared two users.");
         }
 
         [TestMethod]
         public void GetUserByName_FirstUserInTheList()
         {
-
-            for (int i = 0; i < 10; i++)
-            {
-                string name = "Test" + i;
-                string surname = "User" + i;
-                User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
-            }
+            CreateUsers();
 
             User expected = new User("Test0", "User0", 10);
+            User actual = handler.GetUserByName("Test0", "User0");
 
-            Assert.IsTrue(NameCompare(expected), "Compared two users.");
+            Assert.IsTrue(NameCompare(expected, actual), "Compared two users.");
         }
 
         [TestMethod]
         public void GetUserByName_LastUserInTheList()
         {
-
-            for (int i = 0; i < 10; i++)
-            {
-                string name = "Test" + i;
-                string surname = "User" + i;
-                User u1 = new User(name, surname, i + 10);
-                handler.AddUser(u1);
-            }
+            CreateUsers();
 
             User expected = new User("Test9", "User9", 19);
+            User actual = handler.GetUserByName("Test9", "User9");
 
-            Assert.IsTrue(NameCompare(expected), "Compared two users.");
+            Assert.IsTrue(NameCompare(expected, actual), "Compared two users.");
+        }
+
+        [TestMethod]
+        public void GetUserByName_AfterClearData()
+        {
+            CreateUsers();
+            handler.ClearData();
+
+            bool thrown = false;
+
+            try
+            {
+                User actual = handler.GetUserByName("Test5", "User5");
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.Message.Contains("exist"), "Error message is not explicit");
+                thrown = true;
+            }
+
+            Assert.IsFalse(thrown, "No exception occures when user is not found in the list");
         }
 
         [TestMethod]
