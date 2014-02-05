@@ -1,6 +1,7 @@
 ﻿using Task1;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace UnitTestProject1
@@ -168,7 +169,8 @@ namespace UnitTestProject1
             var newGuy = new User(firstname, lastname, age);
             handler.AddUser(newGuy);
             var ourGuy = handler.GetUserByName(firstname, lastname);
-            Assert.IsTrue(ourGuy.FirstName.Equals(firstname) && ourGuy.LastName.Equals(lastname) && ourGuy.Age.Equals(age), "Can't find newly added user by name");
+            Assert.IsTrue(IsEqual(newGuy, ourGuy), "Can't find newly added user by name");
+            //Assert.IsTrue(ourGuy.FirstName.Equals(firstname) && ourGuy.LastName.Equals(lastname) && ourGuy.Age.Equals(age), "Can't find newly added user by name");
         }
         #endregion
 
@@ -218,6 +220,46 @@ namespace UnitTestProject1
                 sBuilder.Append(Convert.ToChar(rand.Next(65, 90)));
 
             return sBuilder.ToString();
+        }
+
+        private bool IsEqual<T>(T lhs, T rhs)
+        {
+            var fields = typeof(T).GetFields();
+            var props = typeof(T).GetProperties();
+            var types = new List<Type> {
+                typeof(Boolean),
+                typeof(Byte),
+                typeof(SByte),
+                typeof(Char),
+                typeof(Decimal),
+                typeof(Double),
+                typeof(Single),
+                typeof(Int32),
+                typeof(UInt32),
+                typeof(Int64),
+                typeof(UInt64),
+                typeof(Int16),
+                typeof(UInt16),
+                typeof(String)
+            };
+
+            foreach (var field in fields)
+                if (field.IsPublic)
+                {
+                    if (!types.Contains(field.FieldType))
+                        continue;
+                    if (!field.GetValue(lhs).Equals(field.GetValue(rhs)))
+                        return false;
+                }
+            foreach (var prop in props)
+                if (prop.CanRead)
+                {
+                    if (!types.Contains(prop.PropertyType))
+                        continue;
+                    if (!prop.GetValue(lhs, null).Equals(prop.GetValue(rhs, null)))
+                        return false;
+                }
+            return true;
         }
 
         #endregion
