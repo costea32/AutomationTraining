@@ -27,8 +27,8 @@ namespace Task2
             //
 
             #region 1
-            String username = "";
-            String password = "";
+            String username = "stepka.k@gmail.com";
+            String password = "Password123";
 
             #endregion
             driver = new ChromeDriver("C:/Selenium/");
@@ -56,7 +56,6 @@ namespace Task2
                 AddFilesFolders(branch);
             }
 
-            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(100));
             driver.Close();
         }
 
@@ -87,15 +86,16 @@ namespace Task2
                     string name = names[i].Text;
                     string type;
                     string url;
-                    if (names[i].GetAttribute("href").Contains("tree"))
-                    {
-                        type = "Folder";
-                        url = driver.Url + "/" + name;
-                    }
-                    else
+
+                    if (names[i].GetAttribute("href").Contains("blob"))
                     {
                         url = driver.Url;
                         type = "File";
+                    }
+                    else
+                    {
+                        type = "Folder";
+                        url = driver.Url + "/" + name;
                     }
 
                     string comment = comments[i].Text;
