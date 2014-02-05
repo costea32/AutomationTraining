@@ -38,7 +38,11 @@ namespace IUserHandlerTests
 
         [TestMethod()]
 <<<<<<< HEAD
+<<<<<<< HEAD
         public void PositiveUserCount()
+=======
+        public void UserCount()
+>>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
 =======
         public void UserCount()
 >>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
@@ -55,6 +59,7 @@ namespace IUserHandlerTests
 
         [TestMethod()]
 <<<<<<< HEAD
+<<<<<<< HEAD
         public void PositiveAddUser()
         {
             User user1 = new User("firstName1", "lastName1", 31);
@@ -69,6 +74,9 @@ namespace IUserHandlerTests
 =======
         public void AddUser()
 >>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
+=======
+        public void AddUser()
+>>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
         {
             User user1 = new User("firstName", "lastName", 31);
 
@@ -79,7 +87,11 @@ namespace IUserHandlerTests
 
         [TestMethod()]
 <<<<<<< HEAD
+<<<<<<< HEAD
         public void PositiveGetListOfUsers()
+=======
+        public void GetUsers()
+>>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
 =======
         public void GetUsers()
 >>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
@@ -102,7 +114,11 @@ namespace IUserHandlerTests
 
         [TestMethod()]
 <<<<<<< HEAD
+<<<<<<< HEAD
         public void PositiveClearData()
+=======
+        public void ClearData()
+>>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
 =======
         public void ClearData()
 >>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
@@ -127,7 +143,11 @@ namespace IUserHandlerTests
 
         [TestMethod()]
 <<<<<<< HEAD
+<<<<<<< HEAD
         public void PositiveGetUserByName()
+=======
+        public void GetByName()
+>>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
 =======
         public void GetByName()
 >>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
@@ -143,7 +163,11 @@ namespace IUserHandlerTests
 
         [TestMethod()]
 <<<<<<< HEAD
+<<<<<<< HEAD
         public void PositiveGetUsersByAge()
+=======
+        public void GetByAge()
+>>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
 =======
         public void GetByAge()
 >>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
@@ -159,7 +183,11 @@ namespace IUserHandlerTests
             List<User> expectedList = handler.GetUsersByAge(31);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             Assert.IsTrue(expectedList.All(x => x.Age == 31));
+=======
+            Assert.IsTrue(expectedList.All(x => x.Age == 31),"Not all returned users have the expected age");
+>>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
 =======
             Assert.IsTrue(expectedList.All(x => x.Age == 31),"Not all returned users have the expected age");
 >>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
@@ -266,6 +294,7 @@ namespace IUserHandlerTests
             }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             catch { }
 
             Assert.AreEqual(1, handler.UserCount,"User added with same first and last name");
@@ -278,10 +307,14 @@ namespace IUserHandlerTests
 =======
             catch (Exception e)
 >>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
+=======
+            catch (Exception e)
+>>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
             {
                 Assert.IsTrue(e.Message.Contains("already registered"));
             }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         [TestMethod()]
         public void GetByName_NoLastName()
@@ -309,6 +342,14 @@ namespace IUserHandlerTests
         [TestMethod()]
         public void GetByName_MultipleFirstName()
 >>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
+=======
+            Assert.AreEqual(1, handler.UserCount,"User added with same first and last name");
+            Assert.IsTrue(exceptionThrown, "Exception not thrown");
+        }
+
+        [TestMethod()]
+        public void GetByName_MultipleFirstName()
+>>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
         {
             User user1 = new User("firstName", "lastName1", 31);
             User user2 = new User("firstName", "lastName2", 32);
@@ -323,7 +364,11 @@ namespace IUserHandlerTests
 
         [TestMethod()]
 <<<<<<< HEAD
+<<<<<<< HEAD
         public void GetByName_LastNameOnly()
+=======
+        public void GetByName_MultipleLastName()
+>>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
 =======
         public void GetByName_MultipleLastName()
 >>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
@@ -339,6 +384,7 @@ namespace IUserHandlerTests
             Assert.IsTrue(IsSameUser(user2,user3), "Wrong user returned");
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         [TestMethod()]
         public void GetByAge_InvalidAge()
@@ -350,6 +396,8 @@ namespace IUserHandlerTests
             Assert.IsTrue(!testList.Any(x => x.Age == -10),"Wrong list of users returned");
         }
 
+=======
+>>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
 =======
 >>>>>>> 518539efd760020ca910aedfb0403470ef4e37b5
     }
