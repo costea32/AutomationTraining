@@ -16,6 +16,7 @@ namespace UnitTestProject1
         IUserHandler handler;
         
         //setting up testing data
+        User nullUser = null;
         User testUser1 = new User("FN1", "LN1", 21);
         User testUser2 = new User("FN2", "LN2", 22);
         User testUser3 = new User("FN1", "LN1", 23); //this user requred to test a dublicate FN<>LN pair
@@ -40,16 +41,16 @@ namespace UnitTestProject1
             PropertyInfo[] expectedProperties = expectedObject.GetType().GetProperties();
             PropertyInfo[] actualProperties = actualObject.GetType().GetProperties();
             string propertyName;
-            object expectedValue;
-            object actualValue;
+            //object expectedValue;
+            //object actualValue;
 
             foreach (PropertyInfo property in expectedProperties)
 	        {
                 propertyName = property.Name;
-                expectedValue = expectedObject.GetType().GetProperty(propertyName).GetValue(expectedObject);
-                actualValue = actualObject.GetType().GetProperty(propertyName).GetValue(actualObject);
+                var expectedValue = expectedObject.GetType().GetProperty(propertyName).GetValue(expectedObject);
+                var actualValue = actualObject.GetType().GetProperty(propertyName).GetValue(actualObject);
 
-                if (expectedValue.ToString() != actualValue.ToString())
+                if (!expectedValue.Equals(actualValue))
                 {
                     errorString.AppendFormat("Wrong Attribute: [{0}]. Expected Value = <{1}>, Actual value = <{2}>; ", propertyName, expectedValue, actualValue);
                 }
@@ -59,6 +60,24 @@ namespace UnitTestProject1
             if (errorString.ToString() != "")
             {
                 throw new AssertFailedException(errorString.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Helper to Assert Generic Exception thrown by Program upon Adding User
+        /// </summary>
+        /// <param name="user">User which violates validation</param>
+        /// <param name="expectedException">The exeption text sent by Program</param>
+        protected void AssertExceptionOnAddUser(User user, string expectedException)
+        {
+            try
+            {
+                handler.AddUser(user);
+            }
+            catch (Exception thrownException)
+            {
+                Assert.IsNotNull(thrownException, "No Exception Sent");
+                Assert.AreEqual(thrownException.Message, expectedException, "Wrong Exception");
             }
         }
 
@@ -130,21 +149,40 @@ namespace UnitTestProject1
         //[ExpectedException(typeof(Exception), "WRONG TEXT")] //TODO Understand why this did not work
         public void AddAUserTwice()
         {
-            try
-            {
-                handler.AddUser(testUser1);
-                handler.AddUser(testUser1);
-            }
-            catch (Exception trownException)
-            {
-                Assert.AreEqual(trownException.Message, "Such a user was already registered", "Wrong Exception");
-            }
 
+            handler.AddUser(testUser1);
 
-
+            AssertExceptionOnAddUser(testUser1, "Such a user was already registered");
             Assert.AreEqual(1, handler.UserCount, "Wrong UserCount");
             Assert.AreEqual(1, handler.Users.Count, "Wrong List Count");
             CompareTwoObjectsHandler(testUser1, handler.Users[0]);
+        }
+
+        /// <summary>
+        /// Adding Another user with Existing FN and LN pair
+        /// </summary>
+        [TestMethod]
+        public void AddUserWithSameFnLn()
+        {
+            handler.AddUser(testUser1);
+
+            AssertExceptionOnAddUser(testUser3, "Such a user was already registered");
+            Assert.AreEqual(1, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(1, handler.Users.Count, "Wrong List Count");
+        }
+
+        /// <summary>
+        /// Trying to add a null user
+        /// </summary>
+        [TestMethod]
+        public void AddNullUser()
+        {
+
+            //TODO  fix Handling different Exception Types
+
+            AssertExceptionOnAddUser(nullUser, "You can not add a null user to the user list");
+            Assert.AreEqual(0, handler.UserCount, "Wrong UserCount");
+            Assert.AreEqual(0, handler.Users.Count, "Wrong List Count");
         }
 
         /// <summary>
