@@ -27,7 +27,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void PositiveUserCountTest()
+        public void PositiveUserCount()
         {
             Assert.AreEqual(0, handler.UserCount);
 
@@ -40,7 +40,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void PositiveAddUserTest()
+        public void PositiveAddUser()
         {
             User user1 = new User("firstName1", "lastName1", 31);
 
@@ -60,7 +60,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void PositiveGetListOfUsersTest()
+        public void PositiveGetListOfUsers()
         {
             User user1 = new User("firstName1", "lastName1", 31);
             User user2 = new User("firstName2", "lastName2", 32);
@@ -79,7 +79,7 @@ namespace IUserHandlerTests
 
 
         [TestMethod()]
-        public void PositiveClearDataTest()
+        public void PositiveClearData()
         {
             User user1 = new User("firstName1", "lastName1", 31);
             User user2 = new User("firstName2", "lastName2", 32);
@@ -100,7 +100,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void PositiveGetUserByNameTest()
+        public void PositiveGetUserByName()
         {
             User user1 = new User("firstName1", "lastName1", 31);
 
@@ -112,7 +112,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void PositiveGetUsersByAgeTest()
+        public void PositiveGetUsersByAge()
         {
             User user1 = new User("firstName1", "lastName1", 31);
             User user2 = new User("firstName11", "lastName11", 31);
@@ -124,12 +124,7 @@ namespace IUserHandlerTests
 
             List<User> expectedList = handler.GetUsersByAge(31);
 
-            Boolean a, b;
-
-            a = expectedList.Any(x => x.Age == 31);
-            b = !expectedList.Any(x => x.Age == 32);
-
-            Assert.IsTrue(a && b,"GetUsersByAge returns incorrect list of users");
+            Assert.IsTrue(expectedList.All(x => x.Age == 31));
         }
 
         //
@@ -137,17 +132,17 @@ namespace IUserHandlerTests
         //
 
         [TestMethod()]
-        public void NegativeAddNullUser()
+        public void AddNullUser()
         {
             try
             {
                 handler.AddUser(null);
             }
-            catch (ArgumentNullException e)
+            catch (ArgumentNullException)
             {
                 Assert.AreEqual(0, handler.UserCount);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Assert.Fail("Cannot add null users");
             }
@@ -155,7 +150,7 @@ namespace IUserHandlerTests
 
 
         [TestMethod()]
-        public void NegativeAddUserWithNoFirstNameTest()
+        public void AddUser_NoFirstName()
         {
             try
             {
@@ -169,7 +164,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void NegativeAddUserWithNoLastNameTest()
+        public void AddUser_NoLastName()
         {
             try
             {
@@ -183,7 +178,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void NegativeAddUserWithInvalidAgeTest()
+        public void AddUser_InvalidAge()
         {
             try
             {
@@ -197,7 +192,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void NegativeAddUsersWithSameFirstAndLastNameTest()
+        public void AddUser_ExistingFirstLastName()
         {
             try
             {
@@ -214,7 +209,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void NegativeGetUserByNameWithNoFirstNameTest()
+        public void GetByName_NoFirstName()
         {
             try
             {
@@ -230,7 +225,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void NegativeGetUserByNameWithNoLastNameTest()
+        public void GetByName_NoLastName()
         {
             try
             {
@@ -246,7 +241,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void TestThatGetUserByNameDoesNotSearchByFirstNameOnly()
+        public void GetByName_FirstNameOnly()
         {
             User user1 = new User("firstName", "lastName1", 31);
             User user2 = new User("firstName", "lastName2", 32);
@@ -260,7 +255,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void TestThatGetUserByNameDoesNotSearchByLastNameOnly()
+        public void GetByName_LastNameOnly()
         {
             User user1 = new User("firstName1", "lastName", 31);
             User user2 = new User("firstName2", "lastName", 32);
@@ -274,7 +269,7 @@ namespace IUserHandlerTests
         }
 
         [TestMethod()]
-        public void TestThatGetUsersByAgeReturnsNothingWhenSearchingByInvalidAge()
+        public void GetByAge_InvalidAge()
         {
             User user1 = new User("firstName1", "lastName1", -10);
 
