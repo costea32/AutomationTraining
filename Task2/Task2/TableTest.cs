@@ -11,7 +11,6 @@ using Microsoft.VisualStudio.TestTools.UITest.Extension;
 using Keyboard = Microsoft.VisualStudio.TestTools.UITesting.Keyboard;
 
 using OpenQA;
-using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium;
 using ObjectMap;
@@ -27,7 +26,7 @@ namespace Task2
         {
         }
 
-        private FirefoxDriver browser;
+        private RemoteWebDriver browser;
 
         [TestMethod]
         public void CodedUITestMethod1()
@@ -41,11 +40,11 @@ namespace Task2
                 .FindElementsByCssSelector("table.branches")[1]
                 .FindElements(By.CssSelector("tbody tr td h3 a"));
 
+            var listFile = new StreamWriter(Directory.GetCurrentDirectory() + "\\" + "FileList.txt", true);
             // Iterate through branches and create a hierarchy of all folders and files for each branch
             for (int i = 0; i < branchAnchorsList.Count; i++)
             {
                 var branchAnchor = branchAnchorsList[i];
-                var listFile = new StreamWriter(Directory.GetCurrentDirectory() + "\\" + "FileList.txt", true);
                 string branchTitle = null;
 
                 try { branchTitle = branchAnchor.Text; }
@@ -64,8 +63,8 @@ namespace Task2
                 // Run a recursive method that creates a list of files/folders in a .txt file
                 FileListGenerator(baseUri, listFile);
                 browser.Navigate().Back();
-                listFile.Close();
             }
+            listFile.Close();
         }
 
 
@@ -144,13 +143,13 @@ namespace Task2
             browser = UIHelpers.RestartBrowser();
         }
 
-        //[TestCleanup()]
-        ////public void MyTestCleanup()
-        //{
-        //    browser.Quit();
-        //    if (File.Exists(Directory.GetCurrentDirectory() + "\\" + "FileList.txt"))
-        //        Process.Start(Directory.GetCurrentDirectory() + "\\" + "FileList.txt");
+        [TestCleanup()]
+        public void MyTestCleanup()
+        {
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\" + "FileList.txt"))
+                Process.Start(Directory.GetCurrentDirectory() + "\\" + "FileList.txt");
+            browser.Quit();
 
-        //}
+        }
     }
 }

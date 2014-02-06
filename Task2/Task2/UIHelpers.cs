@@ -15,24 +15,24 @@ namespace Task2
         public static FirefoxDriver RestartBrowser(string URL = "about:blank")
         {
 
-            Console.WriteLine("Restart browser ! Uri : " + URL);
-            Playback.Wait(3000);
-            foreach (Process process in Process.GetProcesses())
-                if (process.ProcessName.StartsWith("firefox"))
-                    process.Kill();
-            Playback.Wait(2000);
+            //Console.WriteLine("Restart browser ! Uri : " + URL);
+            //Playback.Wait(3000);
+            //foreach (Process process in Process.GetProcesses())
+            //    if (process.ProcessName.StartsWith("firefox"))
+            //        process.Kill();
+            //Playback.Wait(2000);
 
             FirefoxDriver browser;
             try
             {
                 var capabilities = DesiredCapabilities.Firefox();
                 capabilities.SetCapability("ensureCleanSession", true);
+                //var opt = new ChromeOptions();
+                //opt.AddAdditionalCapability("ensureCleanSession", true);
                 browser = new FirefoxDriver(capabilities);
                 browser.Navigate().GoToUrl(URL);
             }
             catch (InvalidCastException) { browser = RestartBrowser(URL); }
-
-            //browserWindow.Maximized = true;
 
             return browser;
         }

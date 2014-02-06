@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Selenium.WebDriverBackedSelenium">
-      <HintPath>..\lib\Selenium NET4\Selenium.WebDriverBackedSelenium.dll</HintPath>
+      <HintPath>..\..\..\Selenium NET4\Selenium.WebDriverBackedSelenium.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -42,16 +42,17 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="ThoughtWorks.Selenium.Core">
-      <HintPath>..\lib\Selenium NET4\ThoughtWorks.Selenium.Core.dll</HintPath>
+      <HintPath>..\..\..\Selenium NET4\ThoughtWorks.Selenium.Core.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver">
-      <HintPath>..\lib\Selenium NET4\WebDriver.dll</HintPath>
+      <HintPath>..\..\..\Selenium NET4\WebDriver.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver.Support">
-      <HintPath>..\lib\Selenium NET4\WebDriver.Support.dll</HintPath>
+      <HintPath>..\..\..\Selenium NET4\WebDriver.Support.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BranchesPage.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
