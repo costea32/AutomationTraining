@@ -12,6 +12,23 @@ namespace Task1.Test
         //publict void FunctionToTest_DataPut_ExpectedResult
         private IUserHandler userHandler;
 
+        public static bool twoUsersAreEqual(User first, User second)
+        {
+            if (first.FirstName == second.FirstName &&
+                first.LastName == second.LastName &&
+                first.Age == second.Age) return true;
+            else return false;
+        }
+
+        public static string getDifferenceMessage(User first, User second)
+        {
+            string message = "";
+            if (first.FirstName != second.FirstName) message += "FirstName doesn't match!";
+            if (first.LastName != second.LastName) message += "LastName doesn't match!";
+            if (first.Age != second.Age) message += "Age doesn't match!";
+            return message;
+        }
+
         [TestInitialize]
         public void TestInit()
         {
@@ -42,7 +59,7 @@ namespace Task1.Test
             actual = userHandler.Users;
 
             //assert
-            CollectionAssert.AllItemsAreNotNull(actual);
+            Assert.Inconclusive();
         }
 
         [TestMethod]
@@ -58,10 +75,10 @@ namespace Task1.Test
             User actual = userHandler.Users[i]; //get last added User
 
             //assert
-            Assert.AreEqual<User>(johny,actual);
+            Assert.IsTrue(twoUsersAreEqual(actual,johny),getDifferenceMessage(johny,actual));
         }
 
-        [TestMethod] //arrange //action //assert
+        [TestMethod] 
         public void UserCount_3Users_3()
         {
             //arrange
@@ -78,14 +95,13 @@ namespace Task1.Test
             int actual = userHandler.UserCount;
 
             //assert
-            Assert.AreEqual(expected,actual);
+            Assert.IsTrue(expected==actual);
         }
 
         [TestMethod]
         public void GetUserByName_3Users_JohnSmith16()
         {
             //arrange
-            UserHandlerProvider user = new UserHandlerProvider();
             User johny = new User("John", "Smith", 16);
             User mary = new User("Mary", "Blossom", 20);
             User bob = new User("Bobby", "Singer", 45);
@@ -98,23 +114,19 @@ namespace Task1.Test
             User actual = userHandler.GetUserByName("John","Smith");
 
             //assert
-            Assert.AreEqual<User>(johny,actual);
+            Assert.IsTrue(twoUsersAreEqual(johny,actual),getDifferenceMessage(johny,actual));
         }
 
         [TestMethod]
         public void GetUsersByAge_3Users_2Users()
         {
             //arrange
-            UserHandlerProvider user = new UserHandlerProvider();
             User johny = new User("John", "Smith", 16);
             User mary = new User("Mary", "Blossom", 16);
             User bob = new User("Bobby", "Singer", 45);
-            List<User> expected = new List<User>();
             List<User> actual = new List<User>();
 
             //action
-            expected.Add(johny);
-            expected.Add(mary);
             userHandler.AddUser(johny);
             userHandler.AddUser(mary);
             userHandler.AddUser(bob);
@@ -122,7 +134,7 @@ namespace Task1.Test
             actual = userHandler.GetUsersByAge(16);
 
             //assert
-            CollectionAssert.AreEqual(expected,actual);
+            Assert.IsTrue(actual.All<User>(x => x.Age == 16));
         }
     }
 }
