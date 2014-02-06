@@ -5,21 +5,26 @@ using System.Text;
 
 namespace Task2
 {
-    class Folder: Record
+    class Folder: Record, Actions
     {
-        List<Record> tree;
+        public List<Record> child;
+        public string link;
+        public Actions action;
 
-        Folder(string n, string t, string c)
+        public Folder(string n, string c, string a, string l)
         {
             Name = n;
-            Type = t;
+            Type = "Folder";
             Comment = c;
-            AddTree();
+            Age = a;
+            link = l;
+            AddFolder();
         }
 
-        public void AddTree()
+        public void AddFolder()
         {
-
+            child = action.AddChildren(link);
         }
+ 
     }
 }

@@ -10,6 +10,7 @@ namespace Task2
         public string Name;
         public string Type;
         public string Comment;
+        public string Age;
 
 /*        Record(string n, string t, string c)
         {

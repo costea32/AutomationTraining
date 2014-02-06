@@ -7,11 +7,12 @@ namespace Task2
 {
     class File: Record
     {
-        File(string n, string t, string c)
+        public File(string n, string c, string a)
         {
             Name = n;
-            Type = t;
+            Type = "File";
             Comment = c;
+            Age = a;
         }
     }
 }

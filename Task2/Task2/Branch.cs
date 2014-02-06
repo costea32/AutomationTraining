@@ -5,19 +5,21 @@ using System.Text;
 
 namespace Task2
 {
-    class Branch
+    class Branch: Actions
     {
         public string branchName;
         public int behind;
         public int ahead;
-        List<Record> records;
+        public List<Record> records;
+        public string link;
 
-        Branch(string bn, int b, int a)
+        public Branch(string bn, int b, int a, string l)
         {
             branchName = bn;
             behind = b;
             ahead = a;
             records = new List<Record>();
+            link = l;
         }
     }
 }
