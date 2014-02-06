@@ -14,7 +14,11 @@ namespace Task2
         [TestMethod]
         public void TestMethod1()
         {
-            new SeleniumLogic().Do();
+            List<Branch> branches = new SeleniumLogic().getBranches();
+            Json_Xml_Creation jx = new Json_Xml_Creation();
+            jx.CreateJson(branches);
+//            jx.CreateXml(branches);
+            
         }
 
     }

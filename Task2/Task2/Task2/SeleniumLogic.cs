@@ -17,9 +17,9 @@ namespace Task2
         IList<IWebElement> comments;
         IList<IWebElement> lastUpdates;
 
-        public List<Container> branches;
+        public List<Branch> branches;
 
-        public void Do()
+        public List<Branch> getBranches()
         {
 
             //
@@ -56,12 +56,13 @@ namespace Task2
                 AddFilesFolders(branch);
             }
 
-            driver.Close();
+            return branches;
+
         }
 
         public void AddBranches()
         {
-            branches = new List<Container>();
+            branches = new List<Branch>();
 
             int nrOfBranches = getNrOfBranches();
 
@@ -70,7 +71,7 @@ namespace Task2
 
             for (int i = 0; i < nrOfBranches; i++)
             {
-                branches.Add(new Branch(names[i].Text, behindAheads[2*i].Text, behindAheads[2*i+1].Text,"https://github.com/costea32/AutomationTraining/tree/" + names[i].Text));
+                branches.Add(new Branch(names[i].Text, Int32.Parse(behindAheads[2*i].Text.Substring(0,2)), Int32.Parse(behindAheads[2*i+1].Text.Substring(0,2)),"https://github.com/costea32/AutomationTraining/tree/" + names[i].Text));
             }
         }
 
@@ -83,7 +84,16 @@ namespace Task2
             for (int i = 0; i < nrOfItems; i++)
                 {
                     if (i == 0) container.Children = new List<Container>();
-                    string name = names[i].Text;
+                    string name;
+                    try
+                    {
+                        name = names[i].Text;
+                    }
+                    catch
+                    {
+                        getItems();
+                        name = names[i].Text;
+                    }
                     string type;
                     string url;
 
@@ -112,7 +122,7 @@ namespace Task2
                     }
                     else
                     {
-                        container.Children.Add(new File(name, comment, lastUpdated));
+                        container.Children.Add(new File1(name, comment, lastUpdated));
                     }
 
                 }
@@ -120,10 +130,10 @@ namespace Task2
 
         public void getItems()
         {
-            IWebElement element = wait.Until<IWebElement>((d) =>
-            {
-                return d.FindElement(By.ClassName("js-directory-link"));
-            });
+//            IWebElement element = wait.Until<IWebElement>((d) =>
+//            {
+//                return d.FindElement(By.ClassName("js-directory-link"));
+//            });
             names = driver.FindElements(By.ClassName("js-directory-link"));
             comments = driver.FindElements(By.ClassName("message"));
             lastUpdates = driver.FindElements(By.ClassName("js-relative-date"));
@@ -132,7 +142,8 @@ namespace Task2
 
         public int getNrOfBranches()
         {
-            return driver.FindElements(By.ClassName("state-widget")).Count();
+           // return driver.FindElements(By.ClassName("state-widget")).Count();
+            return 1;
         }
 
 
