@@ -5,17 +5,16 @@ using System.Text;
 
 namespace Task2
 {
-    public abstract interface Actions
+    public abstract interface Actions<T>
     {
-        public List<Record> AddChildren(string l);
+        public void Add(T l);
     }
 
-    public class AddAction : Actions
+    public class AddAction<T> : Actions<T>
     {
-        public override List<Record> AddChildren(string l)
+        public override void Add(T l)
         {
-            List<Record> tmp = new List<Record>();
-            return tmp;
+
         }
     }
 }
