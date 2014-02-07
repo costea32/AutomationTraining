@@ -4,31 +4,58 @@ using System.Linq;
 using System.Text;
 //
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 
 
 namespace UITest
 {
+    public class Page
+    {
+        public string name;
+    }
+
+    public class Table
+    {
+        string name;
+        TableRow[] rows;
+    }
+
+    public class BranchesTable
+    {
+        string name;
+        BranchesTableRow[] branches;
+
+    }
+
+    public class TableRow
+    {
+        string name;
+        string type;
+        string comment;
+        string last_updated;
+    }
+
+    public class BranchesTableRow
+    {
+        string name;
+        int ahead;
+        int behind;
+        string last_updated;
+    }
+
     class Program
     {
+        
+
+
         static void Main(string[] args)
         {
-            //string[] branches;
-            List<ChromeWebElement> elements = new List<ChromeWebElement>();
 
-            IWebDriver driver = new ChromeDriver(@"C:\Users\culpini\Documents\chromedriver_win32");
-            try
-            {
-                driver.Navigate().GoToUrl("https://github.com/costea32/AutomationTraining/branches");
-                IWebElement element = driver.FindElement(By.XPath("//*[@id=\"js-repo-pjax-container\"]/table[2]/tbody/tr[1]/td[1]/h3/a"));
-                string str = element.GetAttribute("href");
-                Console.WriteLine(str);
-            }
-            finally
-            {
-                //driver.Close();
-            }
+            IWebDriver driver = new FirefoxDriver();
+            string html_path = "https://github.com/costea32/AutomationTraining/branches";
+ 
+            Console.ReadLine();
         }
     }
 }
