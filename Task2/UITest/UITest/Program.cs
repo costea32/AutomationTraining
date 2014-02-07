@@ -28,20 +28,51 @@ namespace UITest
 
     }
 
-    public class TableRow
+    public class TRow
     {
         string name;
-        string type;
-        string comment;
         string last_updated;
+        public TRow(string n, string lu)
+        {
+            name = n;
+            last_updated = lu;
+        }
+
+        public virtual void get_children();
     }
 
-    public class BranchesTableRow
+    public class TableRow:TRow
     {
-        string name;
+        string type;
+        string comment;
+        public TableRow(string n, string lu, string t, string c)
+            :base(n,lu)
+        {
+            type = t;
+            comment = c;
+        }
+
+        public override List<TableRow> get_children()
+        {
+            return null;
+        }
+    }
+
+    public class BranchesTableRow:TRow
+    {
         int ahead;
         int behind;
-        string last_updated;
+        public BranchesTableRow(string n, string lu, int a, int b)
+            : base(n, lu)
+        {
+            ahead = a;
+            behind = b;
+        }
+
+        public override void get_children()
+        {
+            base.get_children();
+        }
     }
 
     class Program
