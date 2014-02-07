@@ -65,7 +65,11 @@
     <Compile Include="IBehavior.cs" />
     <Compile Include="Json_Xml_Creation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SeleniumLogic.cs" />
+    <Compile Include="MainLogic.cs" />
+    <Compile Include="Selenium\BranchPage.cs" />
+    <Compile Include="Selenium\ContentPage.cs" />
+    <Compile Include="Selenium\Driver.cs" />
+    <Compile Include="Selenium\LoginPage.cs" />
     <Compile Include="UnitTest1.cs" />
   </ItemGroup>
   <ItemGroup>

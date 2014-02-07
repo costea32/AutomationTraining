@@ -2,76 +2,48 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Task2.Selenium;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
 
 namespace Task2
 {
-    public class SeleniumLogic
+    public class MainLogic
     {
-        IWebDriver driver;
-        WebDriverWait wait;
+        #region 1
+        String username = "stepka.k@gmail.com";
+        String password = "Password123";
 
-        IList<IWebElement> names;
-        IList<IWebElement> comments;
-        IList<IWebElement> lastUpdates;
-
+        #endregion
         public List<Branch> branches;
 
-        public List<Branch> getBranches()
+        public List<Branch> getAllStuff()
         {
-
-            //
-            // Login
-            //
-
-            #region 1
-            String username = "stepka.k@gmail.com";
-            String password = "Password123";
-
-            #endregion
-            driver = new ChromeDriver("C:/Selenium/");
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            driver.Url = "https://github.com/login";
-            driver.FindElement(By.Id("login_field")).SendKeys(username);
-            driver.FindElement(By.Id("password")).SendKeys(password);
-            driver.FindElement(By.Name("commit")).Submit();
-
-            driver.Url = "https://github.com/costea32/AutomationTraining/branches";
-
-            //
-            // Add branches
-            //
+            Driver.Initialize();
+            LoginPage.GoTo();
+            LoginPage.LoginAs(username).WithPassword(password);
 
             AddBranches();
 
-            //
-            // Add the rest
-            //
-
             foreach (Branch branch in branches)
             {
-                driver.Url = branch.url;
+                Driver.Instance.Url = branch.url;
                 AddFilesFolders(branch);
             }
 
             return branches;
-
         }
 
         public void AddBranches()
         {
             branches = new List<Branch>();
+            BranchPage.GoTo();
+            BranchPage bp = new BranchPage();
 
-            int nrOfBranches = getNrOfBranches();
-
-            IList<IWebElement> names = driver.FindElements(By.ClassName("css-truncate-target"));
-            IList<IWebElement> behindAheads = driver.FindElements(By.TagName("em"));
+            int nrOfBranches = bp.getNrOfBranches();
 
             for (int i = 0; i < nrOfBranches; i++)
             {
-                branches.Add(new Branch(names[i].Text, Int32.Parse(behindAheads[2*i].Text.Substring(0,2)), Int32.Parse(behindAheads[2*i+1].Text.Substring(0,2)),"https://github.com/costea32/AutomationTraining/tree/" + names[i].Text));
+                branches.Add(new Branch(bp.getName(i), bp.getBehind(i), bp.getAhead(i), bp.getUrl(i)));
             }
         }
 

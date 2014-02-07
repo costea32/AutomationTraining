@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 
 namespace Task2
 {
@@ -14,7 +11,7 @@ namespace Task2
         [TestMethod]
         public void TestMethod1()
         {
-            List<Branch> branches = new SeleniumLogic().getBranches();
+            List<Branch> branches = new MainLogic().getAllStuff();
             Json_Xml_Creation jx = new Json_Xml_Creation();
             jx.CreateJson(branches);
 //            jx.CreateXml(branches);
