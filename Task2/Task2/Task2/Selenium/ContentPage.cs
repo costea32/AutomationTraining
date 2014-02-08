@@ -22,37 +22,65 @@ namespace Task2.Selenium
 
         public IWebElement getTable()
         {
-            return table = Driver.Instance.FindElement(By.ClassName("files"));
+            return Driver.Instance.FindElement(By.ClassName("files"));
         }
 
         public IWebElement getRow(int i)
         {
-            return table.FindElements(By.Id("tr"))[i];
+            if (isNotMainFolder()) i++;
+            return table.FindElements(By.TagName("tr"))[i];
         }
 
         public string getName(int i)
         {
-            return getRow(i).FindElement(By.ClassName("js-directory-link")).Text;
+            return getRow(i).FindElement(By.ClassName("content")).FindElement(By.TagName("a")).Text;
         }
 
-        public int getAhead(int i)
+        public string getType(int i)
         {
-            return int.Parse(getRow(i).FindElement(By.ClassName("behind")).FindElement(By.TagName("em")).Text.Substring(0, 2));
+            if (getRow(i).FindElement(By.ClassName("icon")).FindElement(By.TagName("span")).GetAttribute("class").Contains("directory"))
+                return "Folder";
+            else
+                return "File";
         }
 
-        public int getBehind(int i)
+        public string getComment(int i)
         {
-            return int.Parse(getRow(i).FindElement(By.ClassName("ahead")).FindElement(By.TagName("em")).Text.Substring(0, 2));
+            return getRow(i).FindElement(By.ClassName("message")).FindElement(By.TagName("a")).Text;
         }
 
-        public string getUrl(int i)
+        public string getLastUpdated(int i)
         {
-            return "https://github.com/costea32/AutomationTraining/tree/" + getName(i);
+            return getRow(i).FindElement(By.ClassName("age")).FindElement(By.TagName("time")).Text;
+        }
+        
+        public int getNrOfItems()
+        {
+            if (isNotMainFolder())  
+                return table.FindElements(By.TagName("tr")).Count-1;
+            else
+                return table.FindElements(By.TagName("tr")).Count;
         }
 
-        public int getNrOfBranches()
+        public bool isNotMainFolder()
         {
-            return table.FindElements(By.Id("tr")).Count;
+            IWebElement element1 = table.FindElements(By.TagName("tr"))[0];
+            return (table.FindElements(By.TagName("tr"))[0].GetAttribute("class") == "up-tree");
+        }
+
+        public void updateTable()
+        {
+            this.table = getTable();
+        }
+
+        public string getUrl()
+        {
+            return Driver.Instance.Url;
+        }
+
+        public void setUrl(string url)
+        {
+            Driver.Instance.Url = url;
         }
     }
 }

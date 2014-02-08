@@ -24,5 +24,6 @@ namespace Task2
 
         [JsonIgnore]
         public string url { get; set; }
+
     }
 }

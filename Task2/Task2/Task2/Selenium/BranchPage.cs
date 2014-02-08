@@ -27,7 +27,7 @@ namespace Task2.Selenium
 
         public IWebElement getRow(int i)
         {
-            return table.FindElements(By.Id("tr"))[i];
+            return table.FindElements(By.TagName("tr"))[i];
         }
 
         public string getName(int i)
@@ -52,7 +52,7 @@ namespace Task2.Selenium
 
         public int getNrOfBranches()
         {
-            return table.FindElements(By.Id("tr")).Count;
+            return table.FindElements(By.TagName("tr")).Count;
         }
 
 /*
