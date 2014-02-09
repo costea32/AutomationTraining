@@ -10,15 +10,13 @@ namespace Task2v2
         public string branchName;
         public int behind;
         public int ahead;
-        public string link;
         public List<Record> Children;
 
-        public Branch(string bn, int b, int a, string l, List<Record> ch)
+        public Branch(string bn, int b, int a, List<Record> ch)
         {
             branchName = bn;
             behind = b;
             ahead = a;
-            link = l;
             Children = ch;
         }
     }

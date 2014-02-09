@@ -11,6 +11,11 @@ namespace Task2v2
     {
         private IWebDriver driver;
 
+        List<IWebElement> icons;
+        List<IWebElement> rnames;
+        List<IWebElement> rcomments;
+        List<IWebElement> rage;
+
         public TreePage(IWebDriver driver)
         {
             this.driver = driver;
@@ -28,10 +33,9 @@ namespace Task2v2
             return new TreePage(driver);
         }
 
-        public TreePage OpenPreviousPage(string PreviousPageName)
+        public void OpenPreviousPage()
         {
-            driver.Navigate().GoToUrl(driver.Url.TrimEnd(PreviousPageName.ToCharArray()));
-            return new TreePage(driver);
+            driver.Navigate().GoToUrl(driver.Url.TrimEnd(driver.Url.ToCharArray()));
         }
 
         public BranchesPage BackToBranches()
@@ -40,25 +44,27 @@ namespace Task2v2
             return new BranchesPage(driver);
         }
 
-        public List<Record> GetListOfItems()
+        public List<Record> GetListOfItems(string url)
         {
+            driver.Url = url;
             List<Record> MyList = new List<Record>();
             int count = CountItems();
 
-            List<IWebElement> icons = driver.FindElement(By.ClassName("files")).FindElements(By.XPath("//tbody/tr/td[@class = 'icon']/span")).ToList();
-            List<IWebElement> rnames = driver.FindElements(By.ClassName("js-directory-link")).ToList();
-            List<IWebElement> rcomments = driver.FindElement(By.ClassName("files")).FindElements(By.XPath("//tbody/tr/td[@class = 'message']/span/a")).ToList();
-            List<IWebElement> rage = driver.FindElement(By.ClassName("files")).FindElements(By.ClassName("js-relative-date")).ToList();
-
+            getItems();
+            
             for (int i = 0; i < count; i++)
             {
-                if (icons[i].GetAttribute("class").Contains("directory"))
+                bool isFolder1 = isFolder(i);
+
+                if (isFolder1)
                 {
                     //add folder
                     List<Record> children = new List<Record>();
-                    Folder ffolder = new Folder(rnames[i].Text, rcomments[i].Text, rage[i].Text);
-                    children = GetListOfItems();
-                    MyList.Add(ffolder);
+                    string tempName = rnames[i].Text;
+                    children = GetListOfItems(url + "/" + tempName);
+                    driver.Url = url;
+                    getItems();
+                    MyList.Add(new Folder(rnames[i].Text, rcomments[i].Text, rage[i].Text, children));
                 }
 
                 else
@@ -72,5 +78,19 @@ namespace Task2v2
 
             return MyList;
         }
+
+        public void getItems()
+        {
+            icons = driver.FindElement(By.ClassName("files")).FindElements(By.XPath("//tbody/tr/td[@class = 'icon']/span")).ToList();
+            rnames = driver.FindElements(By.ClassName("js-directory-link")).ToList();
+            rcomments = driver.FindElement(By.ClassName("files")).FindElements(By.XPath("//tbody/tr/td[@class = 'message']/span/a")).ToList();
+            rage = driver.FindElement(By.ClassName("files")).FindElements(By.ClassName("js-relative-date")).ToList();
+        }
+
+        public bool isFolder(int i)
+        {
+            return icons[i].GetAttribute("class").Contains("directory");
+        }
+
     }
 }

@@ -9,11 +9,12 @@ namespace Task2v2
     {
         public List<Record> Children;
 
-        public Folder(string name, string comment, string age)
+        public Folder(string name, string comment, string age, List<Record> Children)
         {
             Name = name;
             Comment = comment;
             Age = age;
+            this.Children = Children;
         }
 
         public void AddChildren(List<Record> list)
