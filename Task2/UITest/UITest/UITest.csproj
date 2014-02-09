@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Selenium.WebDriverBackedSelenium">
-      <HintPath>..\..\..\..\selen_dlls\net40\Selenium.WebDriverBackedSelenium.dll</HintPath>
+      <HintPath>..\..\..\..\sele_drivers\net40\Selenium.WebDriverBackedSelenium.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -45,13 +45,13 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="ThoughtWorks.Selenium.Core">
-      <HintPath>..\..\..\..\selen_dlls\net40\ThoughtWorks.Selenium.Core.dll</HintPath>
+      <HintPath>..\..\..\..\sele_drivers\net40\ThoughtWorks.Selenium.Core.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver">
-      <HintPath>..\..\..\..\selen_dlls\net40\WebDriver.dll</HintPath>
+      <HintPath>..\..\..\..\sele_drivers\net40\WebDriver.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver.Support">
-      <HintPath>..\..\..\..\selen_dlls\net40\WebDriver.Support.dll</HintPath>
+      <HintPath>..\..\..\..\sele_drivers\net40\WebDriver.Support.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
