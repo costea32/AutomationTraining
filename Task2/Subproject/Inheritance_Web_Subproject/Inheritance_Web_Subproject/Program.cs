@@ -12,17 +12,17 @@ namespace Iheritance_Web_Test
 {
     public class Table
     {
-        public string name;
-        public List<TableRow> rows= new List<TableRow>();
+        public List<TableRow> rows = new List<TableRow>();
+        public List<TableChild> children = new List<TableChild>();
 
         public Table(IWebDriver driver)
         {
             populate_rows(driver);
+            get_children(driver);
         }
 
         public virtual void populate_rows(IWebDriver driver)
         {
-            int i = 0;
             List<IWebElement> elements = new List<IWebElement>(driver.FindElements(By.XPath(".//tbody[@class='']/tr")));
             foreach (IWebElement element in elements)
             {
@@ -30,10 +30,68 @@ namespace Iheritance_Web_Test
             }
         }
         
-        public static void get_children()
+        public virtual void get_children(IWebDriver driver)
         {
-            //
+            foreach (TableRow row in rows )
+            {
+                IWebDriver subdriver = new FirefoxDriver();
+                subdriver.Url = row.href;
+                children.Add(new TableChild(subdriver));
+                subdriver.Close();
+            }
         }
+
+        public virtual void print_me()
+        {
+            Console.WriteLine("======================");
+            Console.WriteLine("I am master table.");
+            Console.Write("My rows are :");
+            foreach (TableRow row in this.rows) Console.Write(row.name+" ");
+            Console.WriteLine();
+            Console.Write("My children are: ");
+            foreach (TableChild ch in this.children) Console.Write(ch.name+" ");
+            Console.WriteLine();
+            Console.WriteLine("======================");
+        }
+    }
+
+    public class TableChild:Table
+    {
+        public string name;
+        public TableChild(IWebDriver driver)
+            : base(driver)
+        {
+            this.name = get_name(driver);
+        }
+
+        public static string get_name(IWebDriver driver)
+        {
+            return(driver.FindElement(By.ClassName("final-path")).Text);
+        }
+
+        new public virtual void print_me()
+        {
+            Console.WriteLine("======================");
+            Console.WriteLine("I am child table.");
+            Console.WriteLine("My name is : {0}", this.name);
+            Console.Write("My rows are :");
+            foreach (TableRow row in this.rows) Console.Write(row.name + " ");
+            Console.WriteLine();
+            Console.Write("My children are: ");
+            foreach (TableChild ch in this.children) Console.Write(ch.name + " ");
+            Console.WriteLine();
+            Console.WriteLine("======================");
+
+            if (this.children != null)
+            {
+                foreach (TableChild ch in this.children)
+                {
+                    ch.print_me();
+                }
+            }
+        }
+        
+
     }
 
     public class TRow
@@ -104,7 +162,7 @@ namespace Iheritance_Web_Test
         }
 
         public TableRow(IWebElement element)
-            : base(element,"table_row")
+            : base(element, "table_row")
         {
             string[] attributes = GetElementAttributes(element);
             this.type = attributes[0];
@@ -132,20 +190,18 @@ namespace Iheritance_Web_Test
 
         static void Main(string[] args)
         {
-            int i = 0;
             IWebDriver driver = new FirefoxDriver();
             driver.Url = "https://github.com/costea32/AutomationTraining/tree/ikulpin/Task1/Task1.Test";
             try
             {
                 Table main_table = new Table(driver);
-                //List<IWebElement> elements = new List<IWebElement>(driver.FindElements(By.XPath(".//tbody[@class='']/tr")));
+                main_table.print_me();
+                foreach (TableChild ch in main_table.children)
+                {
+                    ch.print_me();
+                }
 
-                //foreach (IWebElement elem in elements)
-                //{
-                //    Console.WriteLine(i);
-                //    Console.WriteLine(new TableRow(elem).type);
-                //    i++;
-                //}
+
             }
             finally
             {

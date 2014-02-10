@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Iheritance_Web_Test")]
+[assembly: AssemblyTitle("Inheritance_Web_Subproject")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("Iheritance_Web_Test")]
+[assembly: AssemblyProduct("Inheritance_Web_Subproject")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6037b72a-fd11-4b1b-9ca5-f87a9686d175")]
+[assembly: Guid("84e046b5-0f8b-4db4-bd4a-dd9f5a926a5e")]
 
 // Version information for an assembly consists of the following four values:
 //
