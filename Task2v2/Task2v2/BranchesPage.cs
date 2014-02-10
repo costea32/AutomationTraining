@@ -25,11 +25,10 @@ namespace Task2v2
             return driver.FindElements(By.ClassName("css-truncate")).Count;
         }
 
-//        public TreePage OpenBranch(string BranchName)
+
         public void OpenBranch(string BranchName)
         {
             driver.Navigate().GoToUrl("https://github.com/costea32/AutomationTraining/tree/" + BranchName);
-//            return new TreePage(driver);
         }
 
         public List<Branch> GetListOfBranches()
@@ -43,11 +42,11 @@ namespace Task2v2
             for (int i = 0; i < count; i++)
             {
                 TreePage ChildPage = new TreePage(driver);
-//                ChildPage = OpenBranch(bnames[i].Text);
-//                OpenBranch(bnames[i].Text);
                 List<Record> ListOfItems = new List<Record>();
                 string tempName = bnames[i].Text;
-                ListOfItems = ChildPage.GetListOfItems("https://github.com/costea32/AutomationTraining/tree/" + tempName); //need to send current branch 
+                ListOfItems = ChildPage.GetListOfItems("https://github.com/costea32/AutomationTraining/tree/" + tempName);
+                
+                ChildPage.BackToBranches();
                 getItems();
 
                 string branchName = bnames[i].Text;
@@ -67,8 +66,8 @@ namespace Task2v2
         public void getItems()
         {
             bnames = driver.FindElements(By.ClassName("css-truncate")).ToList();
-            bbehinds = driver.FindElements(By.XPath("/html/body/div/div[3]/div[2]/div/div[2]/table[2]/tbody/tr/td[@class = 'state-widget']/div/span[@class = 'behind']/em")).ToList();
-            baheads = driver.FindElements(By.XPath("/html/body/div/div[3]/div[2]/div/div[2]/table[2]/tbody/tr/td[@class = 'state-widget']/div/span[@class = 'ahead']/em")).ToList();
+            bbehinds = driver.FindElement(By.Id("js-repo-pjax-container")).FindElements(By.XPath("table[2]/tbody/tr/td[@class = 'state-widget']/div/span[@class = 'behind']/em")).ToList();
+            baheads = driver.FindElement(By.Id("js-repo-pjax-container")).FindElements(By.XPath("table[2]/tbody/tr/td[@class = 'state-widget']/div/span[@class = 'ahead']/em")).ToList();
         }
     }
 }

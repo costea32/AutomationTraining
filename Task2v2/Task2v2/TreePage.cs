@@ -27,10 +27,9 @@ namespace Task2v2
             return count;
         }
 
-        public TreePage OpenNextPage(string NextPageName)
+        public void OpenNextPage(string NextPageName)
         {
             driver.Navigate().GoToUrl(driver.Url + NextPageName);
-            return new TreePage(driver);
         }
 
         public void OpenPreviousPage()
@@ -38,10 +37,9 @@ namespace Task2v2
             driver.Navigate().GoToUrl(driver.Url.TrimEnd(driver.Url.ToCharArray()));
         }
 
-        public BranchesPage BackToBranches()
+        public void BackToBranches()
         {
             driver.Navigate().GoToUrl("https://github.com/costea32/AutomationTraining/branches");
-            return new BranchesPage(driver);
         }
 
         public List<Record> GetListOfItems(string url)

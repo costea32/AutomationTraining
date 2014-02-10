@@ -24,6 +24,7 @@ namespace Task2v2
 
             driver.Close();
             Console.WriteLine("\nTest finished!");
+            Console.ReadLine();
         }
     }
 }
