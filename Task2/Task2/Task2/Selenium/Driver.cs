@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
-using System.Threading;
 
 
 namespace Task2.Selenium

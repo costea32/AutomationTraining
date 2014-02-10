@@ -11,11 +11,11 @@ namespace Task2
         [TestMethod]
         public void TestMethod1()
         {
-            List<Branch> branches = new MainLogic().getAllStuff();
-            Json_Xml_Creation jx = new Json_Xml_Creation();
-            jx.CreateJson(branches);
-//            jx.CreateXml(branches);
-            
+            List<Container> containers = new MainLogic().GetAllStuff();
+            Serializer serializer = new Serializer(new JsonStrategy(),containers);
+            serializer.Execute();
+            serializer.setStrategy(new XmlStrategy());
+            serializer.Execute();
         }
 
     }

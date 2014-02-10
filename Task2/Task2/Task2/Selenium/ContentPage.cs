@@ -12,7 +12,7 @@ namespace Task2.Selenium
 
         public ContentPage()
         {
-            this.table = getTable();
+            UpdateTable();
         }
 
         public static void GoTo(string url)
@@ -20,65 +20,65 @@ namespace Task2.Selenium
             Driver.Instance.Navigate().GoToUrl(url);
         }
 
-        public IWebElement getTable()
+        public IWebElement GetTable()
         {
             return Driver.Instance.FindElement(By.ClassName("files"));
         }
 
-        public IWebElement getRow(int i)
+        public IWebElement GetRow(int i)
         {
-            if (isNotMainFolder()) i++;
+            if (IsNotMainFolder()) i++;
             return table.FindElements(By.TagName("tr"))[i];
         }
 
-        public string getName(int i)
+        public string GetName(int i)
         {
-            return getRow(i).FindElement(By.ClassName("content")).FindElement(By.TagName("a")).Text;
+            return GetRow(i).FindElement(By.ClassName("content")).FindElement(By.TagName("a")).Text;
         }
 
-        public string getType(int i)
+        public string GetType(int i)
         {
-            if (getRow(i).FindElement(By.ClassName("icon")).FindElement(By.TagName("span")).GetAttribute("class").Contains("directory"))
+            if (GetRow(i).FindElement(By.ClassName("icon")).FindElement(By.TagName("span")).GetAttribute("class").Contains("directory"))
                 return "Folder";
             else
                 return "File";
         }
 
-        public string getComment(int i)
+        public string GetComment(int i)
         {
-            return getRow(i).FindElement(By.ClassName("message")).FindElement(By.TagName("a")).Text;
+            return GetRow(i).FindElement(By.ClassName("message")).FindElement(By.TagName("a")).Text;
         }
 
-        public string getLastUpdated(int i)
+        public string GetLastUpdated(int i)
         {
-            return getRow(i).FindElement(By.ClassName("age")).FindElement(By.TagName("time")).Text;
+            return GetRow(i).FindElement(By.ClassName("age")).FindElement(By.TagName("time")).Text;
         }
         
-        public int getNrOfItems()
+        public int GetNrOfItems()
         {
-            if (isNotMainFolder())  
+            if (IsNotMainFolder())  
                 return table.FindElements(By.TagName("tr")).Count-1;
             else
                 return table.FindElements(By.TagName("tr")).Count;
         }
 
-        public bool isNotMainFolder()
+        public bool IsNotMainFolder()
         {
             IWebElement element1 = table.FindElements(By.TagName("tr"))[0];
             return (table.FindElements(By.TagName("tr"))[0].GetAttribute("class") == "up-tree");
         }
 
-        public void updateTable()
+        public void UpdateTable()
         {
-            this.table = getTable();
+            table = GetTable();
         }
 
-        public string getUrl()
+        public string GetUrl()
         {
             return Driver.Instance.Url;
         }
 
-        public void setUrl(string url)
+        public void SetUrl(string url)
         {
             Driver.Instance.Url = url;
         }

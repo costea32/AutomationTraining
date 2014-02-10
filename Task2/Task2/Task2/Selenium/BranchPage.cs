@@ -12,7 +12,7 @@ namespace Task2.Selenium
 
         public BranchPage()
         {
-            this.table = getTable();
+            table = GetTable();
         }
         
         public static void GoTo()
@@ -20,74 +20,39 @@ namespace Task2.Selenium
             Driver.Instance.Navigate().GoToUrl("https://github.com/costea32/AutomationTraining/branches");
         }
 
-        public IWebElement getTable()
+        public IWebElement GetTable()
         {
-            return table = Driver.Instance.FindElements(By.ClassName("branches"))[1];
+            return Driver.Instance.FindElements(By.ClassName("branches"))[1];
         }
 
-        public IWebElement getRow(int i)
+        public IWebElement GetRow(int i)
         {
             return table.FindElements(By.TagName("tr"))[i];
         }
 
-        public string getName(int i)
+        public string GetName(int i)
         {
-            return getRow(i).FindElement(By.ClassName("css-truncate-target")).Text;
+            return GetRow(i).FindElement(By.ClassName("css-truncate-target")).Text;
         }
 
-        public int getAhead(int i)
+        public int GetAhead(int i)
         {
-            return int.Parse(getRow(i).FindElement(By.ClassName("behind")).FindElement(By.TagName("em")).Text.Substring(0,2));
+            return int.Parse(GetRow(i).FindElement(By.ClassName("behind")).FindElement(By.TagName("em")).Text.Substring(0,2));
         }
 
-        public int getBehind(int i)
+        public int GetBehind(int i)
         {
-            return int.Parse(getRow(i).FindElement(By.ClassName("ahead")).FindElement(By.TagName("em")).Text.Substring(0, 2));
+            return int.Parse(GetRow(i).FindElement(By.ClassName("ahead")).FindElement(By.TagName("em")).Text.Substring(0, 2));
         }
 
-        public string getUrl(int i)
+        public string GetUrl(int i)
         {
-            return "https://github.com/costea32/AutomationTraining/tree/" + getName(i);
+            return "https://github.com/costea32/AutomationTraining/tree/" + GetName(i);
         }
 
-        public int getNrOfBranches()
+        public int GetNrOfBranches()
         {
             return table.FindElements(By.TagName("tr")).Count;
         }
-
-/*
-        public class Table : IWebElement
-        {
-            public IWebElement table { get; set; }
-
-            public void Table()
-            {
-                getTable();    
-            }
-
-            public void getTable()
-            {
-                this.table = Driver.Instance.FindElements(By.ClassName("branches"))[1];
-            }
-
-
-            public class Rows : IWebElement
-            {
-                IList<IWebElement> rows;
-
-                public IList<IWebElement> Rows()
-                {
-                    getRows();
-                    return rows;
-                }
-
-                public void getRows()
-                {
-                    this.rows = Driver.Instance.FindElements(By.ClassName("branches"));
-                }
-            }
-        }
-
-*/
     }
 }

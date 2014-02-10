@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace Task2
 {
+    [DataContract(Name = "Folder")]
     public class Folder : Container
     {
+        protected internal Folder() { }
+
         public Folder(string name, string comment, string lastUpdated)
         {
             this.name = name;
@@ -15,13 +18,13 @@ namespace Task2
             this.lastUpdated = lastUpdated;
         }
 
-        [JsonProperty("Type", Order = 2)]
-        public string type = "Folder";
+        [DataMember(Order = 2)]
+        public string Type { get { return "Folder"; } }
 
-        [JsonProperty("Comment", Order = 3)]
+        [DataMember(Name = "Comment", Order = 3)]
         public string comment { get; set; }
 
-        [JsonProperty("LastUpdated", Order = 4)]
+        [DataMember(Name = "LastUpdated", Order = 4)]
         public string lastUpdated { get; set; }
     }
 }

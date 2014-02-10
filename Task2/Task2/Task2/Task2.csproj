@@ -34,9 +34,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\..\..\Desktop\JSON_Parser\Bin\Net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -58,12 +55,12 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Branch.cs" />
-    <Compile Include="Container.cs" />
-    <Compile Include="File.cs" />
-    <Compile Include="Folder.cs" />
-    <Compile Include="IBehavior.cs" />
-    <Compile Include="Json_Xml_Creation.cs" />
+    <Compile Include="Containers\Branch.cs" />
+    <Compile Include="Containers\Container.cs" />
+    <Compile Include="Containers\File.cs" />
+    <Compile Include="Containers\Folder.cs" />
+    <Compile Include="Serializer\IStrategy.cs" />
+    <Compile Include="Serializer\Serializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MainLogic.cs" />
     <Compile Include="Selenium\BranchPage.cs" />
