@@ -9,17 +9,16 @@ namespace Task2
     [DataContract(Name = "Folder")]
     public class Folder : Container
     {
-        protected internal Folder() { }
-
-        public Folder(string name, string comment, string lastUpdated)
+        public Folder(string name, string comment, string lastUpdated, string url)
         {
             this.name = name;
             this.comment = comment;
             this.lastUpdated = lastUpdated;
+            this.url = url;
         }
 
         [DataMember(Order = 2)]
-        public string Type { get { return "Folder"; } }
+        public string Type { get { return "Folder"; } set { } }
 
         [DataMember(Name = "Comment", Order = 3)]
         public string comment { get; set; }

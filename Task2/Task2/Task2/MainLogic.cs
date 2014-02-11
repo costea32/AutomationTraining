@@ -13,6 +13,7 @@ namespace Task2
         String password = "Password123";
 
         #endregion
+
         public List<Container> GetAllStuff()
         {
             Driver.Initialize();
@@ -23,8 +24,7 @@ namespace Task2
 
             foreach (Branch branch in branches)
             {
-                Driver.Instance.Url = branch.url;
-                GetFilesFoldersFor(branch);
+                branch.children = GetFilesFoldersFor(branch.url);
             }
 
             return branches;
@@ -36,41 +36,43 @@ namespace Task2
             BranchPage.GoTo();
             BranchPage bp = new BranchPage();
 
-            int nrOfBranches = bp.GetNrOfBranches();
-
-            for (int i = 6; i < nrOfBranches; i++)
+            foreach (var row in bp.table.tableRows)
             {
-                branches.Add(new Branch(bp.GetName(i), bp.GetBehind(i), bp.GetAhead(i), bp.GetUrl(i)));
+                branches.Add(new Branch(row.name, row.behind, row.ahead, row.url));
             }
 
             return branches;
 
         }
 
-        public void GetFilesFoldersFor(Container container)
+        public List<Container> GetFilesFoldersFor(string url)
         {
             ContentPage page = new ContentPage();
-            int nrOfItems = page.GetNrOfItems();
-            container.Children = new List<Container>();
+            page.SetUrl(url);
+            var Children = new List<Container>();
 
-            for (int i = 0; i < nrOfItems; i++)
+            foreach (var row in page.table.tableRows)
+            {
+                if (row.type == "Folder")
                 {
-                    if (page.GetType(i) == "Folder")
-                    {
-                        string tempName = page.GetName(i);
-                        container.Children.Add(new Folder(page.GetName(i), page.GetComment(i), page.GetLastUpdated(i)));
-                        string tempUrl = page.GetUrl();
-                        page.SetUrl(tempUrl + "/" + page.GetName(i));
-                        GetFilesFoldersFor(container.Children.Find(x => (x.name == tempName)));
-                        page.SetUrl(tempUrl);
-                        page.UpdateTable();
-                    }
-                    else
-                    {
-                        container.Children.Add(new File1(page.GetName(i), page.GetComment(i), page.GetLastUpdated(i)));
-                    }
-
+                    Children.Add(new Folder(row.name, row.comment, row.lastUpdated, row.url));
                 }
+                else
+                {
+                    Children.Add(new File1(row.name, row.comment, row.lastUpdated));
+                }
+            }
+
+            foreach (Container container in Children)
+            {
+                if (container.GetType() == typeof(Folder))
+                {
+                    var FolderChildren = GetFilesFoldersFor(container.url);
+                    container.children = FolderChildren;
+                }
+            }
+
+            return Children;
         }
     }
 }

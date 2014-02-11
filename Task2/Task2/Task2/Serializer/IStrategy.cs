@@ -17,19 +17,20 @@ namespace Task2
     public class JsonStrategy : IStrategy
     {
         List<Container> containers;
-        string xmlPath = @"c:/Selenium/json.json";
+        string jsonPath = @"c:/Selenium/json.json";
 
         public void Serialize(List<Container> containers)
         {
             this.containers = containers;
             
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Container>));
-            MemoryStream memoryStream = new MemoryStream();
-            serializer.WriteObject(memoryStream, containers);
 
-            string json = Encoding.Default.GetString(memoryStream.ToArray());
-
-            File.WriteAllText(xmlPath, json);
+            using (MemoryStream stream = new MemoryStream())
+            {
+                serializer.WriteObject(stream, containers);
+                string json = Encoding.Default.GetString(stream.ToArray());
+                File.WriteAllText(jsonPath, json);
+            }
         }
     }
 

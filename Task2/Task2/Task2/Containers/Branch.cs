@@ -23,8 +23,5 @@ namespace Task2
         [DataMember(Name = "Ahead", Order = 2)]
         public int ahead { get; set; }
 
-        [IgnoreDataMember]
-        public string url { get; set; }
-
     }
 }

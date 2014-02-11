@@ -43,10 +43,10 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebDriver">
-      <HintPath>..\..\..\..\..\..\Desktop\Selenium\WebDriver.dll</HintPath>
+      <HintPath>D:\Work\Selenium\WebDriver.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver.Support">
-      <HintPath>..\..\..\..\..\..\Desktop\Selenium\WebDriver.Support.dll</HintPath>
+      <HintPath>D:\Work\Selenium\WebDriver.Support.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

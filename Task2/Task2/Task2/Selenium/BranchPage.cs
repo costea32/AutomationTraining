@@ -8,51 +8,56 @@ namespace Task2.Selenium
 {
     public class BranchPage
     {
-        IWebElement table;
+        public Table table { get { return new Table(); } }
 
-        public BranchPage()
-        {
-            table = GetTable();
-        }
-        
         public static void GoTo()
         {
             Driver.Instance.Navigate().GoToUrl("https://github.com/costea32/AutomationTraining/branches");
         }
 
-        public IWebElement GetTable()
+        public class Table
         {
-            return Driver.Instance.FindElements(By.ClassName("branches"))[1];
+            IWebElement table;
+
+            public Table()
+            {
+                table = Driver.Instance.FindElements(By.ClassName("branches"))[1];
+            }
+
+            public List<TableRow> tableRows
+            {
+                get
+                {
+                    var retList = new List<TableRow>();
+                    var rowElements = table.FindElements(By.TagName("tr"));
+                    foreach (var rowElement in rowElements)
+                    {
+                        retList.Add(new TableRow(rowElement));
+                    }
+                    return retList;
+                }
+            }
         }
 
-        public IWebElement GetRow(int i)
+        public class TableRow
         {
-            return table.FindElements(By.TagName("tr"))[i];
-        }
+            IWebElement tableRow;
 
-        public string GetName(int i)
-        {
-            return GetRow(i).FindElement(By.ClassName("css-truncate-target")).Text;
-        }
+            public TableRow(IWebElement tableRow)
+            {
+                this.tableRow = tableRow;
+            }
 
-        public int GetAhead(int i)
-        {
-            return int.Parse(GetRow(i).FindElement(By.ClassName("behind")).FindElement(By.TagName("em")).Text.Substring(0,2));
-        }
+            public string name { get { return tableRow.FindElement(By.ClassName("css-truncate-target")).Text; } }
 
-        public int GetBehind(int i)
-        {
-            return int.Parse(GetRow(i).FindElement(By.ClassName("ahead")).FindElement(By.TagName("em")).Text.Substring(0, 2));
-        }
+            public int ahead { get { return int.Parse(tableRow.FindElement(By.ClassName("ahead")).FindElement(By.TagName("em")).Text.Substring(0, 2)); } }
 
-        public string GetUrl(int i)
-        {
-            return "https://github.com/costea32/AutomationTraining/tree/" + GetName(i);
-        }
+            public int behind { get { return int.Parse(tableRow.FindElement(By.ClassName("behind")).FindElement(By.TagName("em")).Text.Substring(0, 2)); } }
 
-        public int GetNrOfBranches()
-        {
-            return table.FindElements(By.TagName("tr")).Count;
+            public string url { get { return "https://github.com/costea32/AutomationTraining/tree/" + name; } }
         }
     }
 }
+
+
+

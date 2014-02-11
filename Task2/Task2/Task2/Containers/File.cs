@@ -9,8 +9,6 @@ namespace Task2
     [DataContract(Name = "File")]
     public class File1 : Container
     {
-        protected internal File1() { }
-
         public File1(string name, string comment, string lastUpdated)
         {
             this.name = name;
@@ -19,7 +17,7 @@ namespace Task2
         }
 
         [DataMember(Order = 2)]
-        public string Type{get{return "File";}}
+        public string Type { get { return "File"; } set { } }
 
         [DataMember(Name = "Comment", Order = 3)]
         public string comment { get; set; }

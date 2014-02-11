@@ -15,8 +15,11 @@ namespace Task2
         [DataMember(Name="Name", Order = 1)]
         public string name { get; set; }
 
-        [DataMember(Order=5, EmitDefaultValue = false)]
-        public List<Container> Children { get; set; }
+        [DataMember(Name="Children", Order=5, EmitDefaultValue = false)]
+        public List<Container> children { get; set; }
+
+        [IgnoreDataMember]
+        public string url { get; set; }
 
     }
 }

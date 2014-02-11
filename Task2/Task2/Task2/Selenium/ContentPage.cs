@@ -8,70 +8,7 @@ namespace Task2.Selenium
 {
     public class ContentPage
     {
-        IWebElement table;
-
-        public ContentPage()
-        {
-            UpdateTable();
-        }
-
-        public static void GoTo(string url)
-        {
-            Driver.Instance.Navigate().GoToUrl(url);
-        }
-
-        public IWebElement GetTable()
-        {
-            return Driver.Instance.FindElement(By.ClassName("files"));
-        }
-
-        public IWebElement GetRow(int i)
-        {
-            if (IsNotMainFolder()) i++;
-            return table.FindElements(By.TagName("tr"))[i];
-        }
-
-        public string GetName(int i)
-        {
-            return GetRow(i).FindElement(By.ClassName("content")).FindElement(By.TagName("a")).Text;
-        }
-
-        public string GetType(int i)
-        {
-            if (GetRow(i).FindElement(By.ClassName("icon")).FindElement(By.TagName("span")).GetAttribute("class").Contains("directory"))
-                return "Folder";
-            else
-                return "File";
-        }
-
-        public string GetComment(int i)
-        {
-            return GetRow(i).FindElement(By.ClassName("message")).FindElement(By.TagName("a")).Text;
-        }
-
-        public string GetLastUpdated(int i)
-        {
-            return GetRow(i).FindElement(By.ClassName("age")).FindElement(By.TagName("time")).Text;
-        }
-        
-        public int GetNrOfItems()
-        {
-            if (IsNotMainFolder())  
-                return table.FindElements(By.TagName("tr")).Count-1;
-            else
-                return table.FindElements(By.TagName("tr")).Count;
-        }
-
-        public bool IsNotMainFolder()
-        {
-            IWebElement element1 = table.FindElements(By.TagName("tr"))[0];
-            return (table.FindElements(By.TagName("tr"))[0].GetAttribute("class") == "up-tree");
-        }
-
-        public void UpdateTable()
-        {
-            table = GetTable();
-        }
+        public Table table { get { return new Table(); } }
 
         public string GetUrl()
         {
@@ -81,6 +18,60 @@ namespace Task2.Selenium
         public void SetUrl(string url)
         {
             Driver.Instance.Url = url;
+        }
+
+        public class Table
+        {
+            IWebElement table;
+
+            public Table()
+            {
+                table = Driver.Instance.FindElement(By.ClassName("files"));
+            }
+
+            public List<TableRow> tableRows
+            {
+                get
+                {
+                    var retList = new List<TableRow>();
+                    var rowElements = table.FindElements(By.TagName("tr"));
+                    foreach (var rowElement in rowElements)
+                    {
+                        if (!(rowElement.GetAttribute("class") == "up-tree"))
+                        retList.Add(new TableRow(rowElement));
+                    }
+                    return retList;
+                }
+            }
+        }
+
+        public class TableRow
+        {
+            IWebElement tableRow;
+
+            public TableRow(IWebElement tableRow)
+            {
+                this.tableRow = tableRow;
+            }
+
+            public string name { get { return tableRow.FindElement(By.ClassName("content")).FindElement(By.TagName("a")).Text; } }
+
+            public string type
+            {
+                get
+                {
+                    if (tableRow.FindElement(By.ClassName("icon")).FindElement(By.TagName("span")).GetAttribute("class").Contains("directory"))
+                        return "Folder";
+                    else
+                        return "File";
+                }
+            }
+
+            public string url { get { return Driver.Instance.Url + "/" + name; } }
+
+            public string comment { get { return tableRow.FindElement(By.ClassName("message")).FindElement(By.TagName("a")).Text; } }
+
+            public string lastUpdated { get { return tableRow.FindElement(By.ClassName("age")).FindElement(By.TagName("time")).Text; } }
         }
     }
 }
