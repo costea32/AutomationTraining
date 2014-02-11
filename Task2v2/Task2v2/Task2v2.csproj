@@ -57,12 +57,15 @@
   <ItemGroup>
     <Compile Include="Branch.cs" />
     <Compile Include="BranchesPage.cs" />
+    <Compile Include="BranchRow.cs" />
     <Compile Include="File.cs" />
     <Compile Include="Folder.cs" />
+    <Compile Include="ItemRow.cs" />
     <Compile Include="LoginPage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Record.cs" />
+    <Compile Include="Table.cs" />
     <Compile Include="TreePage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

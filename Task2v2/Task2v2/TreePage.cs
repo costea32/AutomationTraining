@@ -11,10 +11,12 @@ namespace Task2v2
     {
         private IWebDriver driver;
 
-        List<IWebElement> icons;
-        List<IWebElement> rnames;
-        List<IWebElement> rcomments;
-        List<IWebElement> rage;
+        private List<IWebElement> icons;
+        private List<IWebElement> rnames;
+        private List<IWebElement> rcomments;
+        private List<IWebElement> rage;
+
+        private Table<ItemRow> TreeTable;
 
         public TreePage(IWebDriver driver)
         {
@@ -27,9 +29,10 @@ namespace Task2v2
             return count;
         }
 
-        public void OpenNextPage(string NextPageName)
+        public TreePage OpenNextPage(string NextPageName)
         {
-            driver.Navigate().GoToUrl(driver.Url + NextPageName);
+            driver.Navigate().GoToUrl(driver.Url + "/" + NextPageName);
+            return new TreePage(driver);
         }
 
         public void OpenPreviousPage()
@@ -41,7 +44,7 @@ namespace Task2v2
         {
             driver.Navigate().GoToUrl("https://github.com/costea32/AutomationTraining/branches");
         }
-
+/*
         public List<Record> GetListOfItems(string url)
         {
             driver.Url = url;
@@ -76,8 +79,8 @@ namespace Task2v2
 
             return MyList;
         }
-
-        public void getItems()
+*/
+        private void getItems()
         {
             icons = driver.FindElement(By.ClassName("files")).FindElements(By.XPath("//tbody/tr/td[@class = 'icon']/span")).ToList();
             rnames = driver.FindElements(By.ClassName("js-directory-link")).ToList();
@@ -85,10 +88,43 @@ namespace Task2v2
             rage = driver.FindElement(By.ClassName("files")).FindElements(By.ClassName("js-relative-date")).ToList();
         }
 
-        public bool isFolder(int i)
+        private bool isFolder(int i)
         {
             return icons[i].GetAttribute("class").Contains("directory");
         }
 
+        public Table<ItemRow> GetTreeTable()
+        {
+            TreeTable = new Table<ItemRow>();
+
+            int count = CountItems();
+
+            getItems();
+
+            for (int i = 0; i < count; i++)
+            {
+                string itemName = rnames[i].Text;
+                string itemComment = rcomments[i].Text;
+                string itemAge = rage[i].Text;
+
+                string itemType;
+                if (isFolder(i)) itemType = "Folder";
+                else itemType = "File";
+
+                TreeTable.AddRow(new ItemRow(itemName, itemType, itemComment, itemAge));
+            }
+
+            return TreeTable;
+        }
+
+        public void RefreshPage(string url)
+        {
+            driver.Navigate().GoToUrl(url);
+        }
+
+        public string GetURL()
+        {
+            return driver.Url.ToString();
+        }
     }
 }

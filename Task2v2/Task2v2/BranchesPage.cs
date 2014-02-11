@@ -11,9 +11,11 @@ namespace Task2v2
     {
         private IWebDriver driver;
 
-        List<IWebElement> bnames;
-        List<IWebElement> bbehinds;
-        List<IWebElement> baheads;
+        private List<IWebElement> bnames;
+        private List<IWebElement> bbehinds;
+        private List<IWebElement> baheads;
+
+        private Table<BranchRow> BranchTable;
 
         public BranchesPage(IWebDriver driver)
         {
@@ -25,12 +27,12 @@ namespace Task2v2
             return driver.FindElements(By.ClassName("css-truncate")).Count;
         }
 
-
-        public void OpenBranch(string BranchName)
+        public TreePage OpenBranch(string BranchName)
         {
             driver.Navigate().GoToUrl("https://github.com/costea32/AutomationTraining/tree/" + BranchName);
+            return new TreePage(driver);
         }
-
+/*
         public List<Branch> GetListOfBranches()
         {
             List<Branch> MyList = new List<Branch>();
@@ -62,12 +64,32 @@ namespace Task2v2
 
             return MyList;
         }
-
-        public void getItems()
+*/
+        private void getItems()
         {
             bnames = driver.FindElements(By.ClassName("css-truncate")).ToList();
             bbehinds = driver.FindElement(By.Id("js-repo-pjax-container")).FindElements(By.XPath("table[2]/tbody/tr/td[@class = 'state-widget']/div/span[@class = 'behind']/em")).ToList();
             baheads = driver.FindElement(By.Id("js-repo-pjax-container")).FindElements(By.XPath("table[2]/tbody/tr/td[@class = 'state-widget']/div/span[@class = 'ahead']/em")).ToList();
+        }
+
+        public Table<BranchRow> GetBranchTable()
+        {
+            BranchTable = new Table<BranchRow>();
+
+            int count = CountBranches();
+
+            getItems();
+
+            for (int i = 0; i < count; i++)
+            {
+                string branchName = bnames[i].Text;
+                int ahead = Int32.Parse(baheads[i].Text.Substring(0, 2));
+                int behind = Int32.Parse(bbehinds[i].Text.Substring(0, 2));
+
+                BranchTable.AddRow(new BranchRow(branchName, behind, ahead));
+            }
+
+            return BranchTable;
         }
     }
 }
