@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C284103D-791D-4AC7-9166-6C2BE857F043}</ProjectGuid>
+    <ProjectGuid>{94513EA2-109E-48B6-9D82-F86451CA2A15}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Inheritance_Web_Subproject</RootNamespace>
-    <AssemblyName>Inheritance_Web_Subproject</AssemblyName>
+    <RootNamespace>Iheritance_Web_subproject_rework</RootNamespace>
+    <AssemblyName>Iheritance_Web_subproject_rework</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -39,6 +39,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,8 +56,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BranchesPage.cs" />
+    <Compile Include="BranchRow.cs" />
+    <Compile Include="BranchTable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Row.cs" />
+    <Compile Include="SourcePage.cs" />
+    <Compile Include="SourceRow.cs" />
+    <Compile Include="SourceRowDataCotract.cs" />
+    <Compile Include="SourceTable.cs" />
+    <Compile Include="Table.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
