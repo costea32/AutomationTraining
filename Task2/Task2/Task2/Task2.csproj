@@ -43,10 +43,10 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebDriver">
-      <HintPath>D:\Work\Selenium\WebDriver.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Desktop\Selenium\WebDriver.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver.Support">
-      <HintPath>D:\Work\Selenium\WebDriver.Support.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Desktop\Selenium\WebDriver.Support.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +59,9 @@
     <Compile Include="Containers\Container.cs" />
     <Compile Include="Containers\File.cs" />
     <Compile Include="Containers\Folder.cs" />
+    <Compile Include="Selenium\BranchPageRow.cs" />
+    <Compile Include="Selenium\ContentPageRow.cs" />
+    <Compile Include="Selenium\Table.cs" />
     <Compile Include="Serializer\IStrategy.cs" />
     <Compile Include="Serializer\Serializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

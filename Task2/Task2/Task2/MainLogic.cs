@@ -50,27 +50,25 @@ namespace Task2
             ContentPage page = new ContentPage();
             page.SetUrl(url);
             var Children = new List<Container>();
-
-            foreach (var row in page.table.tableRows)
-            {
-                if (row.type == "Folder")
+                foreach (var row in page.table.tableRows.Where(x => x.isBack == false))
                 {
-                    Children.Add(new Folder(row.name, row.comment, row.lastUpdated, row.url));
+                    if (row.type == "Folder")
+                    {
+                        Children.Add(new Folder(row.name, row.comment, row.lastUpdated, row.url));
+                    }
+                    else
+                    {
+                        Children.Add(new File1(row.name, row.comment, row.lastUpdated));
+                    }
                 }
-                else
+                foreach (Container container in Children)
                 {
-                    Children.Add(new File1(row.name, row.comment, row.lastUpdated));
+                    if (container.GetType() == typeof(Folder))
+                    {
+                        var folderChildren = GetFilesFoldersFor(container.url);
+                        container.children = folderChildren;
+                    }
                 }
-            }
-
-            foreach (Container container in Children)
-            {
-                if (container.GetType() == typeof(Folder))
-                {
-                    var FolderChildren = GetFilesFoldersFor(container.url);
-                    container.children = FolderChildren;
-                }
-            }
 
             return Children;
         }
