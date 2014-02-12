@@ -8,7 +8,7 @@ namespace Task2.Selenium
 {
     public class ContentPage
     {
-        public Table<ContentPageRow> table { get { return new Table<ContentPageRow>(); } }
+        public Table<ContentPageRow> table { get { return new Table<ContentPageRow>(Driver.Instance.FindElement(By.ClassName("files"))); } }
 
         public string GetUrl()
         {

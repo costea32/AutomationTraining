@@ -6,15 +6,8 @@ using OpenQA.Selenium;
 
 namespace Task2.Selenium
 {
-    public class ContentPageRow
+    public class ContentPageRow : TableRow
     {
-        IWebElement tableRow;
-
-        public ContentPageRow(IWebElement tableRow)
-        {
-            this.tableRow = tableRow;
-        }
-
         public string name { get { return tableRow.FindElement(By.ClassName("content")).FindElement(By.TagName("a")).Text; } }
 
         public string type

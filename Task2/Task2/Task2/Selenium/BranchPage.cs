@@ -8,7 +8,7 @@ namespace Task2.Selenium
 {
     public class BranchPage
     {
-        public Table<BranchPageRow> table { get { return new Table<BranchPageRow>(); } }
+        public Table<BranchPageRow> table { get { return new Table<BranchPageRow>(Driver.Instance.FindElements(By.ClassName("branches"))[1]); } }
 
         public static void GoTo()
         {

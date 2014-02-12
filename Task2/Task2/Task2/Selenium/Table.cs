@@ -6,18 +6,13 @@ using OpenQA.Selenium;
 
 namespace Task2.Selenium
 {
-    public class Table<T>
+    public class Table<T> where T : TableRow
     {
         IWebElement table;
 
-
-        public Table()
+        public Table(IWebElement table)
         {
-            string type1 = typeof(T).ToString();
-            if (typeof(T).ToString() == "Task2.Selenium.BranchPageRow")
-                table = Driver.Instance.FindElements(By.ClassName("branches"))[1];
-            else
-                table = Driver.Instance.FindElement(By.ClassName("files"));
+            this.table = table;
         }
 
         public List<T> tableRows

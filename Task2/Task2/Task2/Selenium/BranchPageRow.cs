@@ -6,15 +6,8 @@ using OpenQA.Selenium;
 
 namespace Task2.Selenium
 {
-    public class BranchPageRow
+    public class BranchPageRow : TableRow
     {
-        IWebElement tableRow;
-
-        public BranchPageRow(IWebElement tableRow)
-        {
-            this.tableRow = tableRow;
-        }
-
         public string name { get { return tableRow.FindElement(By.ClassName("css-truncate-target")).Text; } }
 
         public int ahead { get { return int.Parse(tableRow.FindElement(By.ClassName("ahead")).FindElement(By.TagName("em")).Text.Substring(0, 2)); } }

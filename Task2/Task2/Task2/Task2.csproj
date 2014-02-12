@@ -60,6 +60,7 @@
     <Compile Include="Containers\File.cs" />
     <Compile Include="Containers\Folder.cs" />
     <Compile Include="Selenium\BranchPageRow.cs" />
+    <Compile Include="Selenium\TableRow.cs" />
     <Compile Include="Selenium\ContentPageRow.cs" />
     <Compile Include="Selenium\Table.cs" />
     <Compile Include="Serializer\IStrategy.cs" />
