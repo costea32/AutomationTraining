@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 
 namespace Iheritance_Web_subproject_rework
 {
-    [DataContract]
-    class SourceRowDataContract
+    [DataContract(Name="SourceRow",Namespace="")]
+    class SourceRowDataContractXML
     {
         [DataMember]
         string name;
 
         [DataMember]
-        string type;       
+        string type;
 
         [DataMember]
         string comment;
@@ -47,7 +46,7 @@ namespace Iheritance_Web_subproject_rework
             set { last_updated = value; }
         }
 
-        public SourceRowDataContract(SourceRow sRow)
+        public SourceRowDataContractXML(SourceRow sRow)
         {
             this.name = sRow.Name;
             this.type = sRow.Type;

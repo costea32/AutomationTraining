@@ -22,7 +22,6 @@ namespace Iheritance_Web_subproject_rework
         static void Main(string[] args)
         {
             IWebDriver driver = new FirefoxDriver();
-            StreamWriter xml_writer = new StreamWriter(path_xml,true);
             try
             {
                 driver.Url = "https://github.com/costea32/AutomationTraining/tree/ikulpin/Task1/Task1.Test";
@@ -40,17 +39,17 @@ namespace Iheritance_Web_subproject_rework
             
         }
 
-        private static void WriteStringToFile(string s)
-        {
-            StreamWriter outWriter = new StreamWriter(path_txt, true);
-            outWriter.Write(s);
-            outWriter.Close();
-        }
+        //private static void WriteStringToFile(string s)
+        //{
+        //    StreamWriter outWriter = new StreamWriter(path_txt, true);
+        //    outWriter.Write(s);
+        //    outWriter.Close();
+        //}
 
         private static void WriteXMLStringToFile(string s)
         {
             StreamWriter outXMLWriter = new StreamWriter(path_xml,true);
-            outXMLWriter.WriteLine(s);
+            outXMLWriter.Write(s);
             outXMLWriter.Close();
         }
 
@@ -66,19 +65,19 @@ namespace Iheritance_Web_subproject_rework
                     jsonString = HandleString(jsonString);
                     xmlString = HandleStringXML(xmlString);
 
-                    WriteStringToFile(jsonString);
+                    //WriteStringToFile(jsonString);
                     WriteXMLStringToFile(xmlString);
 
                     IWebDriver subdriver = new FirefoxDriver();
                     subdriver.Url = sRow.Href;
                     HandleSourcepage(new SourcePage(subdriver));
 
-                    WriteStringToFile("}]");
+                    //WriteStringToFile("}]");
                     WriteXMLStringToFile("</Children>");
                 }
                 else
                 {
-                    WriteStringToFile("\r\n" + jsonString);
+                   // WriteStringToFile("\r\n" + jsonString);
                     WriteXMLStringToFile("\r\n"+xmlString);
                 }
             }
@@ -114,8 +113,8 @@ namespace Iheritance_Web_subproject_rework
 
         private static string ConvertSourceRowToXMLString(SourceRow sRow)
         {
-            DataContractSerializer ser = new DataContractSerializer(typeof(SourceRowDataContract));
-            SourceRowDataContract sourceXML = new SourceRowDataContract(sRow);
+            DataContractSerializer ser = new DataContractSerializer(typeof(SourceRowDataContractXML));
+            SourceRowDataContractXML sourceXML = new SourceRowDataContractXML(sRow);
             MemoryStream mStream = new MemoryStream();
 
             ser.WriteObject(mStream,sourceXML);

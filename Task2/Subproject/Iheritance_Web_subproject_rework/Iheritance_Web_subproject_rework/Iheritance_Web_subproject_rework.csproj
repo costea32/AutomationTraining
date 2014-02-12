@@ -64,6 +64,7 @@
     <Compile Include="Row.cs" />
     <Compile Include="SourcePage.cs" />
     <Compile Include="SourceRow.cs" />
+    <Compile Include="SourceRowDataContractXML.cs" />
     <Compile Include="SourceRowDataCotract.cs" />
     <Compile Include="SourceTable.cs" />
     <Compile Include="Table.cs" />
