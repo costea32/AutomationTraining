@@ -20,6 +20,5 @@ namespace Task2
 
         [IgnoreDataMember]
         public string url { get; set; }
-
     }
 }

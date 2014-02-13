@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using Task2.Selenium;
 
 namespace Task2
 {
@@ -16,8 +17,17 @@ namespace Task2
             this.lastUpdated = lastUpdated;
         }
 
-        [DataMember(Order = 2)]
-        public string Type { get { return "File"; } set { } }
+        [DataMember(Name = "Type", Order = 2)]
+        public string type
+        {
+            get
+            {
+                int value = (int)RowType.File;
+                string description = Enumerations.GetEnumDescription((RowType)value);
+                return description;
+            }
+            set { }
+        }
 
         [DataMember(Name = "Comment", Order = 3)]
         public string comment { get; set; }

@@ -57,9 +57,11 @@
   <ItemGroup>
     <Compile Include="Containers\Branch.cs" />
     <Compile Include="Containers\Container.cs" />
+    <Compile Include="Containers\Enumerations.cs" />
     <Compile Include="Containers\File.cs" />
     <Compile Include="Containers\Folder.cs" />
     <Compile Include="Selenium\BranchPageRow.cs" />
+    <Compile Include="Selenium\RowTypeEnum.cs" />
     <Compile Include="Selenium\TableRow.cs" />
     <Compile Include="Selenium\ContentPageRow.cs" />
     <Compile Include="Selenium\Table.cs" />

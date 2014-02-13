@@ -8,6 +8,8 @@ namespace Task2.Selenium
 {
     public class BranchPageRow : TableRow
     {
+        public BranchPageRow(IWebElement tableRow) : base(tableRow) { }
+
         public string name { get { return tableRow.FindElement(By.ClassName("css-truncate-target")).Text; } }
 
         public int ahead { get { return int.Parse(tableRow.FindElement(By.ClassName("ahead")).FindElement(By.TagName("em")).Text.Substring(0, 2)); } }

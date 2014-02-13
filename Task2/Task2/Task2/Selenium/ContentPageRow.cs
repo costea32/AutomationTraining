@@ -8,16 +8,18 @@ namespace Task2.Selenium
 {
     public class ContentPageRow : TableRow
     {
+        public ContentPageRow(IWebElement tableRow) : base(tableRow) { }
+        
         public string name { get { return tableRow.FindElement(By.ClassName("content")).FindElement(By.TagName("a")).Text; } }
 
-        public string type
+        public RowType type
         {
             get
             {
                 if (tableRow.FindElement(By.ClassName("icon")).FindElement(By.TagName("span")).GetAttribute("class").Contains("directory"))
-                    return "Folder";
+                    return RowType.Folder;
                 else
-                    return "File";
+                    return RowType.File;
             }
         }
 

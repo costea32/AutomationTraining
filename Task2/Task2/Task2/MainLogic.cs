@@ -20,6 +20,8 @@ namespace Task2
             LoginPage.GoTo();
             LoginPage.LoginAs(username).WithPassword(password).Login();
 
+            Container b = new Container();
+
             List<Container> branches = GetBranches();
 
             foreach (Branch branch in branches)
@@ -52,7 +54,7 @@ namespace Task2
             var Children = new List<Container>();
                 foreach (var row in page.table.tableRows.Where(x => x.isBack == false))
                 {
-                    if (row.type == "Folder")
+                    if (row.type == RowType.Folder)
                     {
                         Children.Add(new Folder(row.name, row.comment, row.lastUpdated, row.url));
                     }
