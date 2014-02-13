@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Task2v2
 {
@@ -15,7 +16,7 @@ namespace Task2v2
         private List<IWebElement> bbehinds;
         private List<IWebElement> baheads;
 
-        private Table<BranchRow> BranchTable;
+        private BranchTable BranchTable;
 
         public BranchesPage(IWebDriver driver)
         {
@@ -72,10 +73,17 @@ namespace Task2v2
             baheads = driver.FindElement(By.Id("js-repo-pjax-container")).FindElements(By.XPath("table[2]/tbody/tr/td[@class = 'state-widget']/div/span[@class = 'ahead']/em")).ToList();
         }
 
-        public Table<BranchRow> GetBranchTable()
+        public BranchTable GetBranchTable()
         {
-            BranchTable = new Table<BranchRow>();
+            BranchTable = new BranchTable(driver.FindElements(By.ClassName("branches")).Reverse().First());
 
+            //IList<IWebElement> rowList = BranchTable.GetAllRows();
+
+            //foreach (IWebElement tmpRow in rowList)
+            //{
+            //    BranchTable.AddRow(new BranchRow(tmpRow));
+            //}
+/*
             int count = CountBranches();
 
             getItems();
@@ -88,7 +96,7 @@ namespace Task2v2
 
                 BranchTable.AddRow(new BranchRow(branchName, behind, ahead));
             }
-
+*/
             return BranchTable;
         }
     }

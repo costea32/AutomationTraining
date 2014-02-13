@@ -10,5 +10,7 @@ namespace Task2v2
         public string Name;
         public string Comment;
         public string Age;
+
+        public virtual void AddChildren(List<Record> records) { }
     }
 }

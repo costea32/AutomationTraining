@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Task2v2
 {
@@ -16,7 +17,7 @@ namespace Task2v2
         private List<IWebElement> rcomments;
         private List<IWebElement> rage;
 
-        private Table<ItemRow> TreeTable;
+        private ItemTable TreeTable;
 
         public TreePage(IWebDriver driver)
         {
@@ -82,6 +83,9 @@ namespace Task2v2
 */
         private void getItems()
         {
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            IWebElement element = wait.Until(d => d.FindElement(By.ClassName("files")));
+            
             icons = driver.FindElement(By.ClassName("files")).FindElements(By.XPath("//tbody/tr/td[@class = 'icon']/span")).ToList();
             rnames = driver.FindElements(By.ClassName("js-directory-link")).ToList();
             rcomments = driver.FindElement(By.ClassName("files")).FindElements(By.XPath("//tbody/tr/td[@class = 'message']/span/a")).ToList();
@@ -93,10 +97,25 @@ namespace Task2v2
             return icons[i].GetAttribute("class").Contains("directory");
         }
 
-        public Table<ItemRow> GetTreeTable()
+        private bool SkipElement(IWebElement row)
         {
-            TreeTable = new Table<ItemRow>();
+            if (row.GetAttribute("class") == "up-tree") return true;
+            else return false;
+        }
 
+        public ItemTable GetTreeTable()
+        {
+            TreeTable = new ItemTable(driver.FindElement(By.ClassName("files")));
+
+            //IList<IWebElement> rowList = TreeTable.GetAllRows();
+
+            //foreach (IWebElement tmpRow in rowList)
+            //{
+            //    if (!SkipElement(tmpRow))
+            //        TreeTable.AddRow(new ItemRow(tmpRow));
+            //    else continue;
+            //}
+/*
             int count = CountItems();
 
             getItems();
@@ -113,7 +132,7 @@ namespace Task2v2
 
                 TreeTable.AddRow(new ItemRow(itemName, itemType, itemComment, itemAge));
             }
-
+*/
             return TreeTable;
         }
 

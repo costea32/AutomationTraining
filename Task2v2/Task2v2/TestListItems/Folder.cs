@@ -16,5 +16,17 @@ namespace Task2v2
             Age = age;
             Children = children;
         }
+
+        public Folder(string name, string comment, string age)
+        {
+            Name = name;
+            Comment = comment;
+            Age = age;
+        }
+
+        public override void AddChildren(List<Record> children)
+        {
+            Children = children;
+        }
     }
 }

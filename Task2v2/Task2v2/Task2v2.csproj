@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Selenium.WebDriverBackedSelenium">
-      <HintPath>..\..\..\..\..\Downloads\selenium-dotnet-2.39.0\net40\Selenium.WebDriverBackedSelenium.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,9 +41,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="ThoughtWorks.Selenium.Core">
-      <HintPath>..\..\..\..\..\Downloads\selenium-dotnet-2.39.0\net40\ThoughtWorks.Selenium.Core.dll</HintPath>
-    </Reference>
     <Reference Include="WebDriver">
       <HintPath>..\..\..\Selenium\WebDriver.dll</HintPath>
     </Reference>
@@ -55,18 +49,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Branch.cs" />
-    <Compile Include="BranchesPage.cs" />
-    <Compile Include="BranchRow.cs" />
-    <Compile Include="File.cs" />
-    <Compile Include="Folder.cs" />
-    <Compile Include="ItemRow.cs" />
-    <Compile Include="LoginPage.cs" />
+    <Compile Include="BranchTable.cs" />
+    <Compile Include="Converter\ConverterContext.cs" />
+    <Compile Include="TestListItems\Branch.cs" />
+    <Compile Include="Pages\BranchesPage.cs" />
+    <Compile Include="PageObjects\BranchRow.cs" />
+    <Compile Include="Converter\Converter.cs" />
+    <Compile Include="Converter\ConvertToJson.cs" />
+    <Compile Include="Converter\ConvertToXml.cs" />
+    <Compile Include="TestListItems\File.cs" />
+    <Compile Include="TestListItems\Folder.cs" />
+    <Compile Include="PageObjects\ItemRow.cs" />
+    <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Record.cs" />
-    <Compile Include="Table.cs" />
-    <Compile Include="TreePage.cs" />
+    <Compile Include="TestListItems\Record.cs" />
+    <Compile Include="PageObjects\Table.cs" />
+    <Compile Include="Pages\TreePage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

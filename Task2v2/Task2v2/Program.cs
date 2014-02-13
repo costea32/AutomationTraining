@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 
 using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
+//using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 
 namespace Task2v2
@@ -13,7 +14,8 @@ namespace Task2v2
     {
         static void Main(string[] args)
         {
-            IWebDriver driver = new FirefoxDriver();
+//            IWebDriver driver = new FirefoxDriver();
+            IWebDriver driver = new ChromeDriver(@"C:\Users\goncharenkoa\Downloads\chromedriver_win32");
             driver.Navigate().GoToUrl("https://github.com/login");
 
             LoginPage Login = new LoginPage(driver);
@@ -24,6 +26,19 @@ namespace Task2v2
             ListOfBranches = GetBranchesWithChildren(Branches);
 
             driver.Close();
+            Console.WriteLine("\nBranch list created.\n");
+/*
+            ConverterContext ctx = new ConverterContext();
+            ctx.SetConverter(new ConvertToJson());
+            ctx.Convert(ListOfBranches);
+
+            Console.WriteLine("\nJson output file created.\n");
+
+            ctx.SetConverter(new ConvertToXml());
+            ctx.Convert(ListOfBranches);
+
+            Console.WriteLine("\nXML output file created.\n");
+*/
             Console.WriteLine("\nTest finished!");
             Console.ReadLine();
         }
@@ -32,14 +47,15 @@ namespace Task2v2
         {
             List<Branch> BranchList = new List<Branch>();
 
-            Table<BranchRow> branchTable = BranchPage.GetBranchTable();
+            BranchTable branchTable = BranchPage.GetBranchTable();
 
-            int count = branchTable.CountRows();
+//            int count = branchTable.CountRows();
 
-            for (int i = 0; i < count; i++)
+            foreach (BranchRow r in branchTable.Rows)
+//            for (int i = 0; i < count; i++)
             {
                 List<Record> ListOfItems = new List<Record>();
-                BranchRow r = new BranchRow(branchTable.GetRow(i));
+//                BranchRow r = new BranchRow(branchTable.GetRow(i));
                 
                 TreePage ChildPage = BranchPage.OpenBranch(r.BranchName);
                 ListOfItems = GetFoldersAndChildren(ChildPage);
@@ -48,7 +64,7 @@ namespace Task2v2
 
             return BranchList;
         }
-
+/*
         public static List<Record> GetFoldersAndChildren(TreePage CurrentPage)
         {
 
@@ -77,6 +93,52 @@ namespace Task2v2
                 {
                     TreeList.Add(new File(r.Name, r.Comment, r.Age));
                 }
+            }
+
+            return TreeList;
+        }
+ */
+
+        public static List<Record> GetFoldersAndChildren(TreePage CurrentPage)
+        {
+            string currentUrl = CurrentPage.GetURL();
+
+            List<Record> TreeList = new List<Record>();
+
+            ItemTable itemTable = CurrentPage.GetTreeTable();
+
+            //int count = itemTable.CountRows();
+
+            foreach (var r in itemTable.Rows)
+//            for (int i = 0; i < count; i++)
+            {
+ //               ItemRow r = itemTable.GetRow(i);
+
+                if (r.Type == "Folder")
+                {
+                    TreeList.Add(new Folder(r.Name, r.Comment, r.Age));
+                }
+
+                else
+                {
+                    TreeList.Add(new File(r.Name, r.Comment, r.Age));
+                }
+            }
+
+            foreach(Record r in TreeList)
+
+//            for (int i = 0; i < count; i++)
+            {
+                if (r.GetType() == typeof(Folder))
+                {
+                    List<Record> Children = new List<Record>();
+                    TreePage ChildPage = CurrentPage.OpenNextPage(r.Name);
+                    Children = GetFoldersAndChildren(ChildPage);
+                    CurrentPage.RefreshPage(currentUrl);
+                    r.AddChildren(Children);
+                }
+                else
+                    continue;
             }
 
             return TreeList;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Task2v2
 {
