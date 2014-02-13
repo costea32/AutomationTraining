@@ -24,105 +24,132 @@ namespace Iheritance_Web_subproject_rework
             IWebDriver driver = new FirefoxDriver();
             try
             {
-                driver.Url = "https://github.com/costea32/AutomationTraining/tree/ikulpin/Task1/Task1.Test";
-                //driver.Url = "https://github.com/costea32/AutomationTraining/branches";
-                SourcePage s_page = new SourcePage(driver);
-                HandleSourcepage(s_page);                
+                //driver.Url = "https://github.com/costea32/AutomationTraining/tree/ikulpin/Task1/Task1.Test";
+                driver.Url = "https://github.com/costea32/AutomationTraining/branches";
+                //SourcePage s_page = new SourcePage(driver);
+                //List<SourceFile> files =  HandleSourcepage(s_page);
+                //WriteToXMLFile(files);
+
+                BranchesPage b_page = new BranchesPage(driver);
+                List<BranchFolder> folders = HandleBranchPage(b_page);
+                WriteToXMLBranch(folders);
+                WriteToJSONBranch(folders);
             }
             finally
             {
                 driver.Quit();
+                Console.WriteLine("All done!");
             }
-
-
-            Console.ReadLine();
-            
+            Console.ReadLine();   
         }
-
-        //private static void WriteStringToFile(string s)
-        //{
-        //    StreamWriter outWriter = new StreamWriter(path_txt, true);
-        //    outWriter.Write(s);
-        //    outWriter.Close();
-        //}
-
-        private static void WriteXMLStringToFile(string s)
+        private static List<SourceFile> HandleSourcepage(SourcePage sPage)
         {
-            StreamWriter outXMLWriter = new StreamWriter(path_xml,true);
-            outXMLWriter.Write(s);
-            outXMLWriter.Close();
-        }
-
-        private static void HandleSourcepage(SourcePage sPage)
-        {
+            List<SourceFile> files = new List<SourceFile>();
             foreach (SourceRow sRow in sPage.Table.Rows)
             {
-                string jsonString = ConvertSourceRowToJSONString(sRow);
-                string xmlString = ConvertSourceRowToXMLString(sRow);
-
                 if (sRow.HasChildren)
                 {
-                    jsonString = HandleString(jsonString);
-                    xmlString = HandleStringXML(xmlString);
-
-                    //WriteStringToFile(jsonString);
-                    WriteXMLStringToFile(xmlString);
-
-                    IWebDriver subdriver = new FirefoxDriver();
-                    subdriver.Url = sRow.Href;
-                    HandleSourcepage(new SourcePage(subdriver));
-
-                    //WriteStringToFile("}]");
-                    WriteXMLStringToFile("</Children>");
+                    using (IWebDriver subdriver = new FirefoxDriver())
+                    {
+                        subdriver.Url = sRow.Href;
+                        SourceFolder folder = new SourceFolder
+                        {
+                            Name = sRow.Name,
+                            Type = sRow.Type,
+                            Last_updated = sRow.Last_updated,
+                            Comment = sRow.Comment,
+                            IsAFolder = sRow.HasChildren,
+                            Children = HandleSourcepage(new SourcePage(subdriver))
+                        };
+                        files.Add(folder);
+                    }
                 }
                 else
                 {
-                   // WriteStringToFile("\r\n" + jsonString);
-                    WriteXMLStringToFile("\r\n"+xmlString);
+                    files.Add( new SourceFile {Name=sRow.Name, Type=sRow.Type, Comment=sRow.Comment, Last_updated=sRow.Last_updated , IsAFolder=sRow.HasChildren } );
                 }
+            }
+
+            return files;
+        }
+
+        private static List<BranchFolder> HandleBranchPage(BranchesPage bPage)
+        {
+            List<BranchFolder> folders = new List<BranchFolder>();
+
+            List<BranchRow> rows = new List<BranchRow>();//only 1 row
+            rows.Add(bPage.BranchTable.Rows[0]);
+
+            foreach (BranchRow bRow in rows)
+            {
+                using (IWebDriver subdriver = new FirefoxDriver())
+                {
+                    subdriver.Url = bRow.Href;
+                    BranchFolder folder = new BranchFolder
+                    {
+                        Name = bRow.Name,
+                        LastUpdated = bRow.Last_updated,
+                        Href = bRow.Href,
+                        Ahead = bRow.Ahead,
+                        Behind = bRow.Behind,
+                        Children = HandleSourcepage(new SourcePage(subdriver))
+                    };
+                    folders.Add(folder);
+                }
+            }
+            return folders;
+        }
+
+        private static void WriteToXMLFile(List<SourceFile> files)
+        {
+            foreach (SourceFile sFile in files)
+            {
+                DataContractSerializer ser;
+                MemoryStream mStream = new MemoryStream();
+                StreamWriter sWriter = new StreamWriter(path_xml,true);
+
+                if (sFile.IsAFolder) ser = new DataContractSerializer(typeof(SourceFolder));
+                else ser = new DataContractSerializer(typeof(SourceFile));
+                
+                ser.WriteObject(mStream,sFile);
+                string xmlString = Encoding.Default.GetString(mStream.ToArray());
+                sWriter.Write(xmlString);
+                sWriter.Close();
+
             }
         }
 
-        private static string HandleString(string s)
+        private static void WriteToXMLBranch(List<BranchFolder> folders)
         {
-            s = s.Substring(0,s.Length-1);
-            StringBuilder sb = new StringBuilder();
-            sb.Append("[");
-            sb.Append(s);
-            sb.Append(" , \"Children:\"");
-            return sb.ToString() ;
+            foreach (BranchFolder bFolder in folders)
+            {
+                DataContractSerializer ser = new DataContractSerializer(typeof(BranchFolder));
+                MemoryStream mStream = new MemoryStream();
+                StreamWriter sWriter = new StreamWriter(path_xml,true);
+
+                ser.WriteObject(mStream,bFolder);
+                string xmlString = Encoding.Default.GetString(mStream.ToArray());
+                sWriter.Write(xmlString);
+                sWriter.Close();
+                mStream.Close();
+            }
         }
 
-        private static string HandleStringXML(string s)
+        private static void WriteToJSONBranch(List<BranchFolder> folders)
         {
-            s = s + "<Children>";
-            return s;
+            foreach (BranchFolder bFolder in folders)
+            {
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(BranchFolder));
+                MemoryStream mStream = new MemoryStream();
+                StreamWriter sWriter = new StreamWriter(path_txt,true);
+
+                ser.WriteObject(mStream,bFolder);
+                string xmlString = Encoding.Default.GetString(mStream.ToArray());
+                sWriter.Write(xmlString);
+                sWriter.Close();
+                mStream.Close();
+            }
         }
-        private static string ConvertSourceRowToJSONString(SourceRow sRow)
-        {
-            
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SourceRowDataContract ));
-            SourceRowDataContract source_json = new SourceRowDataContract(sRow);
-            MemoryStream m_stream = new MemoryStream();
-
-            ser.WriteObject(m_stream, source_json);
-            string json_string = Encoding.Default.GetString(m_stream.ToArray());
-
-            return json_string;
-        }
-
-        private static string ConvertSourceRowToXMLString(SourceRow sRow)
-        {
-            DataContractSerializer ser = new DataContractSerializer(typeof(SourceRowDataContractXML));
-            SourceRowDataContractXML sourceXML = new SourceRowDataContractXML(sRow);
-            MemoryStream mStream = new MemoryStream();
-
-            ser.WriteObject(mStream,sourceXML);
-            string xmlString = Encoding.Default.GetString(mStream.ToArray());
-
-            return xmlString;
-        }
-
-
+        
     }
 }

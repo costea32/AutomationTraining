@@ -56,18 +56,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BranchesPage.cs" />
-    <Compile Include="BranchRow.cs" />
-    <Compile Include="BranchTable.cs" />
+    <Compile Include="BranchFolder.cs" />
+    <Compile Include="ObjectMap\BranchesPage.cs" />
+    <Compile Include="ObjectMap\BranchRow.cs" />
+    <Compile Include="ObjectMap\BranchTable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Row.cs" />
-    <Compile Include="SourcePage.cs" />
-    <Compile Include="SourceRow.cs" />
-    <Compile Include="SourceRowDataContractXML.cs" />
-    <Compile Include="SourceRowDataCotract.cs" />
-    <Compile Include="SourceTable.cs" />
-    <Compile Include="Table.cs" />
+    <Compile Include="ObjectMap\Row.cs" />
+    <Compile Include="ObjectMap\SourcePage.cs" />
+    <Compile Include="ObjectMap\SourceRow.cs" />
+    <Compile Include="SourceFolder.cs" />
+    <Compile Include="SourceFile.cs" />
+    <Compile Include="ObjectMap\SourceTable.cs" />
+    <Compile Include="ObjectMap\Table.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
