@@ -57,6 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BranchFolder.cs" />
+    <Compile Include="BranchStrategy.cs" />
+    <Compile Include="Context.cs" />
+    <Compile Include="IPageStrategy.cs" />
     <Compile Include="ObjectMap\BranchesPage.cs" />
     <Compile Include="ObjectMap\BranchRow.cs" />
     <Compile Include="ObjectMap\BranchTable.cs" />
@@ -69,6 +72,7 @@
     <Compile Include="SourceFile.cs" />
     <Compile Include="ObjectMap\SourceTable.cs" />
     <Compile Include="ObjectMap\Table.cs" />
+    <Compile Include="SourceStrategy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
