@@ -27,18 +27,18 @@ namespace Task2v2
 
             driver.Close();
             Console.WriteLine("\nBranch list created.\n");
-/*
-            ConverterContext ctx = new ConverterContext();
-            ctx.SetConverter(new ConvertToJson());
-            ctx.Convert(ListOfBranches);
 
-            Console.WriteLine("\nJson output file created.\n");
+            ConverterContext ctx = new ConverterContext();
+            //ctx.SetConverter(new ConvertToJson());
+            //ctx.Convert(ListOfBranches);
+
+            //Console.WriteLine("\nJson output file created.\n");
 
             ctx.SetConverter(new ConvertToXml());
             ctx.Convert(ListOfBranches);
 
             Console.WriteLine("\nXML output file created.\n");
-*/
+
             Console.WriteLine("\nTest finished!");
             Console.ReadLine();
         }
@@ -51,12 +51,13 @@ namespace Task2v2
 
 //            int count = branchTable.CountRows();
 
-            foreach (BranchRow r in branchTable.Rows)
+//            foreach (BranchRow r in branchTable.Rows)
 //            for (int i = 0; i < count; i++)
+            for (int i = 0; i < 2; i++ )
             {
                 List<Record> ListOfItems = new List<Record>();
-//                BranchRow r = new BranchRow(branchTable.GetRow(i));
-                
+                BranchRow r = new BranchRow(branchTable.Rows[i]);
+
                 TreePage ChildPage = BranchPage.OpenBranch(r.BranchName);
                 ListOfItems = GetFoldersAndChildren(ChildPage);
                 BranchList.Add(new Branch(r.BranchName, r.Behind, r.Ahead, ListOfItems));
