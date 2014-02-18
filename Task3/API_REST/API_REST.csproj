@@ -45,8 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthDataProvider.cs" />
+    <Compile Include="Comment.cs" />
     <Compile Include="Commit.cs" />
     <Compile Include="CommitFull.cs" />
+    <Compile Include="CommitsCollection.cs" />
     <Compile Include="Parent.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
