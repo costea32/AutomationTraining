@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 
 using System.Xml;
-using System.Xml.Serialization;
+using System.Runtime.Serialization;
 
 namespace Task2v2
 {
@@ -13,22 +13,19 @@ namespace Task2v2
     {
         public void ConvertToFile(List<Branch> branchList)
         {
-            string output = @"C:\Users\goncharenkoa\Documents\Task2_output\XML_output.xml";
+            string timeStamp = DateTime.Now.ToString().Replace("/","_").Replace(":","-");
+            string output = @"C:\Users\goncharenkoa\Documents\Task2_output\XML_output_" + timeStamp + ".xml";
 
-            XmlSerializer serializer = new XmlSerializer(typeof(List<Branch>));
-            TextWriter testXML = new StreamWriter(output);
-            serializer.Serialize(testXML, branchList);
-/*            XmlTextWriter testXML = new XmlTextWriter(output, Encoding.UTF8); //new XML file created
-            testXML.WriteStartDocument(); //header line added
-            testXML.WriteStartElement("Branches"); //<Branches> tag added
-            testXML.WriteEndElement(); //</Branches> tag closed
-*/
-            testXML.Close(); //XML file closed
+            FileStream writer = new FileStream(output, FileMode.Create);
+            DataContractSerializer serializer = new DataContractSerializer(typeof(List<Branch>));
+            
+            foreach (Branch b in branchList)
+            {
+                serializer.WriteObject(writer, b);
+            }
+
+            writer.Close();
             Console.WriteLine("\nXML file created.\n");
-/*
-            XmlDocument content = new XmlDocument(); //object to add content to the XML file
-            content.Load(output);
-*/
         }
     }
 }

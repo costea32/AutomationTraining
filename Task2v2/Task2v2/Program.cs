@@ -22,17 +22,16 @@ namespace Task2v2
             BranchesPage Branches = Login.Do("alina-goncearenco", "MyPassword1");
 
             List<Branch> ListOfBranches = new List<Branch>();
-//            ListOfBranches = Branches.GetListOfBranches();
             ListOfBranches = GetBranchesWithChildren(Branches);
 
             driver.Close();
             Console.WriteLine("\nBranch list created.\n");
 
             ConverterContext ctx = new ConverterContext();
-            //ctx.SetConverter(new ConvertToJson());
-            //ctx.Convert(ListOfBranches);
+            ctx.SetConverter(new ConvertToJson());
+            ctx.Convert(ListOfBranches);
 
-            //Console.WriteLine("\nJson output file created.\n");
+            Console.WriteLine("\nJson output file created.\n");
 
             ctx.SetConverter(new ConvertToXml());
             ctx.Convert(ListOfBranches);
@@ -49,18 +48,17 @@ namespace Task2v2
 
             BranchTable branchTable = BranchPage.GetBranchTable();
 
-//            int count = branchTable.CountRows();
-
-//            foreach (BranchRow r in branchTable.Rows)
-//            for (int i = 0; i < count; i++)
-            for (int i = 0; i < 2; i++ )
+            foreach (BranchRow r in branchTable.Rows)
             {
-                List<Record> ListOfItems = new List<Record>();
-                BranchRow r = new BranchRow(branchTable.Rows[i]);
+                if (r.BranchName.Contains("prodausv"))
+                {
+                    List<Record> ListOfItems = new List<Record>();
 
-                TreePage ChildPage = BranchPage.OpenBranch(r.BranchName);
-                ListOfItems = GetFoldersAndChildren(ChildPage);
-                BranchList.Add(new Branch(r.BranchName, r.Behind, r.Ahead, ListOfItems));
+                    TreePage ChildPage = BranchPage.OpenBranch(r.BranchName);
+                    ListOfItems = GetFoldersAndChildren(ChildPage);
+                    BranchList.Add(new Branch(r.BranchName, r.Behind, r.Ahead, ListOfItems));
+                }
+                else continue;
             }
 
             return BranchList;

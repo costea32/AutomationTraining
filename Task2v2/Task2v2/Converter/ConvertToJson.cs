@@ -11,9 +11,21 @@ namespace Task2v2
     {
         public void ConvertToFile(List<Branch> branchList)
         {
-            string filePath = @"C:\Users\goncharenkoa\Documents\Task2_output\JSON_output.json";
+            string timeStamp = DateTime.Now.ToString().Replace("/", "_").Replace(":", "-");
+            string output = @"C:\Users\goncharenkoa\Documents\Task2_output\JSON_output_" + timeStamp + ".json";
 
-            var serializer = new DataContractJsonSerializer(typeof(List<Branch>));
+            FileStream writer = new FileStream(output, FileMode.Create);
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Branch>));
+
+            foreach (Branch b in branchList)
+            {
+                serializer.WriteObject(writer, b);
+            }
+
+            writer.Close();
+            Console.WriteLine("\nXML file created.\n");
+
+            //var serializer = new DataContractJsonSerializer(typeof(List<Branch>));
             //using (var stream = File.Open(filePath, FileMode.Create, FileAccess.Write))
             //{
             //    serializer.WriteObject(stream, branchList);
