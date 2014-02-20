@@ -24,14 +24,9 @@ namespace API_REST
             return this.strategy.GetJsonString();
         }
 
-        public void WriteToJson(string json)
+        public dynamic GetObject(string js)
         {
-            this.strategy.WriteToJson(json);
-        }
-
-        public void WriteToXml(string json)
-        {
-            this.strategy.WriteToXml(json);
+            return this.strategy.GetObject(js);
         }
     }
 }

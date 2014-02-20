@@ -9,11 +9,21 @@ namespace API_REST
     {
 
         private DataRetrieverContext context;
+        private DataWriterContext writerContext;
 
         public string YieldJsonString()
         {
-
             return context.GetJsonString();
+        }
+
+        public dynamic GetObject(string js)
+        {
+            return context.GetObject(js);
+        }
+
+        public void WriteObject(dynamic obj)
+        {
+            this.writerContext.WriteObject(obj);
         }
 
         public void setDataRetrieverStrategy(int strat)
@@ -27,12 +37,12 @@ namespace API_REST
             }
         }
 
-        public void WriteToFile(int i, string json)
+        public void setDataWriterStrategy(int strat)
         {
-            switch (i)
+            switch (strat)
             {
-                case 1: { context.WriteToJson(json); } break;
-                case 2: { context.WriteToXml(json); } break;
+                case 1: { this.writerContext = new DataWriterContext(new JsonStrategy()); } break;
+                case 2: { this.writerContext = new DataWriterContext(new XmlStrategy()); } break;
                 default: { Console.WriteLine("Incorrect input."); } break;
             }
         }

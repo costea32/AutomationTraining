@@ -15,14 +15,10 @@ namespace API_REST
             return dr.getDataJsonString();
         }
 
-        public void WriteToJson(string json)
-        {
-            new DataWriter().WriteCommentsToJson(new DataManipulator().getCommits(json));
-        }
 
-        public void WriteToXml(string json)
+        public dynamic GetObject(string js)
         {
-            new DataWriter().WriteCommentsToXml(new DataManipulator().getCommits(json));
+            return new DataManipulator().getComments(js);
         }
     }
 }

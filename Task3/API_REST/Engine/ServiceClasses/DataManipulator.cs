@@ -17,6 +17,20 @@ namespace API_REST
             return cmt;
         }
 
+        public List<Comment> getComments(string jsonString)
+        {
+            List<Comment> cmts = new List<Comment>();
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<CommitFull>));
+            List<CommitFull> cmtts = (List<CommitFull>)ser.ReadObject(new MemoryStream(Encoding.UTF8.GetBytes(jsonString)));
+
+            foreach (CommitFull cmt in cmtts)
+            {
+                cmts.Add(new Comment { message = cmt.commit.message.ToString() });
+            }
+
+            return cmts;
+        }
+
         public List<Contributor> getContributors(string jsonString)
         {
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<Contributor>));

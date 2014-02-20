@@ -14,9 +14,10 @@ namespace API_REST
             Console.WriteLine("Retrieving data.");
             worker.setDataRetrieverStrategy(i);
             string js = worker.YieldJsonString();
+            dynamic obj = worker.GetObject(js);
             i = int.Parse(TalkWrite());
-            Console.WriteLine(i);
-            worker.WriteToFile(i,js);
+            worker.setDataWriterStrategy(i);
+            worker.WriteObject(obj);
         }
 
         protected string StartTalk()

@@ -11,6 +11,32 @@ namespace API_REST
     class DataWriter
     {
 
+        public void WriteObjectToJsonFile<T>(T collection)
+        {
+            string path = @"C:\temp\API_REST\JSON_OUTPUT.txt";
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T));
+            var mStream = new MemoryStream();
+            var sWriter = new StreamWriter(path,true);
+
+            ser.WriteObject(mStream,collection);
+            string jsonString = Encoding.Default.GetString(mStream.ToArray());
+            sWriter.Write(jsonString);
+            sWriter.Close();
+        }
+
+        public void WriteObjectToXmlFile<T>(T collection)
+        {
+            string path = @"C:\temp\API_REST\XML_OUTPUT.xml";
+            DataContractSerializer ser = new DataContractSerializer(typeof(T));
+            var mStream = new MemoryStream();
+            var sWriter = new StreamWriter(path, true);
+
+            ser.WriteObject(mStream, collection);
+            string jsonString = Encoding.Default.GetString(mStream.ToArray());
+            sWriter.Write(jsonString);
+            sWriter.Close();
+        }
+
         public void WriteCommentsToXml(List<CommitFull> coll)
         {
             string xml_path = @"C:\temp\API_REST\COMMENTS_XML_OUTPUT.xml";

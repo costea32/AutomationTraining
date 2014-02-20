@@ -59,6 +59,10 @@
     <Compile Include="DataTypes\Commit\Commit.cs" />
     <Compile Include="DataTypes\Commit\CommitFull.cs" />
     <Compile Include="DataTypes\Commit\Parent.cs" />
+    <Compile Include="Engine\Strategies\DataWriter\DataWriterContext.cs" />
+    <Compile Include="Engine\Strategies\DataWriter\IDataWriter.cs" />
+    <Compile Include="Engine\Strategies\DataWriter\JsonStrategy.cs" />
+    <Compile Include="Engine\Strategies\DataWriter\XmlStrategy.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataTypes\Commit\Tree.cs" />

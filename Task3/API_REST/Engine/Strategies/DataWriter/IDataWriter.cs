@@ -5,9 +5,8 @@ using System.Text;
 
 namespace API_REST
 {
-    interface IDataRetrieverStrategy
+    interface IDataWriter
     {
-        string GetJsonString();
-        dynamic GetObject(string js);
+        void WriteData<T>(T obj);
     }
 }

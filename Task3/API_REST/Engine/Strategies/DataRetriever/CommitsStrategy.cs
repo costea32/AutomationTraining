@@ -7,6 +7,7 @@ namespace API_REST
 {
     class CommitsStrategy:IDataRetrieverStrategy
     {
+
         public string GetJsonString()
         {
             DataRetriever dr = new DataRetriever();
@@ -15,14 +16,9 @@ namespace API_REST
             return dr.getDataJsonString();
         }
 
-        public void WriteToJson(string json)
+        public dynamic GetObject(string js)
         {
-            new DataWriter().WriteCommitsToJsonFile(new DataManipulator().getCommits(json));
-        }
-
-        public void WriteToXml(string json)
-        {
-            new DataWriter().WriteCommitsXmlFile(new DataManipulator().getCommits(json));
+            return new DataManipulator().getCommits(js);
         }
     }
 }
