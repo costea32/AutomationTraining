@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lambda_Training", "Lambda_Training\Lambda_Training.csproj", "{BB22A327-0311-4940-8E83-BCE09715D99F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lambda_Training.Tests", "Lambda_Training.Tests\Lambda_Training.Tests.csproj", "{3298E328-7AC0-4563-B2FC-0B9047835F81}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D3AEA1C-1BA0-44DD-AAAD-14D4EF0FDA5C}"
+	ProjectSection(SolutionItems) = preProject
+		Lambda_Training.vsmdi = Lambda_Training.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Lambda_Training.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB22A327-0311-4940-8E83-BCE09715D99F}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{BB22A327-0311-4940-8E83-BCE09715D99F}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{BB22A327-0311-4940-8E83-BCE09715D99F}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{BB22A327-0311-4940-8E83-BCE09715D99F}.Debug|x86.ActiveCfg = Debug|x86
+		{BB22A327-0311-4940-8E83-BCE09715D99F}.Debug|x86.Build.0 = Debug|x86
+		{BB22A327-0311-4940-8E83-BCE09715D99F}.Release|Any CPU.ActiveCfg = Release|x86
+		{BB22A327-0311-4940-8E83-BCE09715D99F}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{BB22A327-0311-4940-8E83-BCE09715D99F}.Release|Mixed Platforms.Build.0 = Release|x86
+		{BB22A327-0311-4940-8E83-BCE09715D99F}.Release|x86.ActiveCfg = Release|x86
+		{BB22A327-0311-4940-8E83-BCE09715D99F}.Release|x86.Build.0 = Release|x86
+		{3298E328-7AC0-4563-B2FC-0B9047835F81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3298E328-7AC0-4563-B2FC-0B9047835F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3298E328-7AC0-4563-B2FC-0B9047835F81}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3298E328-7AC0-4563-B2FC-0B9047835F81}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3298E328-7AC0-4563-B2FC-0B9047835F81}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3298E328-7AC0-4563-B2FC-0B9047835F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3298E328-7AC0-4563-B2FC-0B9047835F81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3298E328-7AC0-4563-B2FC-0B9047835F81}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3298E328-7AC0-4563-B2FC-0B9047835F81}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3298E328-7AC0-4563-B2FC-0B9047835F81}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
